@@ -5,8 +5,15 @@ TODO list for depmix package release 0.0-1
 
 - add help files for all functions:
 	1) depmix.Rd: help on constructing models: done!!!!!
-	2) depmix-class.Rd: detailed description of depmix class: Ingmar
+	2) depmix-class.Rd: detailed description of depmix class: Ingmar, done!!!!!
 	3) depmix.fit.Rd: help on fitting models: Ingmar
+		Other methods for depmix.fitted objects include:
+		a) posterior: get posterior state sequence
+		b) logLik
+		c) AIC, BIC
+		d) getpars, setpars
+	Maybe there should be a help file with depmix methods
+		
 	4) responses.Rd: detailed description on constructing response models
 	5) transInit.Rd: detailed description on constructing transition models
 	6) others: llratio, logLik, AIC, BIC, lystig, fb
