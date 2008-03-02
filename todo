@@ -1,0 +1,62 @@
+
+TODO list for depmix package release 0.0-1
+
+(priority to be determined)
+
+- add help files for all functions
+
+- rework em function and add a working example for it
+
+- balance scale data example with covariate on initial probabilities 
+(this involves a latent class model rather than a hidden Markov model)
+
+- review summary/print functions for depmix and depmix.fitted
+
+- viterbi algorithm to get posterior probabilities as part of depmix.fitted
+
+- general documentation: depmix-introduction needs updating
+
+
+
+
+
+TODO long term 
+
+Examples
+
+1) Discrimination learning example, need covariates with these data!
+
+2) Factor depmix model as example of user specified model
+
+
+Design issues
+
+1) Data simulation according to specified model
+
+2) Analytical gradients in lystig
+
+3) Speed optimization: lystig in C?
+
+4) Multi group possibilities: use group factor in call to depmix
+
+5) Missing data options?
+
+6) Standard errors of parameters
+
+
+Other capabilities
+
+1) Look at log and exp of matrices to have continuous time observations
+(also see mlm)
+
+2) Look at HMISC for mapply -> multivariate apply for mv densities
+
+3) Look at package ks for mv normal mixture densities
+
+4) Check flexclust package for an example of extending models
+
+5) Check glmc pack for constrained glm models!!!!!
+
+6) stochmod pack for stochastic models
+
+7) use relevel function to recode factors into different base
