@@ -301,6 +301,22 @@ setMethod("npar","depmix",
 	function(object) return(object@npars)
 )
 
+setGeneric("ntimes", function(object, ...) standardGeneric("ntimes"))
+setMethod("ntimes","depmix",
+	function(object) return(object@ntimes)
+)
+
+setGeneric("nstates", function(object, ...) standardGeneric("nstates"))
+setMethod("nstates","depmix",
+	function(object) return(object@nstates)
+)
+
+setGeneric("nresp", function(object, ...) standardGeneric("nresp"))
+setMethod("nresp","depmix",
+	function(object) return(object@nresp)
+)
+
+
 setGeneric("freepars", function(object, ...) standardGeneric("freepars"))
 
 # depends on nlin(object) and getpars(object)
