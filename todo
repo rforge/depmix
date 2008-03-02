@@ -3,18 +3,33 @@ TODO list for depmix package release 0.0-1
 
 (priority to be determined)
 
-- add help files for all functions
+- add help files for all functions:
+	1) depmix.Rd: help on constructing models: done!!!!!
+	2) depmix-class.Rd: detailed description of depmix class: Ingmar
+	3) depmix.fit.Rd: help on fitting models: Ingmar
+	4) responses.Rd: detailed description on constructing response models
+	5) transInit.Rd: detailed description on constructing transition models
+	6) others: llratio, logLik, AIC, BIC, lystig, fb
 
-- rework em function and add a working example for it
+- rework em function and add a working example for it: Maarten
 
-- balance scale data example with covariate on initial probabilities 
+- balance scale data example with covariate on initial probabilities
 (this involves a latent class model rather than a hidden Markov model)
+Ingmar
 
 - review summary/print functions for depmix and depmix.fitted
 
+
 - viterbi algorithm to get posterior probabilities as part of depmix.fitted
 
+
 - general documentation: depmix-introduction needs updating
+
+
+
+
+
+
 
 
 
