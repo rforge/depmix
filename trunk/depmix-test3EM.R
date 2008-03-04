@@ -1,4 +1,4 @@
-setwd("/Users/ivisser/Documents/projects/depmixProject/depmixNew/code/depmix/trunk/")
+setwd("/Users/ivisser/Documents/projects/depmixProject/depmixNew/rforge/depmix/trunk/")
 
 source("depmixS4.R")
 source("classes.R")

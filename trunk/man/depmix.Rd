@@ -70,25 +70,26 @@
 \details{ 
 
 	The function \code{depmix} creates an S4 object of class \code{depmix},
-	which needs to be \code{fit}'ted using \code{fit} to optimize the
-	parameters.
+	which needs to be fitted using \code{\link[depmix]{depmix.fit}} to
+	optimize the parameters.
 	
-	The response model(s) are created by call(s) to \code{GLMresponse}
-	providing the family and optional predictors.  If response is a list of
-	formulae, the response's are assumed to be independent conditional on
-	the latent state.
+	The response model(s) are created by call(s) to
+	\code{\link[depmix]{response}} providing the family and optional
+	predictors.  If response is a list of formulae, the response's are
+	assumed to be independent conditional on the latent state.
 	
 	The transitions are modeled as a multinomial logistic model for each
 	state.  Hence, the transition matrix can be modeled as time-dependent,
 	depending on predictors.  The prior density is also modeled as a
-	multinomial logistic.  Both are created by calls to \code{transInit}.
+	multinomial logistic.  Both are created by calls to
+	\code{\link[depmix]{transInit}}.
 	
 	Starting values may be provided by the respective arguments.  The order
 	in which parameters must be provided can be easily studied by using the
 	\code{setpars} function.
 	
 	Linear constraints on parameters can be provided as argument to the
-	\code{fit} function.
+	\code{\link[depmix]{depmix.fit}} function.
 	
 }
 \value{
