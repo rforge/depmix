@@ -23,6 +23,11 @@
 	\S4method{logLik}{depmix}(object)
 	\S4method{AIC}{depmix}(object)
 	\S4method{BIC}{depmix}(object)
+	\S4method{freepars}{depmix}(object)
+	\S4method{npar}{depmix}(object)
+	\S4method{freepars}{depmix}(object)
+	\S4method{setpars}{depmix}(object,which="pars",...)
+	\S4method{getpars}{depmix}(object,which="pars",...)	
 	
 }
 \arguments{
@@ -63,6 +68,13 @@
 		assumed to form a single time series. If the data argument has an
 		attribute ntimes, then this is used.}
 	
+	\item{which}{The default "pars" returns a vector of all parameters of a
+		\code{depmix} object; the alternative value "fixed" return a
+		logical vector of the same length indicating which parameters are
+		fixed. The setpars functions sets parameters (or the logical fixed 
+		vector) to new values; \code{setpars} also recomputes the dens,
+		trans and init slots of \code{depmix} objects.}
+	
 	\item{...}{Not used currently.}
 	
 }
@@ -86,7 +98,7 @@
 	
 	Starting values may be provided by the respective arguments.  The order
 	in which parameters must be provided can be easily studied by using the
-	\code{setpars} function.
+	\code{setpars} function (see example).
 	
 	Linear constraints on parameters can be provided as argument to the
 	\code{\link[depmix]{depmix.fit}} function.
@@ -127,7 +139,10 @@ summary methods. It has the following slots:
 		transitions and prior.}
 
 \code{logLik}, \code{AIC}, and \code{BIC} return the respective associated 
-with the current parameter values. 
+with the current parameter values.  \code{nobs} returns the number of
+observations, ie \code{sum(ntimes)} that is used in computing the
+\code{BIC}.  \code{npar} returns the number of paramters of a model;
+\code{freepars} returns the number of non-fixed parameters.
 
 }
 
