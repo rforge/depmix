@@ -12,68 +12,81 @@
 # BALANCE SCALE data example with age as covariate on class membership
 # 
 
-# old depmix results
+setwd("/Users/ivisser/Documents/projects/depmixProject/depmixNew/rforge/depmix/trunk/")
 
-.libPaths(new="/Users/ivisser/Library/R/library/")
-library(depmix)
+load("data/balance.rda")
 
-setwd("/Users/ivisser/Documents/projects/depmixProject/depmixNew/code/depmix/trunk/")
+source("responses.R")
+source("depmix.R")
+source("depmix.fitted.R")
 
-balance=read.table("balance.txt",head=T)
-
-# the data set consists of four distance items on a balance scale task
-# the data frame contains 11 columns with covariates sex age in days and age in years,
-# and two versions of the four items; t1-t4 are trichotomous items with 1, 2, and 3 
-# meaning left, balance, and right; d1-d4 are dichotomously scored items with 0=incorrect
-# and 1=correct
-
-# to get to grips with the data, first study the histogram of the sumscores of the
-# dichotomous items
-
-sums <- apply(balance[,8:11],1,sum)
-hist(sums)
-
-
-source("depmixS4.r")
-source("classes.r")
-source("hmModel.R")
-source("fithmModel.R")
 source("llratio.R")
 source("lystig.R")
 source("fb.R")
 
-
 # now fit some latent class models
-
-rMods <- list(
-  list(
-	rModel(formula=d1~1,data=balance,family=multinomial()),
-	rModel(formula=d2~1,data=balance,family=multinomial()),
-	rModel(formula=d3~1,data=balance,family=multinomial()),
-	rModel(formula=d4~1,data=balance,family=multinomial())),
-  list(
-	rModel(formula=d1~1,data=balance,family=multinomial()),
-	rModel(formula=d2~1,data=balance,family=multinomial()),
-	rModel(formula=d3~1,data=balance,family=multinomial()),
-	rModel(formula=d4~1,data=balance,family=multinomial()))
-)
-
 trstart=c(1,0,0,1)
 instart=c(0.5,0.5)
 
-# ntimes is added as an argument as the attribute ntimes for speed is different from this
-mod <- depmix(rModels=rMods,data=balance,trstart=trstart,instart=instart,ntimes=rep(1,nrow(balance)))
+# ntimes is added as an argument
+
+mod <- depmix(list(d1~1,d2~1,d3~1,d4~1), data=balance, nstates=2,
+	family=list(multinomial(),multinomial(),multinomial(),multinomial()),
+	trstart=trstart,instart=instart,ntimes=rep(1,nrow(balance)))
 
 pars <- getpars(mod)
 fixed <- c(1,0,1,1,1,1,rep(c(1,0),8))
 
 mod1 <- fit(mod,fixed=fixed)
 
-logLik(mod1)
+# 'log Lik.' -1083.036 (df=9)
 
+logLik(mod1)
 AIC(mod1)
 BIC(mod1)
 
+# 
+# Add age as covariate on class membership
+# 
+
+instart=c(0.5,0.5,0,0)
+mod2 <- depmix(list(d1~1,d2~1,d3~1,d4~1), data=balance, nstates=2,
+	family=list(multinomial(),multinomial(),multinomial(),multinomial()),
+	trstart=trstart, instart=instart, ntimes=rep(1,nrow(balance)), 
+	prior=~age, initdata=balance)
+
+fixed <- c(1,0,1,0,1,1,1,1,rep(c(1,0),8))
+mod2 <- fit(mod2,fixed=fixed)
+
+logLik(mod2)
+AIC(mod2)
+BIC(mod2)
+
+llratio(mod2,mod1)
+
+predict(mod2@response[[1]][[1]])[1,]
+predict(mod2@response[[1]][[2]])[1,]
+predict(mod2@response[[1]][[3]])[1,]
+predict(mod2@response[[1]][[4]])[1,]
+
+predict(mod2@response[[2]][[1]])[1,]
+predict(mod2@response[[2]][[2]])[1,]
+predict(mod2@response[[2]][[3]])[1,]
+predict(mod2@response[[2]][[4]])[1,]
+
+
+plot.multinomial <- function(object,var=1) {	
+	base=1
+	coef <- object@parameters$coefficients[,-base]
+	print(coef)
+	range=range(object@x[,2])
+	print(range) 
+	linv <- function(x) {
+		invlogit(coef[2]*(x+coef[1]))
+	}
+	plot(linv,xlim=range)
+	return(range)
+}
 
 logit <- function(p) {
 	log(p/(1-p))
