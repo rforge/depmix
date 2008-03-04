@@ -2,13 +2,16 @@
 \name{depmix}
 
 \alias{depmix}
+\alias{logLik}
+\alias{AIC}
+\alias{BIC}
 
 \title{Dependent Mixture Model Specifiction}
 
 \description{
 	
 	\item{depmix}{\code{depmix} creates an object of class \code{depmix}, a
-	dependent mixture model.}
+	dependent mixture model, or hidden Markov model.}
 	
 }
 \usage{
@@ -20,7 +23,7 @@
 	\S4method{logLik}{depmix}(object)
 	\S4method{AIC}{depmix}(object)
 	\S4method{BIC}{depmix}(object)
-
+	
 }
 \arguments{
 	\item{object}{An object with class \code{depmix}.}
@@ -130,7 +133,8 @@ with the current parameter values.
 \author{Ingmar Visser \email{i.visser@uva.nl}} 
 
 \seealso{
-	\code{GLMresponse}, \code{transInit}. 
+	\code{\link[depmix]{depmix.fit}},\code{\link[depmix]{transInit}}, 
+	\code{\link[depmix]{response}}. 
 }
 
 \references{
