@@ -12,7 +12,7 @@ TODO list for depmix package release 0.0-1
 		b) logLik
 		c) AIC, BIC
 		d) getpars, setpars
-	Maybe there should be a help file with depmix methods
+	Maybe there should be a help file with depmix methods ...
 		
 	4) responses.Rd: detailed description on constructing response models
 	5) transInit.Rd: detailed description on constructing transition models
