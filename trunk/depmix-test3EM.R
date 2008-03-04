@@ -4,9 +4,11 @@ source("depmixS4.R")
 source("classes.R")
 source("hmModel.R")
 source("trGLM.r")
+source("lystig.R")
+source("fb.r")
 source("EM.R")
 
-load("speed.Rda")
+load("data/speed.Rda")
 
 rModels <- list(
   list(
