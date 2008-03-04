@@ -18,14 +18,17 @@ trGLM <- function(formula,family=binomial(),data,base=as.integer(1),nstate,...) 
   x <- model.matrix(attr(mf, "terms"),mf)
   y <- matrix(1/nstate,ncol=nstate,nrow=nrow(x))
   if(!is.matrix(y)) y <- matrix(y,ncol=1)
+  #if(is.null(fixed)) 
   parameters <- list()
   parameters$coefficients <- matrix(0,nrow=ncol(x),ncol=nstate)
+  fixed <- rep(FALSE,length(unlist(parameters)))
   new("trGLM",
     base=base,
     formula=formula,
     family=family,
     parameters=parameters,
     npar=length(unlist(parameters)),
+    fixed=fixed,
     y=y,
     x=x)
   #  form
@@ -78,8 +81,10 @@ setMethod("fit","trGLM",
 	    #w <- w[,-base] # TODO: adjust this for more than two levels
       #fit <- vglm(y~x-1,object@family,data=data.frame(y=y,x=x),weight=w,...)
       fit <- glm(formula=y~x-1,family=object@family,weight=w) # need to evaluate ...!
-	  } else fit <- glm(y~x-1,object@family)
-    pars$coefficients[,-base] <- fit$coefficients  # TODO: setpars gets matrix in wrong order!!! Fix this in setpars.
+	  #} else fit <- glm(y~x-1,object@family)
+	  } else fit <- multinom(cbind(object@y[,base],y)~x-1)
+    #pars$coefficients[,-base] <- fit$coefficients  # TODO: setpars gets matrix in wrong order!!! Fix this in setpars.
+    pars$coefficients[,-base] <- matrix(fit$wts,ncol=ncol(object@y))[-1,-1]
     #object <- setpars(object,unlist(pars))
     object@parameters <- pars
     object

@@ -372,7 +372,8 @@ setMethod("fit","rMVN",
 
 setMethod("fit","trinMultinom",
 	function(object,w,ntimes) {
-		pars <- object@parameters	
+		pars <- object@parameters
+		if(missing(w)) w <- NULL
 		oldfit <- function() {
 			#fit.trMultinom(object,w,ntimes)
 			tol <- 1e-5 # TODO: check global options
@@ -440,14 +441,17 @@ setMethod("fit","trinMultinom",
 		x <- object@x
 		if(is.matrix(y)) na <- unlist(apply(y,2,function(x) which(is.na(x)))) else na <- which(is.na(y))
 		if(is.matrix(x)) na <- c(na,unlist(apply(x,2,function(x) which(is.na(x))))) else na <- c(na,which(is.na(x)))
-		na <- c(na,which(is.na(w)))
+		if(!is.null(w)) na <- c(na,which(is.na(w)))
 		y <- as.matrix(y)
 		x <- as.matrix(x)
 		na <- unique(na)
-		mask <- matrix(1,nrow=nrow(pars$coefficients),ncol=ncol(pars$coefficients))
-		mask[,base] <- 0
-		fit <- nnet.default(x=x[-na,],y=y[-na,],weights=w[-na],size=0,entropy=TRUE,skip=TRUE,mask=mask,rang=0,trace=FALSE)
-		pars$coefficients <- matrix(fit$wts,ncol=ncol(pars$coefficients),nrow=nrow(pars$coefficients),byrow=TRUE)
+		x <- x[-na,]
+		y <- y[-na,]
+		if(!is.null(w)) w <- w[-na]
+		#mask <- matrix(1,nrow=nrow(pars$coefficients),ncol=ncol(pars$coefficients))
+		#mask[,base] <- 0
+		if(!is.null(w)) fit <- multinom(y~x-1,weights=w) else fit <- multinom(y~x-1,weights=w)
+		pars$coefficients <- matrix(fit$wts,ncol=ncol(y))[-1,-1]
 		#object <- setpars(object,unlist(pars))
 		#object
 		pars
