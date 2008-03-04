@@ -17,9 +17,14 @@
 		prior=~1, initdata=NULL, respstart=NULL, trstart=NULL, instart=NULL,
 		ntimes=NULL,...)
 	
-	
+	\S4method{logLik}{depmix}(object)
+	\S4method{AIC}{depmix}(object)
+	\S4method{BIC}{depmix}(object)
+
 }
 \arguments{
+	\item{object}{An object with class \code{depmix}.}
+	
 	\item{response}{The response to be modeled; either a formula or a list 
 		of formulae in the multivariate case. See details.}
 	
@@ -88,7 +93,7 @@
 \code{depmix} returns an object of class \code{depmix} which has print and 
 summary methods. It has the following slots: 
 
-	\item{response}{A list of a list of (GLM)response models; the first
+	\item{response}{A list of a list of response models; the first
 		index runs over states; the second index runs over the independent 
 		responses in case a multivariate response is provided.}
 	
@@ -98,12 +103,8 @@ summary methods. It has the following slots:
 	\item{prior}{A multinomial logistic model for the initial state
 		probabilities.}
 
-	\item{dens,trDens,init}{For internal use, ie for computing the
-		loglikelihood.  An array of dimensions sum(ntimes) by nresp by
-		nstates providing the individual densities of the obeservations
-		given the current parameter values.  trDens has the current
-		predictions for the transition matrix at each time point.  init has
-		the current predictions for the initial state probabilities.}
+	\item{dens,trDens,init}{See depmix-class help for details. For internal
+		use.}
 	
 	\item{stationary}{Logical indicating whether the transitions are
 		time-dependent or not; for internal use.}
@@ -120,7 +121,10 @@ summary methods. It has the following slots:
 		the degrees of freedom, ie there are redundancies in the
 		parameters, in particular in the multinomial models for the
 		transitions and prior.}
-	
+
+\code{logLik}, \code{AIC}, and \code{BIC} return the respective associated 
+with the current parameter values. 
+
 }
 
 \author{Ingmar Visser \email{i.visser@uva.nl}} 
@@ -146,10 +150,8 @@ summary methods. It has the following slots:
 	data(speed)
 	depmix(list(rt~1,corr~1),data=speed,nstates=2,family=list(gaussian(),mulitnomial()))
 	
-	
-
 }
-
+\author{Ingmar Visser}
 \keyword{models}
 
 
