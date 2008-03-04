@@ -10,6 +10,8 @@
 	\S4method{fit}{depmix}(object, w=NULL, fixed=NULL, equal=NULL, conrows=NULL,
 		conrows.upper=0, conrows.lower=0, method=c("em","donlp"),...)
 	
+	\S4method{llratio}{depmix}{object,object}
+	
 }
 \arguments{
 	\item{object}{An object of class "depmix".}
@@ -54,6 +56,11 @@
 	the constraints. \code{conrows} is a matrix of npar(object) columns and
 	one row for each constraint (ie a vector in the case of a single
 	constraint). 
+	
+	\code{llratio} performs a log-likelihood ratio test on two
+	\code{fit}ted models; the first object should have the largest degrees 
+	of freedom. 
+	
 }
 \value{
 	\code{fit} returns an object of class depmix.fitted which contains 
