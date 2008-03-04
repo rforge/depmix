@@ -1,10 +1,19 @@
 \name{fit}
+
 \docType{method}
+
 \alias{fit}
 \alias{depmix.fit}
 \alias{fit,depmix-method}
+\alias{llratio}
+\alias{llratio,depmix-method}
+\alias{likelihoodratio}
+
 \title{Method fit}
-\description{Method for fitting depmix models.}
+
+\description{\code{fit} optimizes parameters of depmix models, possibly
+subject to general linear (in)equality constraints.}
+
 \usage{
 
 	\S4method{fit}{depmix}(object, w=NULL, fixed=NULL, equal=NULL, conrows=NULL,
