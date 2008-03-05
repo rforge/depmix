@@ -1,8 +1,9 @@
-setwd("/Users/ivisser/Documents/projects/depmixProject/depmixNew/code/depmix/trunk/")
+setwd("/Users/ivisser/Documents/projects/depmixProject/depmixNew/rforge/depmix/trunk/")
 
 source("depmixS4.R")
 source("classes.R")
 source("hmModel.R")
+source("fithmModel.R")
 source("lystig.R")
 source("fb.R")
 source("trGLM.r")
@@ -13,7 +14,7 @@ source("EM.R")
 maxit=100
 tol=1e-5
 
-load("speed.Rda")
+load("data/speed.Rda")
 
 rModels <- list(
   list(
@@ -23,13 +24,13 @@ rModels <- list(
 )
 
 trstart=c(0.8,0.2,0.1,0.9)
-instart=c(.5,.5)
+instart=c(0,1)
 
 
 mod <- depmix(rModels=rModels,data=speed,transition=~1,trstart=trstart,instart=instart)
 
 logLik(mod)
-
+source("EM.R")
 fmod <- em(mod,verbose=T)
 
 # 
@@ -37,26 +38,8 @@ fmod <- em(mod,verbose=T)
 # 
 
 fixed <- getpars(mod,"fixed")
-allpars <- getpars(mod)
-
-pars <- allpars[!fixed]
-
-logl <- function(pars) {
-	allpars[!fixed] <- pars
-	mod <- setpars(mod,allpars)
-	-logLik(mod)
-}
-
-library(Rdonlp2)
-
-cntrl <- donlp2.control(hessian=FALSE,difftype=1,epsfcn=1e-6)
-
-res1 <- donlp2(pars,logl,control=cntrl)
-
-allpars[!fixed] <- res1$par
-mod <- setpars(mod,allpars)
-
-ll <- logLik(mod)
+fixed[2] <- TRUE
+fdmod <- fit(mod,fixed=fixed)
 
 
 # final loglike
