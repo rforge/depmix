@@ -44,6 +44,7 @@ em <- function(object,maxit=100,tol=1e-5,verbose=FALSE,...) {
       #object@trModels[[i]] <- fit(object@trModels[[i]],w=NULL,ntimes=object@ntimes) # check this
       #object@trans[,,i] <- exp(logDens(object@trModels[[i]]))
       object@trans[,,i] <- predict(object@trModels[[i]])
+      
       for(k in 1:object@nresp) {
         object@rModels[[i]][[k]] <- fit(object@rModels[[i]][[k]],w=fbo$gamma[,i])
         object@logdens[,k,i] <- logDens(object@rModels[[i]][[k]])

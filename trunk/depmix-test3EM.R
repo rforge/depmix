@@ -28,11 +28,10 @@ mod <- depmix(rModels=rModels,data=speed,transition=~Pacc,trstart=trstart,instar
 
 logLik(mod)
 
-mod@trModels[[1]] <- mod@trModels[[2]] <- trGLM(~Pacc,data=speed,nstate=2)
-mod@trModels[[1]]@parameters$coefficients[,2] <- c(-2.153550,.01)
-mod@trModels[[2]]@parameters$coefficients[,2] <- c(2.389200,0)
+#mod@trModels[[1]] <- mod@trModels[[2]] <- trGLM(~Pacc,data=speed,nstate=2)
+#mod@trModels[[1]]@parameters$coefficients[,2] <- c(-2.153550,.01)
+#mod@trModels[[2]]@parameters$coefficients[,2] <- c(2.389200,0)
 
-object <- mod
 maxit=100
 tol=1e-5
 

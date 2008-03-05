@@ -380,27 +380,18 @@ setMethod("fit","trinMultinom",
 			pars <- object@parameters
 			b <- pars$coefficients
 			base <- object@family$base
-			
 			if(is.matrix(w)) nan <- which(is.na(rowSums(w))) else nan <- which(is.na(w))
-			
 			#vgam(cbind(w[,-base],w[,base]) ~ ) # what is this?
-			
 			y <- as.vector(t(object@family$linkinv(w[-c(nan,ntimes),-base],base=object@family$base)))
-			
-			x <- object@x[-c(nan,ntimes),]
-			
+			x <- object@x[-c(nan,ntimes),]			
 			if(!is.matrix(x)) x <- matrix(x,ncol=ncol(object@x))
-			nt <- nrow(x)
-			
+			nt <- nrow(x)			
 			Z <- matrix(ncol=length(b))
 			Z <- vector()
-			for(i in 1:nt) Z <- rbind(Z,t(bdiag(rep(list(x[i,]),ncol(w)-1))))
-			
-			mu <- object@family$linkinv(x%*%b,base=base)
-			
+			for(i in 1:nt) Z <- rbind(Z,t(bdiag(rep(list(x[i,]),ncol(w)-1))))			
+			mu <- object@family$linkinv(x%*%b,base=base)			
 			mt <- as.numeric(t(mu[,-base]))
-			Dl <- Sigmal <- Wl <- list()
-			
+			Dl <- Sigmal <- Wl <- list()			
 			converge <- FALSE
 			while(!converge) {
 				b.old <- b
@@ -433,6 +424,33 @@ setMethod("fit","trinMultinom",
     }
     
     nnetfit <- function() {
+  		require(nnet)
+  		pars <- object@parameters
+  		base <- object@family$base # delete me
+  		#y <- object@y[,-base]
+  		y <- object@y
+  		x <- object@x
+  		if(is.matrix(y)) na <- unlist(apply(y,2,function(x) which(is.na(x)))) else na <- which(is.na(y))
+  		if(is.matrix(x)) na <- c(na,unlist(apply(x,2,function(x) which(is.na(x))))) else na <- c(na,which(is.na(x)))
+  		if(!is.null(w)) na <- c(na,which(is.na(w)))
+  		y <- as.matrix(y)
+  		x <- as.matrix(x)
+  		na <- unique(na)
+  		x <- x[-na,]
+  		y <- y[-na,]
+  		y <- round(y) # delete me
+  		if(!is.null(w)) w <- w[-na]
+  		#mask <- matrix(1,nrow=nrow(pars$coefficients),ncol=ncol(pars$coefficients))
+  		#mask[,base] <- 0
+  		if(!is.null(w)) fit <- multinom(y~x-1,weights=w,trace=FALSE) else fit <- multinom(y~x-1,weights=w,trace=FALSE)
+  		ids <- vector(,length=ncol(y))
+  		ids[base] <- 1
+  		ids[-base] <- 2:ncol(y)
+  		pars$coefficients <- t(matrix(fit$wts,ncol=ncol(y))[-1,ids])
+  		object <- setpars(object,unlist(pars))
+  		#object
+  		pars
+    }
 		require(nnet)
 		pars <- object@parameters
 		base <- object@family$base # delete me
@@ -447,16 +465,15 @@ setMethod("fit","trinMultinom",
 		na <- unique(na)
 		x <- x[-na,]
 		y <- y[-na,]
+		#y <- round(y) # delete me
 		if(!is.null(w)) w <- w[-na]
 		#mask <- matrix(1,nrow=nrow(pars$coefficients),ncol=ncol(pars$coefficients))
 		#mask[,base] <- 0
-		if(!is.null(w)) fit <- multinom(y~x-1,weights=w) else fit <- multinom(y~x-1,weights=w)
-		pars$coefficients <- matrix(fit$wts,ncol=ncol(y))[-1,-1]
-		#object <- setpars(object,unlist(pars))
-		#object
-		pars
-    }
-    pars <- nnetfit()
+		if(!is.null(w)) fit <- multinom(y~x-1,weights=w,trace=FALSE) else fit <- multinom(y~x-1,weights=w,trace=FALSE)
+		ids <- vector(,length=ncol(y))
+		ids[base] <- 1
+		ids[-base] <- 2:ncol(y)
+		pars$coefficients <- t(matrix(fit$wts,ncol=ncol(y))[-1,ids]) # why do we need to transpose?
 		object <- setpars(object,unlist(pars))
 		object
 	}
