@@ -3,7 +3,7 @@ setwd("/Users/ivisser/Documents/projects/depmixProject/depmixNew/rforge/depmix/t
 source("depmixS4.R")
 source("classes.R")
 source("hmModel.R")
-source("trGLM.r")
+source("fithmModel.R")
 source("lystig.R")
 source("fb.r")
 source("viterbi.r")
@@ -33,7 +33,7 @@ logLik(mod)
 #mod@trModels[[1]]@parameters$coefficients[,2] <- c(-2.153550,.01)
 #mod@trModels[[2]]@parameters$coefficients[,2] <- c(2.389200,0)
 
-maxit=100
-tol=1e-5
+#fmod <- em(mod,verbose=T)
 
-fmod <- em(mod,verbose=T)
+fixed <- getpars(mod,"fixed")
+fdmod <- fit(mod,fixed=fixed)
