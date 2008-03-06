@@ -18,7 +18,8 @@ em <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 		
 		B <- exp(apply(object@logdens,c(1,3),sum))
 		# TODO: add functionality for inModel
-		init <- predict(object@initModel)
+		init <- exp(logDens(object@initModel))
+# 		print(init)
 		LL.old <- LL
 		j <- j+1
 		
@@ -31,7 +32,20 @@ em <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 		#object@init <- fit(object@init,ip=fbo$gamma[1,])
 		#object@init <- matrix(fbo$gamma[1,],nrow=1)
 		
-		object@initModel <- setpars(object@initModel,values=object@initModel@family$linkfun(fbo$gamma[1,],base=object@initModel@family$base))
+		# FIX ME for length(ntimes)>1
+		# print(fbo$gamma[1,])
+		# Here we need an average of gamma[bt[case],], which may need to be weighted ?? (see Rabiner, p283)
+		
+		ntimes <- object@ntimes
+		lt <- length(ntimes)
+		et <- cumsum(ntimes)
+		bt <- c(1,et[-lt]+1)
+		
+		# this is without weighting
+		initprobs <- apply(fbo$gamma[bt,],2,mean)
+		
+		object@initModel <- setpars(object@initModel,values=object@initModel@family$linkfun(initprobs,base=object@initModel@family$base))
+		
 		# This should become:
 		# lt <- length(object@ntimes)
 		# et <- cumsum(object@ntimes)
@@ -58,11 +72,13 @@ em <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 				#object@trModels[[i]] <- fit(object@trModels[[i]],w=NULL,ntimes=object@ntimes) # check this
 				#object@trans[,,i] <- exp(logDens(object@trModels[[i]]))
 				
+				# update trans slot of the model
 				object@trans[,,i] <- predict(object@trModels[[i]])
 			}
 			
 			for(k in 1:object@nresp) {
 				object@rModels[[i]][[k]] <- fit(object@rModels[[i]][[k]],w=fbo$gamma[,i])
+				# update logdens slot of the model
 				object@logdens[,k,i] <- logDens(object@rModels[[i]][[k]])
 			}
 		}
