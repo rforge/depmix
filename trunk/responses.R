@@ -149,7 +149,7 @@ setMethod("GLMresponse",
 
 setClass("transInit",contains="GLMresponse")
 
-setGeneric("transInit", function(formula, ...) standardGeneric("transInit"))
+setGeneric("transInit", function(formula, ... ) standardGeneric("transInit"))
 
 # FIX ME: data is a necessary argument to determine the dimension of x, even when there
 # are no covariates (and there are by definition no responses ...)
@@ -165,6 +165,10 @@ setMethod("transInit",
 		mf <- eval(mf, parent.frame())
 		x <- model.matrix(attr(mf, "terms"),mf)
 		y <- matrix(1,ncol=1) # y is not needed in the transition and init models
+		
+		# use ntimes 
+    #if(!is.null(ntimes)) if(nrow(x) < sum(ntimes)) x <- apply(x,2,function(y) rep(y,length=sum(ntimes)))
+		    
 		parameters <- list()
 		if(is.null(nstates)) stop("'nstates' must be provided in call to trinModel")
 		if(family$family=="multinomial") {
@@ -543,88 +547,31 @@ multinomial <- function(link="mlogit",base=1) {
 
 setMethod("fit","transInit",
 	function(object,w,ntimes) {
-		pars <- object@parameters	
-		oldfit <- function() {
-			#fit.trMultinom(object,w,ntimes)
-			tol <- 1e-5 # TODO: check global options
-			pars <- object@parameters
-			b <- pars$coefficients
-			base <- object@family$base
-			
-			if(is.matrix(w)) nan <- which(is.na(rowSums(w))) else nan <- which(is.na(w))
-			
-			#vgam(cbind(w[,-base],w[,base]) ~ ) # what is this?
-			
-			y <- as.vector(t(object@family$linkinv(w[-c(nan,ntimes),-base],base=object@family$base)))
-			
-			x <- object@x[-c(nan,ntimes),]
-			
-			if(!is.matrix(x)) x <- matrix(x,ncol=ncol(object@x))
-			nt <- nrow(x)
-			
-			Z <- matrix(ncol=length(b))
-			Z <- vector()
-			for(i in 1:nt) Z <- rbind(Z,t(bdiag(rep(list(x[i,]),ncol(w)-1))))
-			
-			mu <- object@family$linkinv(x%*%b,base=base)
-			
-			mt <- as.numeric(t(mu[,-base]))
-			Dl <- Sigmal <- Wl <- list()
-			
-			converge <- FALSE
-			while(!converge) {
-				b.old <- b
-				for(i in 1:nt) {
-					Dl[[i]] <- object@family$mu.eta(mu[i,-base])
-					Sigmal[[i]] <- object@family$variance(mu[i,-base])
-					Wl[[i]] <- Dl[[i]]%*%solve(Sigmal[[i]])%*%t(Dl[[i]]) # TODO: 
-				}
-				Sigma <- bdiag(Sigmal)
-				D <- bdiag(Dl)
-				W <- bdiag(Wl)
-				
-				b[,-base] <- as.numeric(b[,-base]) + solve(t(Z)%*%W%*%Z)%*%(t(Z)%*%D%*%solve(Sigma)%*%(y-mt))
-				if(abs(sum(b-b.old)) < tol) converge <- TRUE
-				mu <- object@family$linkinv(x%*%b,base=base)
-				mt <- as.numeric(t(mu[,-base]))
-			}
-			pars$coefficients <- t(b) # TODO: setpars gets matrix in wrong order!!! Fix this in setpars.
-			pars
-		}
-		
-		vglmfit <- function() {		
-			base <- object@family$base
-			w <- cbind(w[,-base],w[,base])
-			x <- slot(object,"x")
-			fam <- slot(object,"family")
-			fit <- vglm(w~x,fam)
-			pars$coefficients[,-base] <- t(slot(fit,coefficients))  # TODO: setpars gets matrix in wrong order!!! Fix this in setpars.
-			pars
-		}
-		
-		nnetfit <- function() {
-			require(nnet)
-			pars <- object@parameters
-			base <- object@family$base # delete me
-			#y <- object@y[,-base]
-			y <- object@y
-			x <- object@x
-			if(is.matrix(y)) na <- unlist(apply(y,2,function(x) which(is.na(x)))) else na <- which(is.na(y))
-			if(is.matrix(x)) na <- c(na,unlist(apply(x,2,function(x) which(is.na(x))))) else na <- c(na,which(is.na(x)))
-			na <- c(na,which(is.na(w)))
-			y <- as.matrix(y)
-			x <- as.matrix(x)
-			na <- unique(na)
-			mask <- matrix(1,nrow=nrow(pars$coefficients),ncol=ncol(pars$coefficients))
-			mask[,base] <- 0
-			fit <- nnet.default(x=x[-na,],y=y[-na,],weights=w[-na],size=0,entropy=TRUE,skip=TRUE,mask=mask,rang=0,trace=FALSE)
-			pars$coefficients <- matrix(fit$wts,ncol=ncol(pars$coefficients),nrow=nrow(pars$coefficients),byrow=TRUE)
-			#object <- setpars(object,unlist(pars))
-			#object
-			pars
-		}
-		pars <- nnetfit()
+		require(nnet)
+		pars <- object@parameters
+		base <- object@family$base # delete me
+		#y <- object@y[,-base]
+		y <- object@y
+		x <- object@x
+		if(is.matrix(y)) na <- unlist(apply(y,2,function(x) which(is.na(x)))) else na <- which(is.na(y))
+		if(is.matrix(x)) na <- c(na,unlist(apply(x,2,function(x) which(is.na(x))))) else na <- c(na,which(is.na(x)))
+		if(!is.null(w)) na <- c(na,which(is.na(w)))
+		y <- as.matrix(y)
+		x <- as.matrix(x)
+		na <- unique(na)
+		x <- x[-na,]
+		y <- y[-na,]
+		#y <- round(y) # delete me
+		if(!is.null(w)) w <- w[-na]
+		#mask <- matrix(1,nrow=nrow(pars$coefficients),ncol=ncol(pars$coefficients))
+		#mask[,base] <- 0
+		if(!is.null(w)) fit <- multinom(y~x-1,weights=w,trace=FALSE) else fit <- multinom(y~x-1,weights=w,trace=FALSE)
+		ids <- vector(,length=ncol(y))
+		ids[base] <- 1
+		ids[-base] <- 2:ncol(y)
+		pars$coefficients <- t(matrix(fit$wts,ncol=ncol(y))[-1,ids]) # why do we need to transpose?
 		object <- setpars(object,unlist(pars))
 		object
+
 	}
 )

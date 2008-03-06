@@ -1,38 +1,26 @@
 setwd("/Users/ivisser/Documents/projects/depmixProject/depmixNew/rforge/depmix/trunk/")
 
-source("depmixS4.R")
-source("classes.R")
-source("hmModel.R")
-source("trGLM.r")
+
+source("responses.R")
 source("lystig.R")
+source("depmix.R")
 source("fb.r")
 source("EM.R")
 
 load("data/speed.Rda")
 
-rModels <- list(
-  list(
-	rModel(formula=rt~1,data=speed,family=gaussian(),pstart=c(5.52,.2)),
-	rModel(formula=corr~1,data=speed,family=multinomial())),
-  list(
-	rModel(formula=rt~1,data=speed,family=gaussian(),pstart=c(6.39,.24)),
-	rModel(formula=corr~1,data=speed,family=multinomial(),pstart=c(.098,.902)))
-)
-
 trstart=c(0.896,0.104,0.084,0.916)
-instart=c(.5,.5)
+trstart=c(trstart[1:2],0,0.01,trstart[3:4],0,0.01)
+instart=c(0,1)
+resp <- c(5.52,0.202,0.472,0.528,6.39,0.24,0.098,0.902)
 
-trstart=c(trstart[1:2],0,0.01,trstart[3:4],0,0)
+# intercept only (NOTE: we should fix the transInit etc function so that 
+#   transition=~1 returns an x matrix of correct dimension!
+mod <- depmix(list(rt~1,corr~1),data=speed,family=list(gaussian(),multinomial()),transition=~rep(1,439)-1,trstart=c(.9,.1,.1,.9),instart=instart,respst=resp,nst=2)
+fmod.int <- em(mod)
+logLik(fmod.int)
 
-mod <- depmix(rModels=rModels,data=speed,transition=~Pacc,trstart=trstart,instart=instart)
-
-logLik(mod)
-
-#mod@trModels[[1]] <- mod@trModels[[2]] <- trGLM(~Pacc,data=speed,nstate=2)
-#mod@trModels[[1]]@parameters$coefficients[,2] <- c(-2.153550,.01)
-#mod@trModels[[2]]@parameters$coefficients[,2] <- c(2.389200,0)
-
-maxit=100
-tol=1e-5
-
+# now with a covariate
+mod <- depmix(list(rt~1,corr~1),data=speed,family=list(gaussian(),multinomial()),transition=~Pacc,trstart=trstart,instart=instart,respst=resp,nst=2)
 fmod <- em(mod,verbose=T)
+logLik(fmod)
