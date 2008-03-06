@@ -18,19 +18,21 @@ load("data/speed.Rda")
 
 rModels <- list(
   list(
-	rModel(formula=rt~1,data=speed,family=gaussian(),pstart=c(5.5,.2))),
+	rModel(formula=rt~1,data=speed,family=gaussian())),#,pstart=c(5.5,.2)
   list(
-	rModel(formula=rt~1,data=speed,family=gaussian(),pstart=c(6.3,.2)))
+	rModel(formula=rt~1,data=speed,family=gaussian()))#,pstart=c(6.3,.2)
 )
 
-trstart=c(0.8,0.2,0.1,0.9)
+trstart=runif(4)
 instart=c(0,1)
-
 
 mod <- depmix(rModels=rModels,data=speed,transition=~1,trstart=trstart,instart=instart)
 
 logLik(mod)
 source("EM.R")
+
+mod
+
 fmod <- em(mod,verbose=T)
 
 # 

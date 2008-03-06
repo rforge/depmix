@@ -9,11 +9,9 @@ TODO list for depmix package release 0.0-1
 	3) depmix.fit.Rd: help on fitting models: Ingmar
 		Other methods for depmix.fitted objects include:
 		a) posterior: get posterior state sequence: we still need the code for this!
-		
 		b) logLik: done!!!
 		c) AIC, BIC: done!!!
-		d) getpars, setpars
-		
+		d) getpars, setpars: done!!!!
 		e) llratio: done!!!!!
 		
 	4) responses.Rd: detailed description on constructing response models
@@ -32,9 +30,10 @@ Ingmar
 - viterbi algorithm to get posterior probabilities as part of depmix.fitted
 
 
-- general documentation: depmix-introduction needs updating
+- general documentation: depmix-introduction.pdf needs updating
 
 
+- generate initial values?!?!?
 
 
 
