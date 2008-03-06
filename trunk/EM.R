@@ -1,4 +1,4 @@
-em <- function(object,maxit=100,tol=1e-9,verbose=FALSE,...) {
+em <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 	if(!is(object,"hmModel")) stop("object must be 'hmModel'")
 	
 	# pseudocode
@@ -44,20 +44,22 @@ em <- function(object,maxit=100,tol=1e-9,verbose=FALSE,...) {
 		trm <- matrix(0,ns,ns)
 		for(i in 1:ns) {
 			
-			if(!object@stationary) {
-				object@trModels[[i]]@y <- fbo$xi[,,i]/fbo$gamma[,i]
-				object@trModels[[i]] <- fit(object@trModels[[i]],w=as.matrix(fbo$gamma[,i]),ntimes=object@ntimes) # check this
-			} else {
-				for(k in 1:ns) {
-					trm[i,k] <- sum(fbo$xi[-c(et),k,i])/sum(fbo$gamma[-c(et),i])
+			if(max(object@ntimes)>1) { #skip transition parameters update in case of latent class model
+				if(!object@stationary) {
+					object@trModels[[i]]@y <- fbo$xi[,,i]/fbo$gamma[,i]
+					object@trModels[[i]] <- fit(object@trModels[[i]],w=as.matrix(fbo$gamma[,i]),ntimes=object@ntimes) # check this
+				} else {
+					for(k in 1:ns) {
+						trm[i,k] <- sum(fbo$xi[-c(et),k,i])/sum(fbo$gamma[-c(et),i])
+					}
+					object@trModels[[i]]@parameters$coefficients <- object@trModels[[i]]@family$linkfun(trm[i,],base=object@initModel@family$base)
 				}
-				object@trModels[[i]]@parameters$coefficients <- object@trModels[[i]]@family$linkfun(trm[i,],base=object@initModel@family$base)
+				
+				#object@trModels[[i]] <- fit(object@trModels[[i]],w=NULL,ntimes=object@ntimes) # check this
+				#object@trans[,,i] <- exp(logDens(object@trModels[[i]]))
+				
+				object@trans[,,i] <- predict(object@trModels[[i]])
 			}
-			
-			#object@trModels[[i]] <- fit(object@trModels[[i]],w=NULL,ntimes=object@ntimes) # check this
-			#object@trans[,,i] <- exp(logDens(object@trModels[[i]]))
-			
-			object@trans[,,i] <- predict(object@trModels[[i]])
 			
 			for(k in 1:object@nresp) {
 				object@rModels[[i]][[k]] <- fit(object@rModels[[i]][[k]],w=fbo$gamma[,i])
