@@ -73,8 +73,11 @@
 		logical vector of the same length indicating which parameters are
 		fixed. The setpars functions sets parameters (or the logical fixed 
 		vector) to new values; \code{setpars} also recomputes the dens,
-		trans and init slots of \code{depmix} objects.}
-	
+		trans and init slots of \code{depmix} objects. Note that the 
+		\code{getpars} and \code{setpars} functions for \code{depmix} 
+		objects simply call the functions of the same name for the response
+		and transition models.}
+		
 	\item{...}{Not used currently.}
 	
 }

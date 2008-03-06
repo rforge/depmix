@@ -4,8 +4,8 @@
 \alias{predict,response-method}
 \alias{dens,response-method}
 \alias{npar,response-method}
-\alias{transInit}
-\alias{GLMresponse}
+\alias{transInit,response-method}
+\alias{GLMresponse,response-method}
 \title{Methods for creating depmix response models}
 \description{Create \code{\link[depmix]{response}} models.}
 \usage{

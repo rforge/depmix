@@ -20,13 +20,17 @@
 	}
 	
 }
+\details{
+	This class offers a framework from which to build specific response
+	models such as glm based responses or multinomial.
+}
 \section{Accessor Functions}{
-  The following functions should be used for accessing the corresponding
-  slots:
-  \describe{
-    \item{\code{npar}:}{The number of parameters of the model.}
-	\item{\code{getdf}:}{The number of non-fixed parameters.}
-  }
+	The following functions should be used for accessing the corresponding
+	slots:
+	\describe{
+		\item{\code{npar}:}{The number of parameters of the model.}
+		\item{\code{getdf}:}{The number of non-fixed parameters.}
+	}
 }
 \author{Ingmar Visser}
 \keyword{classes}
