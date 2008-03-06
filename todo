@@ -26,6 +26,7 @@ Ingmar
 
 - review summary/print functions for depmix and depmix.fitted
 
+- viterbi algorithm to get maximum a posteriori states for hmmModel: Maarten, done !!!!!
 
 - viterbi algorithm to get posterior probabilities as part of depmix.fitted
 
