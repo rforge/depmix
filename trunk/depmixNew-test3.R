@@ -13,14 +13,13 @@ setwd("/Users/ivisser/Documents/projects/depmixProject/depmixNew/rforge/depmix/t
 
 load("data/balance.rda")
 
-source("responses.R")
-source("depmix.R")
-source("depmix.fitted.R")
-
-source("llratio.R")
-source("lystig.R")
-source("fb.R")
-source("EM.R")
+source("R/responses.R")
+source("R/depmix.R")
+source("R/depmix.fitted.R")
+source("R/llratio.R")
+source("R/lystig.R")
+source("R/fb.R")
+source("R/EM.R")
 
 # now fit some latent class models
 trstart=c(1,0,0,1)

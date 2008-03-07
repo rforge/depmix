@@ -330,9 +330,6 @@ setMethod("freepars","depmix",
 
 setGeneric("logLik", function(object, ...) standardGeneric("logLik"))
 
-source("lystig.R")
-source("fb.R")
-
 # depends on getpars and nobs
 setMethod("logLik",signature(object="depmix"),
 	function(object,method="lystig") { # TODO: initial dens and response densities are recomputed here, but this is also done in setpars at least for the response densities !!!!!!!!

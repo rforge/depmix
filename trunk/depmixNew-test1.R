@@ -16,8 +16,8 @@
 
 setwd("/Users/ivisser/Documents/projects/depmixProject/depmixNew/rforge/depmix/trunk/")
 
-source("responses.R")
-source("depmix.R")
+source("R/responses.R")
+source("R/depmix.R")
 
 load("data/speed.Rda")
 
@@ -150,8 +150,8 @@ cat("Test 5: ", all.equal(getpars(mod),getpars(mod1)), "(getpars and setpars) \n
 # SPECIFYING MODELS THE EASY WAY
 # 
 
-mod <- depmix(rt~1,data=speed,nstates=2)
-mod
+# mod <- depmix(rt~1,data=speed,nstates=2)
+# mod
 
 
 
