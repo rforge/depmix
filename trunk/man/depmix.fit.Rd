@@ -90,6 +90,9 @@
 	mod <- depmix(rt~1,data=speed,nstates=2,trstart=runif(4))
 	# fit the model
 	mod1 <- fit(mod)
+	mod1 # to see the logLik and optimization information
+	# to see the parameters
+	summary(mod1)
 }
 \author{Ingmar Visser}
 \keyword{classes}
