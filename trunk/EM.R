@@ -40,8 +40,8 @@ em <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 		
 		# should become object@prior <- fit(object@prior)
 		object@prior@y <- fbo$gamma[bt,]
-		object@prior <- fit(object@prior, w=NULL)
-		
+		object@prior <- fit(object@prior, w=NULL,ntimes=NULL)
+		object@init <- dens(object@prior)
 		# init needs to be recomputed here?
 		
 		#object@initModel <- setpars(object@initModel,values=object@initModel@family$linkfun(initprobs,base=object@initModel@family$base))
@@ -84,11 +84,17 @@ em <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 		if( (LL >= LL.old) & (LL - LL.old < tol))  converge <- TRUE
 	}
 	
+	class(object) <- "depmix.fitted"
 	if(converge) object@message <- "Log likelihood converged to within tol."
 	else object@message <- "'maxit' iterations reached in EM without convergence."
 	
 	# no constraints in EM
-	object@conMat <- NULL
+	# NULL values not allowed in slot conMat!!!
+	object@conMat <- matrix()
+	#object@conMat <- NULL
+	
+	# what do we want in slot posterior?
+	object@posterior <- fbo$gamma
 	
 	object
 }

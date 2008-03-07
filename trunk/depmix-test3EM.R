@@ -4,6 +4,7 @@ setwd("/Users/ivisser/Documents/projects/depmixProject/depmixNew/rforge/depmix/t
 source("responses.R")
 source("lystig.R")
 source("depmix.R")
+source("depmix.fitted.R")
 source("fb.r")
 source("EM.R")
 
@@ -24,3 +25,13 @@ logLik(fmod.int)
 mod <- depmix(list(rt~1,corr~1),data=speed,family=list(gaussian(),multinomial()),transition=~Pacc,trstart=trstart,instart=instart,respst=resp,nst=2)
 fmod <- em(mod,verbose=T)
 logLik(fmod)
+
+# with only multinomial response
+mod <- depmix(list(corr~1),data=speed,family=list(multinomial()),transition=~Pacc,trstart=trstart,instart=instart,respst=resp[c(3,4,7,8)],nst=2)
+fmod.mult <- em(mod,verbose=T)
+logLik(fmod.mult)
+
+# with only gaussian response
+mod <- depmix(list(rt~1),data=speed,family=list(gaussian()),transition=~Pacc,trstart=trstart,instart=instart,respst=resp[c(1,2,5,6)],nst=2)
+fmod.gauss <- em(mod,verbose=T)
+logLik(fmod.gauss)

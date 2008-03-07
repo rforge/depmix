@@ -301,8 +301,10 @@ setMethod("fit","NORMresponse",
 	function(object,w) {
 		pars <- object@parameters
 		fit <- lm.wfit(x=object@x,y=object@y,w=w)
+		#fit <- glm.fit(x=object@x,y=object@y,weights=w,family=object@family)
 		pars$coefficients <- fit$coefficients
 		pars$sd <- sqrt(sum(w*fit$residuals^2/sum(w)))
+		#pars$sd <- sqrt(sum(w*residuals(fit)^2/sum(w)))
 		object <- setpars(object,unlist(pars))
 		object
 	}
@@ -559,13 +561,15 @@ setMethod("fit","transInit",
 		y <- as.matrix(y)
 		x <- as.matrix(x)
 		na <- unique(na)
-		x <- x[-na,]
-		y <- y[-na,]
+		if(length(na)>0) {
+  		x <- x[-na,]
+  		y <- y[-na,]
 		#y <- round(y) # delete me
-		if(!is.null(w)) w <- w[-na]
+  		if(!is.null(w)) w <- w[-na]
+    }
 		#mask <- matrix(1,nrow=nrow(pars$coefficients),ncol=ncol(pars$coefficients))
 		#mask[,base] <- 0
-		if(!is.null(w)) fit <- multinom(y~x-1,weights=w,trace=FALSE) else fit <- multinom(y~x-1,weights=w,trace=FALSE)
+		if(!is.null(w)) fit <- multinom(y~x-1,weights=w,trace=FALSE) else fit <- multinom(y~x-1,trace=FALSE)
 		ids <- vector(,length=ncol(y))
 		ids[base] <- 1
 		ids[-base] <- 2:ncol(y)
