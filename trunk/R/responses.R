@@ -3,13 +3,6 @@
 # response, transition and prior models for DEPMIX models
 # 
 
-# set up response models in such a way that they are easily extensible
-# all it needs is:
-# 1) the actual response y
-# 2) optional covariates x
-# 3) parameters
-# 4) further information about parameters: fixed or otherwise contrained
-
 # 
 # RESPONSE CLASS
 # 
@@ -27,25 +20,11 @@ setClass("response",
 # RESPONSE CLASS METHODS
 # 
 
-
-# What methods are neccessary for response models?
-# 1) construction method: done!
-# 2) dens function (with argument object and log=TRUE/FALSE to return density on log scale): done!
-# 3) getpars function to return the parameter, with argument which="pars"/"fixed" to determine 
-# whether to return parameter or fixed/free information: done!
-# 4) setpars function to set parameters to new values: done!
-# 5) accessor function npar: done!
-# 6) accessor function getdf (get the number of free parameters): done!
-
-setGeneric("npar",function(object) standardGeneric("npar"))
-
 setMethod("npar","response",
 	function(object) {
 		return(object@npar)
 	}
 )
-
-setGeneric("getdf",function(object) standardGeneric("getdf"))
 
 setMethod("getdf","response",
 	function(object) {
@@ -62,23 +41,15 @@ setClass("GLMresponse",
 		family="ANY"
 	),
 	prototype(
-# 		parameters=list(coefficients=0,other=1),
-# 		fixed=c(FALSE,FALSE),
-# 		y = matrix(1,ncol=1),
-# 		x = matrix(1,ncol=1),
 		formula=.~.,
 		family=gaussian()
 	),
 	contains="response"
 )
 
-# Which methods are neccessary for this in addition to the general response class methods?
-# 1) predict function (needed for dens): done!
-# 2) fit function (needed for EM): done!
-# 3) print method: done!
-# 4) summary method
-
-setGeneric("GLMresponse", function(formula, ...) standardGeneric("GLMresponse"))
+# 
+# TODO: review print and summary methods
+# 
 
 setMethod("GLMresponse",
 	signature(formula="formula"),
@@ -118,7 +89,6 @@ setMethod("GLMresponse",
 			if(family$family=="multinomial") {
 				if(family$link=="identity") parameters$coefficients[1,] <- family$linkfun(pstart[1:ncol(parameters$coefficients)])
 				else {
-# 					print("ok")
 					if(prob) parameters$coefficients[1,] <- family$linkfun(pstart[1:ncol(parameters$coefficients)],base=family$base)
 					else parameters$coefficients[1,] <- pstart[1:ncol(parameters$coefficients)]
 				}
@@ -149,11 +119,7 @@ setMethod("GLMresponse",
 # neccessary in the mulinomial model)
 # 
 
-# setClass("trinMultinom",contains=c("trinModel","rMultinom"))
-
 setClass("transInit",contains="GLMresponse")
-
-setGeneric("transInit", function(formula, ... ) standardGeneric("transInit"))
 
 # FIX ME: data is a necessary argument to determine the dimension of x, even when there
 # are no covariates (and there are by definition no responses ...)
@@ -168,11 +134,7 @@ setMethod("transInit",
 		mf[[1]] <- as.name("model.frame")
 		mf <- eval(mf, parent.frame())
 		x <- model.matrix(attr(mf, "terms"),mf)
-		y <- matrix(1,ncol=1) # y is not needed in the transition and init models
-		
-		# use ntimes 
-    #if(!is.null(ntimes)) if(nrow(x) < sum(ntimes)) x <- apply(x,2,function(y) rep(y,length=sum(ntimes)))
-		    
+		y <- matrix(1,ncol=1) # y is not needed in the transition and init models		    
 		parameters <- list()
 		if(is.null(nstates)) stop("'nstates' must be provided in call to trinModel")
 		if(family$family=="multinomial") {
@@ -224,8 +186,6 @@ setMethod("show","GLMresponse",
 	}
 )
 
-setGeneric("setpars", function(object,values,which="pars",...) standardGeneric("setpars"))
-
 setMethod("setpars","GLMresponse",
 	function(object,values,which="pars",...) {
 		npar <- npar(object)
@@ -251,8 +211,6 @@ setMethod("setpars","GLMresponse",
 		return(object)
 	}
 )
-
-setGeneric("getpars", function(object,which="pars",...) standardGeneric("getpars"))
 
 setMethod("getpars","GLMresponse",
 	function(object,which="pars",...) {
@@ -289,8 +247,6 @@ setClass("MVNresponse",contains="response")
 # use: in EM (M step)
 # returns: (fitted) response with (new) estimates of parameters
 
-setGeneric("fit",function(object,w,...) standardGeneric("fit"))
-
 setMethod("fit","GLMresponse",
 	function(object,w) {
 		pars <- object@parameters
@@ -305,10 +261,8 @@ setMethod("fit","NORMresponse",
 	function(object,w) {
 		pars <- object@parameters
 		fit <- lm.wfit(x=object@x,y=object@y,w=w)
-		#fit <- glm.fit(x=object@x,y=object@y,weights=w,family=object@family)
 		pars$coefficients <- fit$coefficients
 		pars$sd <- sqrt(sum(w*fit$residuals^2/sum(w)))
-		#pars$sd <- sqrt(sum(w*residuals(fit)^2/sum(w)))
 		object <- setpars(object,unlist(pars))
 		object
 	}
@@ -344,11 +298,6 @@ setMethod("fit","MULTINOMresponse",
 # method 'logDens'
 # use: instead of density slot in rModel
 # returns: matrix with log(p(y|x,parameters))
-
-setGeneric("logDens",function(object,...) standardGeneric("logDens"))
-
-setGeneric("dens",function(object,...) standardGeneric("dens"))
-
 setMethod("logDens","BINOMresponse",
 	function(object) {
 		dbinom(x=object@y,size=object@n,prob=predict(object),log=TRUE)
@@ -533,10 +482,8 @@ multinomial <- function(link="mlogit",base=1) {
 		}
 	}
 	variance <- function(mu) {
-		# diag(mu) - mu%*%t(mu)
 		n <- length(mu)
 		v <- diag(n)*outer(mu,1-mu) - (1-diag(n))*outer(mu,-mu)
-		#diag(v) <- diag(v) + 1e-50
 	}
 	validmu <- function(mu) {
 		all(mu > 0) && all(mu < 1)
@@ -548,7 +495,7 @@ multinomial <- function(link="mlogit",base=1) {
 	structure(list(family = "multinomial", link = linktemp, linkfun = stats$linkfun,
 			linkinv = stats$linkinv, variance = variance, dev.resids = dev.resids,
 			mu.eta = stats$mu.eta, initialize = initialize, validmu = validmu, valideta = stats$valideta, base=base),
-		class = "family")
+			class = "family")
 }
 
 setMethod("fit","transInit",
@@ -556,7 +503,6 @@ setMethod("fit","transInit",
 		pars <- object@parameters
 		if(missing(w)) w <- NULL
 		oldfit <- function() {
-			#fit.trMultinom(object,w,ntimes)
 			tol <- 1e-5 # TODO: check global options
 			pars <- object@parameters
 			b <- pars$coefficients
@@ -646,11 +592,11 @@ setMethod("fit","transInit",
 		x <- as.matrix(x)
 		na <- unique(na)
 		if(length(na)>0) {
-  		x <- x[-na,]
-  		y <- y[-na,]
-		#y <- round(y) # delete me
-		if(!is.null(w)) w <- w[-na]
-	}
+			x <- x[-na,]
+			y <- y[-na,]
+			#y <- round(y) # delete me
+			if(!is.null(w)) w <- w[-na]
+		}
 		#mask <- matrix(1,nrow=nrow(pars$coefficients),ncol=ncol(pars$coefficients))
 		#mask[,base] <- 0
 		if(!is.null(w)) fit <- multinom(y~x-1,weights=w,trace=FALSE) else fit <- multinom(y~x-1,trace=FALSE)

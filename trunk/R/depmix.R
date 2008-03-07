@@ -11,25 +11,12 @@
 # DEPMIX CLASS
 # 
 
-# What does the user want to know after having defined a model?
-
-# 1) the models: formulae or otherwise and the parameter values
-# 2) whether parameters are feasible: ie does logLik exist or return nan (very likely with bad parameters)
-
-# What do we need to be able to optimize the model?
-# 1) density of the responses
-# 2) density of the transitions
-# 3) density of the priors
-# 4) ntimes: the lengths of individual time series
-# 5) whether the models are stationary, ie time-dependent parameters or not
-
 setClass("depmix",
-	representation(response="list",
-		transition="list",
-		# these are the initial state probabilities or priors as they are called in eg mixture or lca models
-		prior="ANY",
-		dens="array", # B 
-		trDens="array", # A
+	representation(response="list", # response models
+		transition="list", # transition models (multinomial logistic)
+		prior="ANY", # the prior model (multinomial logistic)
+		dens="array", # response densities (B)
+		trDens="array", # transition densities (A)
 		init="array", # usually called pi 
 		stationary="logical",
 		ntimes="numeric",
@@ -43,14 +30,7 @@ setClass("depmix",
 # METHODS
 # 
 
-# Which methods are needed for this class? 
-# 1) construction methods: by inputting various models for responses, transitions and priors
-# 2) accessor methods: getpars, getdf, nlin, npars, nobs (etc)
-# 3) setpars method
-# 4) gof methods: logLik, AIC, BIC (etc) 
-# 5) print method
-# 6) summary method: I am not quite sure what the differences are between print and summary methods?
-
+# TODO: change print and add summary method for depmix objects
 
 # CONSTRUCTORS
 
@@ -288,8 +268,6 @@ setMethod("getpars","depmix",
 	}
 )
 
-setGeneric("nobs", function(object, ...) standardGeneric("nobs"))
-
 setMethod("nobs", signature(object="depmix"),
 	function(object, ...) {
 		sum(object@ntimes)
@@ -316,14 +294,11 @@ setMethod("nresp","depmix",
 	function(object) return(object@nresp)
 )
 
-
-setGeneric("freepars", function(object, ...) standardGeneric("freepars"))
-
 # depends on nlin(object) and getpars(object)
 setMethod("freepars","depmix",
 	function(object) {
 		free <- sum(!getpars(object,which="fixed"))
-# 		free <- free-nlin(object)
+# 		free <- free-nlin(object) # FIX ME!!!!
 		free
 	}
 )
@@ -332,7 +307,7 @@ setGeneric("logLik", function(object, ...) standardGeneric("logLik"))
 
 # depends on getpars and nobs
 setMethod("logLik",signature(object="depmix"),
-	function(object,method="lystig") { # TODO: initial dens and response densities are recomputed here, but this is also done in setpars at least for the response densities !!!!!!!!
+	function(object,method="lystig") { 
 		if(method=="fb") ll <- fb(object@init,object@trDens,apply(object@dens,c(1,3),prod),object@ntimes,object@stationary)$logLike
 		if(method=="lystig") ll <- lystig(object@init,object@trDens,apply(object@dens,c(1,3),prod),object@ntimes,object@stationary)$logLike
 		attr(ll, "df") <- freepars(object)
@@ -348,8 +323,6 @@ setMethod("AIC", signature(object="depmix"),
 		c(-2 * logLik(object) + freepars(object) * k)
 	}
 )
-
-setGeneric("BIC", function(object, ...) standardGeneric("BIC"))
 
 # depends on logLik, freepars and nobs
 setMethod("BIC", signature(object="depmix"),
