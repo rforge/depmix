@@ -1,8 +1,6 @@
 \name{response-class}
 \docType{class}
 \alias{response-class}
-\alias{posterior}
-\alias{posterior,response-method}
 \title{Class "response"}
 \description{A \code{\link{response}} model for depmix models.}
 \arguments{

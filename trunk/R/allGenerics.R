@@ -7,6 +7,8 @@
 
 setGeneric("depmix", function(response=any, transition=any, ...) standardGeneric("depmix"))
 
+setGeneric("npar", function(object, ...) standardGeneric("npar"))
+
 setGeneric("nobs", function(object, ...) standardGeneric("nobs"))
 
 setGeneric("ntimes", function(object, ...) standardGeneric("ntimes"))

@@ -1,7 +1,5 @@
 \name{fit}
-
 \docType{method}
-
 \alias{fit}
 \alias{depmix.fit}
 \alias{fit,depmix-method}
@@ -12,10 +10,10 @@
 \title{Method fit}
 
 \description{\code{fit} optimizes parameters of depmix models, possibly
-subject to general linear (in)equality constraints.}
+	subject to general linear (in)equality constraints.}
 
 \usage{
-
+	
 	\S4method{fit}{depmix}(object, w=NULL, fixed=NULL, equal=NULL, conrows=NULL,
 		conrows.upper=0, conrows.lower=0, method=c("em","donlp"),...)
 	
@@ -41,7 +39,7 @@ subject to general linear (in)equality constraints.}
 	linear constraints on the parameters and if the transition model has
 	no covariates. Otherwise the general optimizer donlp is used which 
 	handles general linear (in-)equality constraints. 
-		
+	
 	Three types of constraints can be specified on the parameters: fixed,
 	equality, and general constraints. Constraint vectors should be of
 	length npar(object). See help on getpars and setpars about the
@@ -72,14 +70,13 @@ subject to general linear (in)equality constraints.}
 	
 }
 \value{
-	\code{fit} returns an object of class depmix.fitted which contains 
+	\code{fit} returns an object of class \code{depmix.fitted} which contains 
 	the original depmix object, and further has slots: 
 	
-	\describe{
-		\item{message:}{Convergence information.}
-		\item{conMat:}{The constraint matrix A, see details.}
-		\item{posterior:}{The posterior state probabilities.}
-	}
+	message: Convergence information.
+	
+	conMat: The constraint matrix A, see details.
+	posterior: The posterior state probabilities.
 	
 	The print function shows the \code{message} and the parameter
 	estimates.
