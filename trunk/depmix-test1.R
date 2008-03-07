@@ -40,7 +40,7 @@ loglike(speed, mod)
 # [1] -296.115107102
 
 
-setwd("/Users/ivisser/Documents/projects/depmixProject/depmixNew/code/depmix/trunk/")
+setwd("/Users/ivisser/Documents/projects/depmixProject/depmixNew/rforge/depmix/trunk/")
 
 source("depmixS4.R")
 source("classes.R")
@@ -48,7 +48,7 @@ source("hmModel.R")
 source("lystig.R")
 source("fb.R")
 
-load("speed.Rda")
+load("data/speed.Rda")
 
 # 
 # TEST 1: speed data model with optimal parameters, compute the likelihood
