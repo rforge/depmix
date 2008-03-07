@@ -4,6 +4,8 @@
 \alias{predict,response-method}
 \alias{dens,response-method}
 \alias{npar,response-method}
+\alias{transInit}
+\alias{GLMresponse}
 \alias{transInit,response-method}
 \alias{GLMresponse,response-method}
 \title{Methods for creating depmix response models}
@@ -15,7 +17,7 @@
 	transInit(formula, family=multinomial(), data, nstates, 
 		pstart=NULL, prob=TRUE, fixed=NULL)
 	
-	\S4methods{npar}{response}(object)
+	\S4methods{npar}{response}(object,...)
 }
 \arguments{
 	\item{object}{An object of class \code{response} or one of its
@@ -25,6 +27,7 @@
 		gaussian() are allowed options.}
 	\item{data}{An optional data.frame to interpret the variables from the 
 		formula argument in.}
+	\item{nstates}{The number of states of the model.}
 	\item{pstart}{Starting values for the coefficients and other
 		parameters, ie the standard deviation for the gaussian() family.}
 	\item{fixed}{Logical vector indicating which paramters are to be fixed.}

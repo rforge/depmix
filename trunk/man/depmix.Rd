@@ -3,8 +3,23 @@
 
 \alias{depmix}
 \alias{logLik}
+\alias{logLik,depmix-method}
 \alias{AIC}
+\alias{AIC,depmix-method}
 \alias{BIC}
+\alias{BIC,depmix-method}
+
+\alias{npar}
+\alias{npar,depmix-method}
+
+\alias{freepars}
+\alias{freepars,depmix-method}
+
+\alias{setpars}
+\alias{setpars,depmix-method}
+
+\alias{getpars}
+\alias{getpars,depmix-method}
 
 \title{Dependent Mixture Model Specifiction}
 
@@ -174,7 +189,6 @@ observations, ie \code{sum(ntimes)} that is used in computing the
 	depmix(list(rt~1,corr~1),data=speed,nstates=2,family=list(gaussian(),multinomial()))
 	
 }
-\author{Ingmar Visser}
 \keyword{models}
 
 

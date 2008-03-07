@@ -6,7 +6,6 @@
 \title{Class "depmix"}
 \description{A \code{\link{depmix}} model.}
 \usage{
-	\S4method{fit}{depmix}(object)
 	\S4method{posterior}{depmix}(object)
 }
 \arguments{

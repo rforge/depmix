@@ -21,6 +21,12 @@ setGeneric("freepars", function(object, ...) standardGeneric("freepars"))
 
 setGeneric("logLik", function(object, ...) standardGeneric("logLik"))
 
+setGeneric("fit", function(object, ...) standardGeneric("fit"))
+
+setGeneric("predict", function(object, ...) standardGeneric("predict"))
+
+setGeneric("AIC", function(object, ..., k=2) standardGeneric("AIC"))
+
 setGeneric("BIC", function(object, ...) standardGeneric("BIC"))
 
 setGeneric("getdf",function(object) standardGeneric("getdf"))
