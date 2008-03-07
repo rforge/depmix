@@ -1,8 +1,8 @@
 Package: depmixS4
-Version: 0.0-1
-Date: 2008-03-01
+Version: 0.1
+Date: 2008-03-07
 Title: Dependent Mixture Models
-Author: Ingmar Visser <i.visser@uva.nl>, Maarten Speekenbrink
+Author: Ingmar Visser <i.visser@uva.nl>, Maarten Speekenbrink <m.speekenbrink@ucl.ac.uk>
 Maintainer: Ingmar Visser <i.visser@uva.nl>
 Depends: R (>= 2.6.0), MASS
 Suggests: Rdonlp2
