@@ -1,4 +1,5 @@
 em <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
+	
 	if(!is(object,"depmix")) stop("object is not of class 'depmix'")
 	
 	# pseudocode
@@ -24,7 +25,6 @@ em <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 		B <- apply(object@dens,c(1,3),prod)
 		# TODO: add functionality for inModel
 		init <- object@init
-# 		print(init)
 		LL.old <- LL
 		j <- j+1
 		
@@ -34,21 +34,16 @@ em <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 		
 		# maximization
 		
-		#object@init <- fit(object@init,ip=fbo$gamma[1,])
-		#object@init <- matrix(fbo$gamma[1,],nrow=1)
-		
-		# FIX ME for length(ntimes)>1
-		# print(fbo$gamma[1,])
 		# Here we need an average of gamma[bt[case],], which may need to be weighted ?? (see Rabiner, p283)
-		
-
-		
 		# this is without weighting
 		initprobs <- apply(fbo$gamma[bt,],2,mean)
 		
 		# should become object@prior <- fit(object@prior)
 		object@prior@y <- fbo$gamma[bt,]
-		object@prior <- fit(object@prior,w=NULL)
+		object@prior <- fit(object@prior, w=NULL)
+		
+		# init needs to be recomputed here?
+		
 		#object@initModel <- setpars(object@initModel,values=object@initModel@family$linkfun(initprobs,base=object@initModel@family$base))
 		
 		# This should become:
@@ -57,9 +52,7 @@ em <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 		# bt <- c(1,et[-lt]+1)
 		# object@initModel@y <- fbo$gamma[bt,]
 		# object@initModel <- fit(object@initModel)
-		
-		#et <- cumsum(object@ntimes)
-		
+				
 		trm <- matrix(0,ns,ns)
 		for(i in 1:ns) {
 			
@@ -75,9 +68,6 @@ em <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 					object@transition[[i]]@parameters$coefficients <- object@transition[[i]]@family$linkfun(trm[i,],base=object@transition[[i]]@family$base)
 				}
 				
-				#object@trModels[[i]] <- fit(object@trModels[[i]],w=NULL,ntimes=object@ntimes) # check this
-				#object@trans[,,i] <- exp(logDens(object@trModels[[i]]))
-				
 				# update trans slot of the model
 				object@trDens[,,i] <- dens(object@transition[[i]])
 			}
@@ -88,13 +78,17 @@ em <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 				object@dens[,k,i] <- dens(object@response[[i]][[k]])
 			}
 		}
-		
-		#object <- setpars(object,getpars(object)) # set parameters and recompute (bit of a roundabout way)
-		
+				
 		LL <- logLik(object)
 		if(verbose) cat("iteration",j,"logLik:",LL,"\n")
 		if( (LL >= LL.old) & (LL - LL.old < tol))  converge <- TRUE
 	}
+	
+	if(converge) object@message <- "Log likelihood converged to within tol."
+	else object@message <- "'maxit' iterations reached in EM without convergence."
+	
+	# no constraints in EM
+	object@conMat <- NULL
 	
 	object
 }
