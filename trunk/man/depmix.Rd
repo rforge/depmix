@@ -171,7 +171,7 @@ observations, ie \code{sum(ntimes)} that is used in computing the
 
 	# create a 2 state model with one continuous and one binary response
 	data(speed)
-	depmix(list(rt~1,corr~1),data=speed,nstates=2,family=list(gaussian(),mulitnomial()))
+	depmix(list(rt~1,corr~1),data=speed,nstates=2,family=list(gaussian(),multinomial()))
 	
 }
 \author{Ingmar Visser}
