@@ -1,8 +1,11 @@
 \name{response}
 \docType{method}
 \alias{response}
+\alias{predict}
 \alias{predict,response-method}
+\alias{dens}
 \alias{dens,response-method}
+\alias{npar}
 \alias{npar,response-method}
 \alias{transInit}
 \alias{GLMresponse}
@@ -17,7 +20,7 @@
 	transInit(formula, family=multinomial(), data, nstates, 
 		pstart=NULL, prob=TRUE, fixed=NULL)
 	
-	\S4methods{npar}{response}(object,...)
+	npar(object,...)
 }
 \arguments{
 	\item{object}{An object of class \code{response} or one of its

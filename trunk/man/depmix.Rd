@@ -9,9 +9,6 @@
 \alias{BIC}
 \alias{BIC,depmix-method}
 
-\alias{npar}
-\alias{npar,depmix-method}
-
 \alias{freepars}
 \alias{freepars,depmix-method}
 
@@ -39,7 +36,6 @@
 	\S4method{AIC}{depmix}(object)
 	\S4method{BIC}{depmix}(object)
 	\S4method{freepars}{depmix}(object)
-	\S4method{npar}{depmix}(object)
 	\S4method{freepars}{depmix}(object)
 	\S4method{setpars}{depmix}(object,which="pars",...)
 	\S4method{getpars}{depmix}(object,which="pars",...)	

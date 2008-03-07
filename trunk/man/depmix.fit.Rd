@@ -17,7 +17,7 @@
 	\S4method{fit}{depmix}(object, w=NULL, fixed=NULL, equal=NULL, conrows=NULL,
 		conrows.upper=0, conrows.lower=0, method=NULL,...)
 		
-	\S4methods{llratio}{depmix}(object,object,...)
+	llratio(object,object,...)
 }
 \arguments{
 	\item{object}{An object of class "depmix".}
