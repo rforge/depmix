@@ -53,7 +53,7 @@ logLik(mod1)
 
 # 'log Lik.' -1083.036 (df=9)
 
-source("EM.R")
+source("EM4.R")
 
 # optimize using em
 logLik(mod,meth="fb")

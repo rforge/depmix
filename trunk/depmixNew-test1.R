@@ -14,12 +14,12 @@
 # Other tests with optimization of models are moved to depmix-test2.R
 # 
 
-setwd("/Users/ivisser/Documents/projects/depmixProject/depmixNew/code/depmix/trunk/")
+setwd("/Users/ivisser/Documents/projects/depmixProject/depmixNew/rforge/depmix/trunk/")
 
 source("responses.R")
 source("depmix.R")
 
-load("speed.Rda")
+load("data/speed.Rda")
 
 # 
 # TEST 1: speed data model with optimal parameters, compute the likelihood
@@ -150,9 +150,8 @@ cat("Test 5: ", all.equal(getpars(mod),getpars(mod1)), "(getpars and setpars) \n
 # SPECIFYING MODELS THE EASY WAY
 # 
 
-source("depmix.R")
-
 mod <- depmix(rt~1,data=speed,nstates=2)
+mod
 
 
 

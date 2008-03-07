@@ -82,7 +82,7 @@ setGeneric("GLMresponse", function(formula, ...) standardGeneric("GLMresponse"))
 
 setMethod("GLMresponse",
 	signature(formula="formula"),
-	function(formula,family,data,pstart=NULL,fixed=NULL) {
+	function(formula,family,data,pstart=NULL,fixed=NULL,prob=TRUE) {
 		call <- match.call()
 		mf <- match.call(expand.dots = FALSE)
 		m <- match(c("formula", "data"), names(mf), 0)
@@ -117,15 +117,19 @@ setMethod("GLMresponse",
 			if(length(pstart)!=npar) stop("length of 'pstart' must be",npar)
 			if(family$family=="multinomial") {
 				if(family$link=="identity") parameters$coefficients[1,] <- family$linkfun(pstart[1:ncol(parameters$coefficients)])
-				else parameters$coefficients[1,] <- family$linkfun(pstart[1:ncol(parameters$coefficients)],base=family$base)
+				else {
+# 					print("ok")
+					if(prob) parameters$coefficients[1,] <- family$linkfun(pstart[1:ncol(parameters$coefficients)],base=family$base)
+					else parameters$coefficients[1,] <- pstart[1:ncol(parameters$coefficients)]
+				}
 				pstart <- matrix(pstart,ncol(x),byrow=TRUE)
-					  if(ncol(x)>1) parameters$coefficients[2:ncol(x),] <- pstart[2:ncol(x),]
-				} else {
+				if(ncol(x)>1) parameters$coefficients[2:ncol(x),] <- pstart[2:ncol(x),]
+			} else {
 				parameters$coefficients <- family$linkfun(pstart[1:length(parameters$coefficients)])
 			}
-				if(length(unlist(parameters))>length(parameters$coefficients)) {
+			if(length(unlist(parameters))>length(parameters$coefficients)) {
 				if(family$family=="gaussian") parameters$sd <- pstart[(length(parameters$coefficients)+1)]
-				}
+			}
 		}
 		mod <- switch(family$family,
 			gaussian = new("NORMresponse",formula=formula,family=family,parameters=parameters,fixed=fixed,x=x,y=y,npar=npar),
@@ -549,6 +553,86 @@ multinomial <- function(link="mlogit",base=1) {
 
 setMethod("fit","transInit",
 	function(object,w,ntimes) {
+		pars <- object@parameters
+		if(missing(w)) w <- NULL
+		oldfit <- function() {
+			#fit.trMultinom(object,w,ntimes)
+			tol <- 1e-5 # TODO: check global options
+			pars <- object@parameters
+			b <- pars$coefficients
+			base <- object@family$base
+			if(is.matrix(w)) nan <- which(is.na(rowSums(w))) else nan <- which(is.na(w))
+			#vgam(cbind(w[,-base],w[,base]) ~ ) # what is this?
+			y <- as.vector(t(object@family$linkinv(w[-c(nan,ntimes),-base],base=object@family$base)))
+			x <- object@x[-c(nan,ntimes),]			
+			if(!is.matrix(x)) x <- matrix(x,ncol=ncol(object@x))
+			nt <- nrow(x)			
+			Z <- matrix(ncol=length(b))
+			Z <- vector()
+			for(i in 1:nt) Z <- rbind(Z,t(bdiag(rep(list(x[i,]),ncol(w)-1))))			
+			mu <- object@family$linkinv(x%*%b,base=base)			
+			mt <- as.numeric(t(mu[,-base]))
+			Dl <- Sigmal <- Wl <- list()			
+			converge <- FALSE
+			while(!converge) {
+				b.old <- b
+				for(i in 1:nt) {
+					Dl[[i]] <- object@family$mu.eta(mu[i,-base])
+					Sigmal[[i]] <- object@family$variance(mu[i,-base])
+					Wl[[i]] <- Dl[[i]]%*%solve(Sigmal[[i]])%*%t(Dl[[i]]) # TODO: 
+				}
+				Sigma <- bdiag(Sigmal)
+				D <- bdiag(Dl)
+				W <- bdiag(Wl)
+				
+				b[,-base] <- as.numeric(b[,-base]) + solve(t(Z)%*%W%*%Z)%*%(t(Z)%*%D%*%solve(Sigma)%*%(y-mt))
+				if(abs(sum(b-b.old)) < tol) converge <- TRUE
+				mu <- object@family$linkinv(x%*%b,base=base)
+				mt <- as.numeric(t(mu[,-base]))
+			}
+			pars$coefficients <- t(b) # TODO: setpars gets matrix in wrong order!!! Fix this in setpars.
+			pars
+		}
+		
+		vglmfit <- function() {		
+			base <- object@family$base
+			w <- cbind(w[,-base],w[,base])
+			x <- slot(object,"x")
+			fam <- slot(object,"family")
+			fit <- vglm(w~x,fam)
+			pars$coefficients[,-base] <- t(slot(fit,coefficients))  # TODO: setpars gets matrix in wrong order!!! Fix this in setpars.
+			pars
+		}
+		
+		nnetfit <- function() {
+			require(nnet)
+			pars <- object@parameters
+			base <- object@family$base # delete me
+			#y <- object@y[,-base]
+			y <- object@y
+			x <- object@x
+			if(is.matrix(y)) na <- unlist(apply(y,2,function(x) which(is.na(x)))) else na <- which(is.na(y))
+			if(is.matrix(x)) na <- c(na,unlist(apply(x,2,function(x) which(is.na(x))))) else na <- c(na,which(is.na(x)))
+			if(!is.null(w)) na <- c(na,which(is.na(w)))
+			y <- as.matrix(y)
+			x <- as.matrix(x)
+			na <- unique(na)
+			x <- x[-na,]
+			y <- y[-na,]
+			y <- round(y) # delete me
+			if(!is.null(w)) w <- w[-na]
+			#mask <- matrix(1,nrow=nrow(pars$coefficients),ncol=ncol(pars$coefficients))
+			#mask[,base] <- 0
+			if(!is.null(w)) fit <- multinom(y~x-1,weights=w,trace=FALSE) else fit <- multinom(y~x-1,weights=w,trace=FALSE)
+			ids <- vector(,length=ncol(y))
+			ids[base] <- 1
+			ids[-base] <- 2:ncol(y)
+			pars$coefficients <- t(matrix(fit$wts,ncol=ncol(y))[-1,ids])
+			object <- setpars(object,unlist(pars))
+			#object
+			pars
+		}
+		
 		require(nnet)
 		pars <- object@parameters
 		base <- object@family$base # delete me
@@ -565,8 +649,8 @@ setMethod("fit","transInit",
   		x <- x[-na,]
   		y <- y[-na,]
 		#y <- round(y) # delete me
-  		if(!is.null(w)) w <- w[-na]
-    }
+		if(!is.null(w)) w <- w[-na]
+	}
 		#mask <- matrix(1,nrow=nrow(pars$coefficients),ncol=ncol(pars$coefficients))
 		#mask[,base] <- 0
 		if(!is.null(w)) fit <- multinom(y~x-1,weights=w,trace=FALSE) else fit <- multinom(y~x-1,trace=FALSE)
@@ -576,6 +660,6 @@ setMethod("fit","transInit",
 		pars$coefficients <- t(matrix(fit$wts,ncol=ncol(y))[-1,ids]) # why do we need to transpose?
 		object <- setpars(object,unlist(pars))
 		object
-
 	}
 )
+

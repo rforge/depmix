@@ -39,37 +39,14 @@ fixed <- c(1,0,1,1,1,1,rep(c(1,0),8))
 
 mod1 <- fit(mod,fixed=fixed)
 
-# 'log Lik.' -1083.036 (df=9)
+mod1
 
-logLik(mod1)
-AIC(mod1)
-BIC(mod1)
+# 'log Lik.' -1083.036 (df=9)
 
 # 
 # Add age as covariate on class membership
 # 
 
-setwd("/Users/ivisser/Documents/projects/depmixProject/depmixNew/rforge/depmix/trunk/")
-
-load("data/balance.rda")
-
-source("responses.R")
-source("depmix.R")
-source("depmix.fitted.R")
-
-source("llratio.R")
-source("lystig.R")
-source("fb.R")
-source("EM.R")
-
-# source("responses.R")
-
-# respstart=getpars(mod)[7:22]
-# 
-# invlogit <- function(x) {
-# 	exp(x)/(1+exp(x))
-# }
-# respstart[1:8*2] <- sapply(respstart[1:8*2],invlogit)
 instart=c(0.5,0.5,0,0)
 respstart=c(rep(c(0.1,0.9),4),rep(c(0.9,0.1),4))
 trstart=c(1,0,0,1)

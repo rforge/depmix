@@ -21,15 +21,20 @@ source("llratio.R")
 source("lystig.R")
 source("fb.R")
 
+source("EM.R")
+
 # now fit some latent class models
 trstart=c(1,0,0,1)
 instart=c(0.5,0.5)
 
 # ntimes is added as an argument
 
+respstart=c(rep(c(0.9,0.1),4),rep(c(0.1,0.9),4))
+
 mod <- depmix(list(d1~1,d2~1,d3~1,d4~1), data=balance, nstates=2,
 	family=list(multinomial(),multinomial(),multinomial(),multinomial()),
-	trstart=trstart,instart=instart,ntimes=rep(1,nrow(balance)))
+	trstart=trstart,instart=instart,respstart=respstart,
+	ntimes=rep(1,nrow(balance)))
 
 pars <- getpars(mod)
 fixed <- c(1,0,1,1,1,1,rep(c(1,0),8))

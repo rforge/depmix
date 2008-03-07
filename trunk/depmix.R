@@ -230,11 +230,11 @@ makeTransModels <- function(nstates,formula=~1,data=NULL,stationary,values=NULL,
 	return(models)
 }
 
-makePriorModel <- function(nstates,ncases,formula=~1,data=NULL,values=NULL) {
+makePriorModel <- function(nstates,ncases,formula=~1,data=NULL,values=NULL, ...) {
 	
 	# these arguments need to be added at some point FIX ME
 	base=1
-	prob=TRUE
+# 	prob=TRUE
 	
 	# initial probabilities model, depending on covariates init(=~1 by default)
 	if(formula==~1) {
