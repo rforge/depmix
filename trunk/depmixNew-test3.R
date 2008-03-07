@@ -20,6 +20,7 @@ source("depmix.fitted.R")
 source("llratio.R")
 source("lystig.R")
 source("fb.R")
+source("EM.R")
 
 # now fit some latent class models
 trstart=c(1,0,0,1)
@@ -27,9 +28,11 @@ instart=c(0.5,0.5)
 
 # ntimes is added as an argument
 
+respstart=runif(16)
 mod <- depmix(list(d1~1,d2~1,d3~1,d4~1), data=balance, nstates=2,
 	family=list(multinomial(),multinomial(),multinomial(),multinomial()),
-	trstart=trstart,instart=instart,ntimes=rep(1,nrow(balance)))
+	respstart=respstart,trstart=trstart,instart=instart,
+	ntimes=rep(1,nrow(balance)))
 
 pars <- getpars(mod)
 fixed <- c(1,0,1,1,1,1,rep(c(1,0),8))
@@ -46,54 +49,41 @@ BIC(mod1)
 # Add age as covariate on class membership
 # 
 
+setwd("/Users/ivisser/Documents/projects/depmixProject/depmixNew/rforge/depmix/trunk/")
+
+load("data/balance.rda")
+
+source("responses.R")
+source("depmix.R")
+source("depmix.fitted.R")
+
+source("llratio.R")
+source("lystig.R")
+source("fb.R")
+source("EM.R")
+
+# source("responses.R")
+
+# respstart=getpars(mod)[7:22]
+# 
+# invlogit <- function(x) {
+# 	exp(x)/(1+exp(x))
+# }
+# respstart[1:8*2] <- sapply(respstart[1:8*2],invlogit)
 instart=c(0.5,0.5,0,0)
+respstart=c(rep(c(0.1,0.9),4),rep(c(0.9,0.1),4))
+trstart=c(1,0,0,1)
 mod2 <- depmix(list(d1~1,d2~1,d3~1,d4~1), data=balance, nstates=2,
 	family=list(multinomial(),multinomial(),multinomial(),multinomial()),
-	trstart=trstart, instart=instart, ntimes=rep(1,nrow(balance)), 
-	prior=~age, initdata=balance)
+	trstart=trstart, instart=instart, respstart=respstart,
+	ntimes=rep(1,nrow(balance)), prior=~age, initdata=balance)
 
 fixed <- c(1,0,1,0,1,1,1,1,rep(c(1,0),8))
-mod2 <- fit(mod2,fixed=fixed)
+mod3 <- fit(mod2,fixed=fixed)
 
-logLik(mod2)
-AIC(mod2)
-BIC(mod2)
+mod4 <- fit(mod2,fixed=fixed,method="donlp")
 
-llratio(mod2,mod1)
-
-
-predict(mod2@response[[1]][[1]])[1,]
-predict(mod2@response[[1]][[2]])[1,]
-predict(mod2@response[[1]][[3]])[1,]
-predict(mod2@response[[1]][[4]])[1,]
-
-predict(mod2@response[[2]][[1]])[1,]
-predict(mod2@response[[2]][[2]])[1,]
-predict(mod2@response[[2]][[3]])[1,]
-predict(mod2@response[[2]][[4]])[1,]
-
-
-plot.multinomial <- function(object,var=1) {	
-	base=1
-	coef <- object@parameters$coefficients[,-base]
-	print(coef)
-	range=range(object@x[,2])
-	print(range) 
-	linv <- function(x) {
-		invlogit(coef[2]*(x+coef[1]))
-	}
-	plot(linv,xlim=range)
-	return(range)
-}
-
-logit <- function(p) {
-	log(p/(1-p))
-}
-
-invlogit <- function(x) {
-	exp(x)/(1+exp(x))
-}
-
+llratio(mod3,mod1)
 
 
 
