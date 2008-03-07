@@ -85,5 +85,14 @@ subject to general linear (in)equality constraints.}
 	estimates.
 	
 }
+\examples{
+	data(speed)
+	# 2-state model on the RTs of the speed data with random 
+	# starting values for the transition pars (without those EM does not get off the ground)
+	set.seed(1)
+	mod <- depmix(rt~1,data=speed,nstates=2,trstart=runif(4))
+	# fit the model
+	mod1 <- fit(mod)
+}
 \author{Ingmar Visser}
 \keyword{classes}
