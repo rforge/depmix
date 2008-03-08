@@ -281,7 +281,7 @@ setMethod("fit","MVNresponse",
 
 setMethod("fit","MULTINOMresponse",
 	function(object,w) {
-		require(nnet)
+# 		require(nnet)
 		pars <- object@parameters
 		base <- object@family$base # delete me
 		y <- object@y[,-base]
@@ -551,7 +551,7 @@ setMethod("fit","transInit",
 		}
 		
 		nnetfit <- function() {
-			require(nnet)
+# 			require(nnet)
 			pars <- object@parameters
 			base <- object@family$base # delete me
 			#y <- object@y[,-base]
@@ -579,7 +579,7 @@ setMethod("fit","transInit",
 			pars
 		}
 		
-		require(nnet)
+# 		require(nnet)
 		pars <- object@parameters
 		base <- object@family$base # delete me
 		#y <- object@y[,-base]

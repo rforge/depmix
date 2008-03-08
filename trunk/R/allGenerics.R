@@ -3,6 +3,12 @@
 # Started by Ingmar Visser, march 2008
 # 
 
+.First.lib <- function(lib, pkg) {
+	require(nnet)
+}
+
+.Last.lib <- function(libpath) {}
+
 # Guess what: all generics
 
 setGeneric("depmix", function(response=any, transition=any, ...) standardGeneric("depmix"))
