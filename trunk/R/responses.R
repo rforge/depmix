@@ -71,7 +71,30 @@ setMethod("GLMresponse",
 		}
 		if(family$family=="binomial") {
 			# FIX ME
-		}
+		  y <- model.response(mf)
+			switch(is(y)[1],
+        factor = {
+          y <- as.matrix(as.numeric(as.numeric(y)==1))
+          n <- matrix(1,nrow=nrow(y))
+        },
+        matrix = {
+          if(ncol(y) == 2) {
+            n <- rowSums(y)
+            y <- as.matrix(y[,1])
+          } else {
+            stop("model response not valid for binomial model")
+          }
+        },
+        numeric = {
+          if(sum(y %in% c(0,1)) != length(y)) stop("model response not valid for binomial model")
+          n <- matrix(1,nrow=length(y))
+          y <- as.matrix(y)
+        },
+        stop("model response not valid for binomial model")
+			 # assume 1 success, rest not
+			 #y <- as.numeric(as.numeric(y)==1)
+		  )
+	  }
 		if(family$family=="multinomial") {
 			if(is.factor(y)) y <- model.matrix(~y-1)
 			if(is.numeric(y)) y <- model.matrix(~factor(y)-1)
@@ -103,7 +126,7 @@ setMethod("GLMresponse",
 		}
 		mod <- switch(family$family,
 			gaussian = new("NORMresponse",formula=formula,family=family,parameters=parameters,fixed=fixed,x=x,y=y,npar=npar),
-			binomial = new("BINOMresponse",formula=formula,family=family,parameters=parameters,fixed=fixed,x=x,y=y,npar=npar),
+			binomial = new("BINOMresponse",formula=formula,family=family,parameters=parameters,fixed=fixed,x=x,y=y,npar=npar,n=n),
 			multinomial = new("MULTINOMresponse",formula=formula,family=family,parameters=parameters,fixed=fixed,x=x,y=y,npar=npar),
 			new("GLMresponse",formula=formula,family=family,parameters=parameters,fixed=fixed,x=x,y=y,npar=npar)
 		)
