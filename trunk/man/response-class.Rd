@@ -3,11 +3,16 @@
 \docType{class}
 
 \alias{response-class}
-\alias{getdf}{response-method}
+\alias{getdf}
+\alias{getdf,response-method}
 
 \title{Class "response"}
 
 \description{A \code{\link{response}} model for depmix models.}
+
+\usage{
+	\S4method{getdf}{response}(object)
+}
 
 \arguments{
 	\item{object}{An object of class "response".}

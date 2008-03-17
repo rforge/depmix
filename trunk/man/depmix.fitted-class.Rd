@@ -46,12 +46,15 @@
 			the degrees of freedom, ie there are redundancies in the
 			parameters, in particular in the multinomial models for the
 			transitions and prior.}
-
+			
 		\item{\code{message}:}{This provides some information on convergence,
 			either from the EM algorithm or from Rdonlp2.}
 		
 		\item{\code{conMat}:}{The linear constraint matrix, which has zero rows
 			if there were no constraints.}
+		
+		\item{\code{posterior}:}{Posterior (Viterbi) state sequence (not
+			implemented currently).}
 	}
 }
 

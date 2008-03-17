@@ -11,7 +11,6 @@
 
 \alias{mlogit}
 \alias{multinomial}
-\alias{nobs}
 \alias{nresp}
 \alias{nstates}
 \alias{ntimes}
@@ -43,8 +42,7 @@
 \alias{getpars,GLMresponse-method}
 \alias{setpars,GLMresponse-method}
 
-\alias{getdf,response,response-method}
-\alias{npar,response,response-method}
+\alias{npar,response-method}
 
 \title{Depmix internal functions}
 

@@ -13,6 +13,8 @@
 \alias{BIC}
 \alias{BIC,depmix-method}
 
+\alias{nobs}
+\alias{nobs,depmix-method}
 
 \alias{npar}
 \alias{npar,depmix-method}
@@ -48,6 +50,7 @@
 	\S4method{logLik}{depmix}(object)
 	\S4method{AIC}{depmix}(object)
 	\S4method{BIC}{depmix}(object)
+	\S4method{nobs}{depmix}(object)
 	
 	\S4method{npar}{depmix}(object)
 	\S4method{freepars}{depmix}(object)
