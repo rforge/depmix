@@ -1,0 +1,38 @@
+import(methods)
+
+importFrom(stats, predict)
+importFrom(stats4, AIC, BIC, logLik, plot, summary)
+
+export(
+	lystig,
+	fb,
+	multinomial,
+	mlogit
+)
+
+exportClasses(
+	depmix,
+	depmix.fitted,
+	response,
+	GLMresponse,
+	transInit
+)
+
+exportMethods(
+	AIC,
+	BIC,
+	fit,
+	npar,
+	getdf,
+	nobs,
+	depmix,
+	GLMresponse,
+	transInit,
+	setpars,
+	getpars,
+	logLik,
+	predict,
+	dens,
+	show,
+	summary
+)
