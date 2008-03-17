@@ -1,13 +1,16 @@
 \name{fit}
+
 \docType{method}
+
 \alias{fit}
 \alias{depmix.fit}
 \alias{fit,depmix-method}
+
 \alias{llratio}
 \alias{llratio,depmix-method}
 \alias{likelihoodratio}
 
-\title{Method fit}
+\title{Fit depmix models}
 
 \description{\code{fit} optimizes parameters of depmix models, possibly
 	subject to general linear (in)equality constraints.}
@@ -17,10 +20,13 @@
 	\S4method{fit}{depmix}(object, w=NULL, fixed=NULL, equal=NULL, conrows=NULL,
 		conrows.upper=0, conrows.lower=0, method=NULL,...)
 		
-	llratio(object,object,...)
+	llratio(basemodel,constrainedmodel,...)
+	
 }
+
 \arguments{
-	\item{object}{An object of class "depmix".}
+	\item{object}{An object of class \code{depmix}.}
+	\item{basemodel, constrainedmodel}{Objects of class \code{depmix.fitted}.}
 	\item{w}{Weights??? What's this argument doing here? It's not being
 		used.}
 	\item{fixed}{Vector of mode logical indicating which parameters should 
@@ -33,6 +39,7 @@
 		constraints.}
 	\item{...}{Not used currently.}
 }
+
 \details{
 	The method fits depmix models by the EM algorithm if there are no
 	linear constraints on the parameters and if the transition model has
@@ -68,6 +75,7 @@
 	of freedom. 
 	
 }
+
 \value{
 	\code{fit} returns an object of class \code{depmix.fitted} which contains 
 	the original depmix object, and further has slots: 
@@ -81,6 +89,7 @@
 	estimates.
 	
 }
+
 \examples{
 	data(speed)
 	# 2-state model on the RTs of the speed data with random 
@@ -93,5 +102,7 @@
 	# to see the parameters
 	summary(mod1)
 }
+
 \author{Ingmar Visser}
-\keyword{classes}
+
+\keyword{methods}

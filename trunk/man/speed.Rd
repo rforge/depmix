@@ -1,9 +1,11 @@
-
 \name{speed}
+
 \docType{data}
+
 \alias{speed}
 
 \title{Speed Accuracy Switching Data}
+
 \description{
 
 	This data set is a bivariate series of reaction times and accuracy
@@ -18,8 +20,11 @@
 	Maas et al, 2005}.
 	
 }
+
 \usage{data(speed)}
+
 \format{Data.frame}
+
 \source{
 
 	Han L. J. Van der Maas, Conor V. Dolan and Peter C. M. Molenaar (2005),
@@ -27,4 +32,5 @@
 	Reaction Time Tasks.  \emph{Manuscript in preparation}. 
 
 }
+
 \keyword{datasets}

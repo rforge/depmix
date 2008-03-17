@@ -37,7 +37,7 @@ setGeneric("BIC", function(object, ...) standardGeneric("BIC"))
 
 setGeneric("getdf",function(object) standardGeneric("getdf"))
 
-setGeneric("GLMresponse", function(formula, ...) standardGeneric("GLMresponse"))
+setGeneric("GLMresponse", function(formula, ... ) standardGeneric("GLMresponse"))
 
 setGeneric("transInit", function(formula, ... ) standardGeneric("transInit"))
 

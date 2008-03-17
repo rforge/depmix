@@ -40,7 +40,7 @@ setClass("depmix",
 setGeneric("depmix", function(response=any, transition=any, ...) standardGeneric("depmix"))
 
 setMethod("depmix",
-	signature(response = "list", transition= "list"),
+ 	signature(response = "list", transition= "list"),
 	function(response, transition, prior, ntimes=NULL, stationary=TRUE, ...) {
 		
 		nstates <- length(response)
@@ -89,7 +89,7 @@ setMethod("depmix",
 # 
 
 setMethod("depmix",
-	signature(response="ANY",transition="formula"),
+ 	signature(response="ANY",transition="formula"),
 	function(response,data=NULL,nstates,transition,family=gaussian(),prior=~1,initdata=NULL,
 		respstart=NULL,trstart=NULL,instart=NULL,ntimes=NULL, ...) {
 		
@@ -125,7 +125,7 @@ setMethod("depmix",
 )
 
 setMethod("depmix",
-	signature(response="ANY",transition="missing"),
+ 	signature(response="ANY",transition="missing"),
 	function(response,data=NULL,nstates,transition=~1,family=gaussian(),prior=~1,initdata=NULL,
 		respstart=NULL,trstart=NULL,instart=NULL,ntimes=NULL, ...) {
 		

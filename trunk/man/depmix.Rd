@@ -1,13 +1,21 @@
 
 \name{depmix}
 
+\alias{depmixS4}
 \alias{depmix}
+
 \alias{logLik}
 \alias{logLik,depmix-method}
+
 \alias{AIC}
 \alias{AIC,depmix-method}
+
 \alias{BIC}
 \alias{BIC,depmix-method}
+
+
+\alias{npar}
+\alias{npar,depmix-method}
 
 \alias{freepars}
 \alias{freepars,depmix-method}
@@ -18,6 +26,9 @@
 \alias{getpars}
 \alias{getpars,depmix-method}
 
+\alias{show,depmix-method}
+\alias{summary,depmix-method}
+
 \title{Dependent Mixture Model Specifiction}
 
 \description{
@@ -26,21 +37,25 @@
 	dependent mixture model, or hidden Markov model.}
 	
 }
+
 \usage{
 	
 	depmix(response, data=NULL, nstates, transition=~1, family=gaussian(), 
 		prior=~1, initdata=NULL, respstart=NULL, trstart=NULL, instart=NULL,
 		ntimes=NULL,...)
 	
+	\S4method{summary}{depmix}(object)
 	\S4method{logLik}{depmix}(object)
 	\S4method{AIC}{depmix}(object)
 	\S4method{BIC}{depmix}(object)
-	\S4method{freepars}{depmix}(object)
+	
+	\S4method{npar}{depmix}(object)
 	\S4method{freepars}{depmix}(object)
 	\S4method{setpars}{depmix}(object,which="pars",...)
 	\S4method{getpars}{depmix}(object,which="pars",...)	
 	
 }
+
 \arguments{
 	\item{object}{An object with class \code{depmix}.}
 	
@@ -118,10 +133,11 @@
 	\code{\link[depmix]{depmix.fit}} function.
 	
 }
+
 \value{
 	
-\code{depmix} returns an object of class \code{depmix} which has print and 
-summary methods. It has the following slots: 
+\code{depmix} returns an object of class \code{depmix} which has the
+following slots:
 
 	\item{response}{A list of a list of response models; the first
 		index runs over states; the second index runs over the independent 
@@ -152,9 +168,9 @@ summary methods. It has the following slots:
 		parameters, in particular in the multinomial models for the
 		transitions and prior.}
 
-\code{logLik}, \code{AIC}, and \code{BIC} return the respective associated 
-with the current parameter values.  \code{nobs} returns the number of
-observations, ie \code{sum(ntimes)} that is used in computing the
+\code{logLik}, \code{AIC}, and \code{BIC} return the respective values
+associated with the current parameter values.  \code{nobs} returns the
+number of observations, ie \code{sum(ntimes)} that is used in computing the
 \code{BIC}.  \code{npar} returns the number of paramters of a model;
 \code{freepars} returns the number of non-fixed parameters.
 
@@ -185,6 +201,7 @@ observations, ie \code{sum(ntimes)} that is used in computing the
 	depmix(list(rt~1,corr~1),data=speed,nstates=2,family=list(gaussian(),multinomial()))
 	
 }
-\keyword{models}
+
+\keyword{methods}
 
 

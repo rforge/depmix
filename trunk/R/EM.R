@@ -64,8 +64,11 @@ em <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 		}
 				
 		LL <- logLik(object)
-		if(verbose) cat("iteration",j,"logLik:",LL,"\n")
-		if( (LL >= LL.old) & (LL - LL.old < tol))  converge <- TRUE
+		if(verbose&((j%%5)==0)) cat("iteration",j,"logLik:",LL,"\n")
+		if( (LL >= LL.old) & (LL - LL.old < tol))  {
+			cat("iteration",j,"logLik:",LL,"\n")
+			converge <- TRUE
+		}
 	}
 	
 	class(object) <- "depmix.fitted"

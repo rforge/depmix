@@ -1,36 +1,34 @@
 \name{response}
+
 \docType{method}
+
 \alias{response}
-\alias{predict}
-\alias{predict,response-method}
-\alias{dens}
-\alias{dens,response-method}
-\alias{npar}
-\alias{npar,response-method}
 \alias{transInit}
 \alias{GLMresponse}
-\alias{transInit,response-method}
-\alias{GLMresponse,response-method}
+
+\alias{transInit,formula,GLMresponse-method}
+\alias{GLMresponse,formula,GLMresponse-method}
+
 \title{Methods for creating depmix response models}
+
 \description{Create \code{\link[depmix]{response}} models.}
+
 \usage{
 	
-	GLMresponse(formula, family, data, pstart=NULL, fixed=NULL)
+	GLMresponse(formula, data=NULL, family=gaussian(), pstart=NULL, fixed=NULL)
 	
-	transInit(formula, family=multinomial(), data, nstates, 
+	transInit(formula, nstates, data=NULL, family=multinomial(),
 		pstart=NULL, prob=TRUE, fixed=NULL)
-	
-	npar(object,...)
+		
 }
+
 \arguments{
-	\item{object}{An object of class \code{response} or one of its
-		descendents.}
 	\item{formula}{A model formula.}
+	\item{nstates}{The number of states of the model.}
 	\item{family}{A family object; currently only multinomial() and
 		gaussian() are allowed options.}
 	\item{data}{An optional data.frame to interpret the variables from the 
 		formula argument in.}
-	\item{nstates}{The number of states of the model.}
 	\item{pstart}{Starting values for the coefficients and other
 		parameters, ie the standard deviation for the gaussian() family.}
 	\item{fixed}{Logical vector indicating which paramters are to be fixed.}
@@ -38,6 +36,7 @@
 		multinomial() family models are probabilities or logistic
 		parameters (see details).}
 }
+
 \details{
 	
 	Both methods use the familiar formula interface from linear and general
@@ -55,14 +54,17 @@
 	observed. 
 	
 }
+
 \value{
 	\code{GLMresponse} and \code{transInit} return objects of class
 	\code{GLMresponse} and \code{transInit} respectively; both classes
 	extend the \code{\link[depmix]{response-class}}. 
 	
-	Objects with class \code{response} have at least methods: \code{predict}
-	to return \code{predict}'ed responses, \code{dens} to return the
-	\code{dens}'ity of responses. 
+	For extensibility, objects with class \code{response} have at least
+	methods: \code{predict} to return \code{predict}'ed responses,
+	\code{dens} to return the \code{dens}'ity of responses.  
 }
-\author{Ingmar Visser}
-\keyword{classes}
+
+\author{Ingmar Visser} 
+
+\keyword{methods}
