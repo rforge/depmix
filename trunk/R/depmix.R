@@ -37,60 +37,55 @@ setClass("depmix",
 # the main function constructing a depmix model with full information, ie all models already in place
 # this function is probably not ever called by users
 
-setGeneric("depmix", function(response=any, transition=any, ...) standardGeneric("depmix"))
-
-setMethod("depmix",
- 	signature(response = "list", transition= "list"),
-	function(response, transition, prior, ntimes=NULL, stationary=TRUE, ...) {
+makeDepmix <- function(response, transition, prior, ntimes=NULL, stationary=TRUE, ...) {
 		
-		nstates <- length(response)
-		nresp <- length(response[[1]])
-		
-		# make appropriate ntimes
-		if(is.null(ntimes)) {
-			ntimes <- nrow(response[[1]][[1]]@y)
-		}
-		
-		# count the number of parameters	
-		npars <- npar(prior) 
-		for(i in 1:nstates) {
-			npars <- npars + sum(sapply(response[[i]],npar))
-		}
-		npars <- npars + sum(sapply(transition,npar))
-				
-		# make appropriate array for transition densities
-		nt <- sum(ntimes)
-		if(stationary) trDens <- array(0,c(1,nstates,nstates))
-		else trDens <- array(0,c(nt,nstates,nstates))
-		
-		# make appropriate array for response densities
-		dens <- array(,c(nt,nresp,nstates))
-				
-		# compute observation and transition densities
-		for(i in 1:nstates) {
-			for(j in 1:nresp) {
-				dens[,j,i] <- dens(response[[i]][[j]]) # remove this response as an argument from the call to setpars
-			}
-			trDens[,,i] <- dens(transition[[i]])
-		}
-		
-		# compute initial state probabilties
-		init <- dens(prior)
-		
-		new("depmix",response=response,transition=transition,prior=prior,
-			dens=dens,trDens=trDens,init=init,stationary=stationary,
-			ntimes=ntimes,nstates=nstates,nresp=nresp,npars=npars)
-		
+	nstates <- length(response)
+	nresp <- length(response[[1]])
+	
+	# make appropriate ntimes
+	if(is.null(ntimes)) {
+		ntimes <- nrow(response[[1]][[1]]@y)
 	}
-)
+	
+	# count the number of parameters	
+	npars <- npar(prior) 
+	for(i in 1:nstates) {
+		npars <- npars + sum(sapply(response[[i]],npar))
+	}
+	npars <- npars + sum(sapply(transition,npar))
+	
+	# make appropriate array for transition densities
+	nt <- sum(ntimes)
+	if(stationary) trDens <- array(0,c(1,nstates,nstates))
+	else trDens <- array(0,c(nt,nstates,nstates))
+	
+	# make appropriate array for response densities
+	dens <- array(,c(nt,nresp,nstates))
+	
+	# compute observation and transition densities
+	for(i in 1:nstates) {
+		for(j in 1:nresp) {
+			dens[,j,i] <- dens(response[[i]][[j]]) # remove this response as an argument from the call to setpars
+		}
+		trDens[,,i] <- dens(transition[[i]])
+	}
+	
+	# compute initial state probabilties
+	init <- dens(prior)
+	
+	new("depmix",response=response,transition=transition,prior=prior,
+		dens=dens,trDens=trDens,init=init,stationary=stationary,
+		ntimes=ntimes,nstates=nstates,nresp=nresp,npars=npars)
+	
+}
 
 #
 # UNIVARIATE AND MULTIVARIATE MARKOV MIXTURE OF GLM'S
 # 
 
 setMethod("depmix",
- 	signature(response="ANY",transition="formula"),
-	function(response,data=NULL,nstates,transition,family=gaussian(),prior=~1,initdata=NULL,
+	signature(response="ANY"),
+	function(response,data=NULL,nstates,transition=~1,family=gaussian(),prior=~1,initdata=NULL,
 		respstart=NULL,trstart=NULL,instart=NULL,ntimes=NULL, ...) {
 		
 		if(is.null(data)) {
@@ -116,7 +111,7 @@ setMethod("depmix",
 		prior <- makePriorModel(nstates=nstates,ncases=length(ntimes),formula=prior,data=initdata,values=instart)
 		
 		# call main depmix with all these models, ntimes and stationary
-		model <- depmix(response=response,transition=transition,prior=prior,ntimes=ntimes,stationary=stationary)
+		model <- makeDepmix(response=response,transition=transition,prior=prior,ntimes=ntimes,stationary=stationary)
 		
 		# deal with starting values here!!!!!!
 		
@@ -124,18 +119,9 @@ setMethod("depmix",
 	}
 )
 
-setMethod("depmix",
- 	signature(response="ANY",transition="missing"),
-	function(response,data=NULL,nstates,transition=~1,family=gaussian(),prior=~1,initdata=NULL,
-		respstart=NULL,trstart=NULL,instart=NULL,ntimes=NULL, ...) {
-		
-		model <- depmix(response=response,data=data,nstates=nstates,transition=~1,family=family,
-			prior=prior,initdata=initdata,respstart=respstart,trstart=trstart,instart=instart,ntimes=ntimes, ...)
-		
-		return(model)
-		
-	}
-)
+# 
+# internal functions
+# 
 
 makeResponseModels <- function(response,data=NULL,nstates,family,values=NULL,...) {
 	

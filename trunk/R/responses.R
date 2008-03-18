@@ -53,7 +53,7 @@ setClass("GLMresponse",
 
 setMethod("GLMresponse",
 	signature(formula="formula"),
-	function(formula,data=NULL,family=gaussian(),pstart=NULL,fixed=NULL,prob=TRUE) {
+	function(formula,data=NULL,family=gaussian(),pstart=NULL,fixed=NULL,prob=TRUE, ...) {
 		call <- match.call()
 		mf <- match.call(expand.dots = FALSE)
 		m <- match(c("formula", "data"), names(mf), 0)
@@ -148,7 +148,7 @@ setClass("transInit",contains="GLMresponse")
 # are no covariates (and there are by definition no responses ...)
 setMethod("transInit",
 	signature(formula="formula"),
-	function(formula,nstates,data=NULL,family=multinomial(),pstart=NULL,prob=TRUE,fixed=NULL) {
+	function(formula,nstates,data=NULL,family=multinomial(),pstart=NULL,fixed=NULL,prob=TRUE, ...) {
 		call <- match.call()
 		mf <- match.call(expand.dots = FALSE)
 		m <- match(c("formula", "data"), names(mf), 0)

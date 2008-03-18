@@ -11,7 +11,8 @@
 
 # Guess what: all generics
 
-setGeneric("depmix", function(response=any, transition=any, ...) standardGeneric("depmix"))
+setGeneric("depmix", function(response,data=NULL,nstates,transition=~1,family=gaussian(),prior=~1,initdata=NULL,
+		respstart=NULL,trstart=NULL,instart=NULL,ntimes=NULL, ...) standardGeneric("depmix"))
 
 setGeneric("npar", function(object, ...) standardGeneric("npar"))
 
@@ -37,9 +38,11 @@ setGeneric("BIC", function(object, ...) standardGeneric("BIC"))
 
 setGeneric("getdf",function(object) standardGeneric("getdf"))
 
-setGeneric("GLMresponse", function(formula, ... ) standardGeneric("GLMresponse"))
+setGeneric("GLMresponse", function(formula, data = NULL, family = gaussian(), pstart =
+                 NULL, fixed = NULL, prob=TRUE, ...) standardGeneric("GLMresponse"))
 
-setGeneric("transInit", function(formula, ... ) standardGeneric("transInit"))
+setGeneric("transInit", function(formula, nstates, data = NULL, family = multinomial(),
+                 pstart = NULL, fixed = NULL, prob=TRUE, ...) standardGeneric("transInit"))
 
 setGeneric("setpars", function(object,values,which="pars",...) standardGeneric("setpars"))
 

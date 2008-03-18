@@ -3,6 +3,7 @@
 
 \alias{depmixS4}
 \alias{depmix}
+\alias{depmix,depmix-method}
 
 \alias{logLik}
 \alias{logLik,depmix-method}

@@ -15,10 +15,11 @@
 
 \usage{
 	
-	GLMresponse(formula, data=NULL, family=gaussian(), pstart=NULL, fixed=NULL)
+	GLMresponse(formula, data=NULL, family=gaussian(), pstart=NULL, 
+		fixed=NULL, prob=TRUE, ...)
 	
 	transInit(formula, nstates, data=NULL, family=multinomial(),
-		pstart=NULL, prob=TRUE, fixed=NULL)
+		pstart=NULL, fixed=NULL, prob=TRUE, ...)
 		
 }
 
@@ -35,6 +36,7 @@
 	\item{prob}{Logical indicating whether the starting values for
 		multinomial() family models are probabilities or logistic
 		parameters (see details).}
+	\item{...}{Not used currently.}
 }
 
 \details{
