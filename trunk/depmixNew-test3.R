@@ -9,17 +9,7 @@
 # BALANCE SCALE data example with age as covariate on class membership
 # 
 
-setwd("/Users/ivisser/Documents/projects/depmixProject/depmixNew/rforge/depmix/trunk/")
-
-load("data/balance.rda")
-
-source("R/responses.R")
-source("R/depmix.R")
-source("R/depmix.fitted.R")
-source("R/llratio.R")
-source("R/lystig.R")
-source("R/fb.R")
-source("R/EM.R")
+data(balance)
 
 # now fit some latent class models
 trstart=c(1,0,0,1)
@@ -57,9 +47,11 @@ mod2 <- depmix(list(d1~1,d2~1,d3~1,d4~1), data=balance, nstates=2,
 fixed <- c(1,0,1,0,1,1,1,1,rep(c(1,0),8))
 mod3 <- fit(mod2,fixed=fixed)
 
+llratio(mod3,mod1)
+
+
 mod4 <- fit(mod2,fixed=fixed,method="donlp")
 
-llratio(mod3,mod1)
 
 
 

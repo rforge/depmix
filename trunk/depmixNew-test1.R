@@ -14,13 +14,6 @@
 # Other tests with optimization of models are moved to depmix-test2.R
 # 
 
-setwd("/Users/ivisser/Documents/projects/depmixProject/depmixNew/rforge/depmix/trunk/")
-
-source("R/responses.R")
-source("R/depmix.R")
-
-load("data/speed.Rda")
-
 # 
 # TEST 1: speed data model with optimal parameters, compute the likelihood
 # 
@@ -47,7 +40,7 @@ transition[[2]] <- transInit(~1,nstates=2,data=data.frame(1),pstart=c(trstart[3:
 instart=c(0,1)
 inMod <- transInit(~1,ns=2,ps=instart,data=data.frame(rep(1,3)))
 
-mod <- depmix(response=rModels,transition=transition,prior=inMod,ntimes=attr(speed,"ntimes"))
+mod <- makeDepmix(response=rModels,transition=transition,prior=inMod,ntimes=attr(speed,"ntimes"))
 
 ll <- logLik(mod)
 ll.fb <- logLik(mod,method="fb")
@@ -61,9 +54,12 @@ cat("Test 1: ", all.equal(c(ll),logl,check.att=FALSE), "(loglike of speed data) 
 # model specification made easy
 # 
 
-resp <- c(5.52,0.202,0.472,0.528,6.39,0.24,0.098,0.902)
+library(depmixS4)
 
-mod <- depmix(list(rt~1,corr~1),data=speed,nstates=2,family=list(gaussian(),multinomial()),respstart=resp,trstart=trstart,instart=instart)
+resp <- c(5.52,0.202,0.472,0.528,6.39,0.24,0.098,0.902)
+trstart=c(0.899,0.101,0.084,0.916)
+instart=c(0,1)
+mod <- depmix(list(rt~1,corr~1),data=speed,nstates=2,family=list(gaussian(),multinomial()),respstart=resp,trstart=trstart,instart=instart,prob=T)
 
 ll2 <- logLik(mod)
 
@@ -126,7 +122,8 @@ mod <- depmix(list(rt~1,corr~1),data=speed,family=list(gaussian(),multinomial())
 ll <- logLik(mod)
 
 cat("Test 4: ll is now larger than speedll, ie ll is better due to introduction of a covariate \n")
-cat("Test 4: ", ll,"\t", speedll, "\n")
+cat("Test 4: ", ll,"\t", logl, "\n")
+cat("Test 4: ", ll > logl, "\n")
 
 
 # 

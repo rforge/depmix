@@ -85,8 +85,8 @@ makeDepmix <- function(response, transition, prior, ntimes=NULL, stationary=TRUE
 
 setMethod("depmix",
 	signature(response="ANY"),
-	function(response,data=NULL,nstates,transition=~1,family=gaussian(),prior=~1,initdata=NULL,
-		respstart=NULL,trstart=NULL,instart=NULL,ntimes=NULL, ...) {
+	function(response, data=NULL, nstates, transition=~1, family=gaussian(), prior=~1, initdata=NULL,
+		respstart=NULL, trstart=NULL, instart=NULL, ntimes=NULL, ...) {
 		
 		if(is.null(data)) {
 			if(is.null(ntimes)) stop("'ntimes' must be provided if not in the data")
@@ -168,7 +168,8 @@ makeResponseModels <- function(response,data=NULL,nstates,family,values=NULL,...
 
 makeTransModels <- function(nstates,formula=~1,data=NULL,stationary,values=NULL, ...) {
 	
-	# defaults that possibly need some work at some point FIX ME
+	# defaults that possibly need some work at some point 
+	# FIX ME
 	base=1
 	prob=TRUE
 		
