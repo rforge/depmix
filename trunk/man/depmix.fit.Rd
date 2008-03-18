@@ -6,9 +6,8 @@
 \alias{depmix.fit}
 \alias{fit,depmix-method}
 
-\alias{llratio}
-\alias{llratio,depmix-method}
-\alias{likelihoodratio}
+\alias{show,depmix.fitted-method}
+\alias{summary,depmix.fitted-method}
 
 \title{Fit depmix models}
 
@@ -19,14 +18,14 @@
 	
 	\S4method{fit}{depmix}(object, w=NULL, fixed=NULL, equal=NULL, conrows=NULL,
 		conrows.upper=0, conrows.lower=0, method=NULL,...)
-		
-	llratio(basemodel,constrainedmodel,...)
+	
+	\S4method{summary}{depmix.fitted}(object)
+	
 	
 }
 
 \arguments{
 	\item{object}{An object of class \code{depmix}.}
-	\item{basemodel, constrainedmodel}{Objects of class \code{depmix.fitted}.}
 	\item{w}{Weights??? What's this argument doing here? It's not being
 		used.}
 	\item{fixed}{Vector of mode logical indicating which parameters should 

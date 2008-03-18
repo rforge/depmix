@@ -1,9 +1,11 @@
 
 \name{depmix}
 
+\docType{methods}
+
 \alias{depmixS4}
 \alias{depmix}
-\alias{depmix,depmix-method}
+\alias{depmix,ANY-method}
 
 \alias{logLik}
 \alias{logLik,depmix-method}

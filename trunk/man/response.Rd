@@ -6,8 +6,10 @@
 \alias{transInit}
 \alias{GLMresponse}
 
-\alias{transInit,formula,GLMresponse-method}
-\alias{GLMresponse,formula,GLMresponse-method}
+\alias{transInit,formula-method}
+\alias{GLMresponse,formula-method}
+
+\alias{show,GLMresponse-method}
 
 \title{Methods for creating depmix response models}
 
@@ -58,6 +60,7 @@
 }
 
 \value{
+	
 	\code{GLMresponse} and \code{transInit} return objects of class
 	\code{GLMresponse} and \code{transInit} respectively; both classes
 	extend the \code{\link[depmix]{response-class}}. 
