@@ -11,32 +11,39 @@
 
 \title{Fit depmix models}
 
-\description{\code{fit} optimizes parameters of depmix models, possibly
+\description{
+
+	\code{fit} optimizes parameters of \code{\link{depmix}} models, optionally
 	subject to general linear (in)equality constraints.}
 
 \usage{
 	
-	\S4method{fit}{depmix}(object, w=NULL, fixed=NULL, equal=NULL, conrows=NULL,
+	\S4method{fit}{depmix}(object, fixed=NULL, equal=NULL, conrows=NULL,
 		conrows.upper=0, conrows.lower=0, method=NULL,...)
 	
 	\S4method{summary}{depmix.fitted}(object)
 	
-	
 }
 
 \arguments{
+
 	\item{object}{An object of class \code{depmix}.}
-	\item{w}{Weights??? What's this argument doing here? It's not being
-		used.}
+	
 	\item{fixed}{Vector of mode logical indicating which parameters should 
 		be fixed.}
+
 	\item{equal}{Vector indicating equality constraints; see details.}
+
 	\item{conrows}{Rows of a general linear constraint matrix; see details.}
+
 	\item{conrows.upper, conrows.lower}{Upper and lower bounds for the
 		linear constraints; see details.}
+
 	\item{method}{The optimization method; mostly determined by
 		constraints.}
+
 	\item{...}{Not used currently.}
+
 }
 
 \details{
@@ -76,30 +83,34 @@
 }
 
 \value{
-	\code{fit} returns an object of class \code{depmix.fitted} which contains 
+	
+	\code{fit} returns an object of class \code{\link[depmix.fitted-class]{depmix.fitted}} which contains 
 	the original depmix object, and further has slots: 
 	
-	message: Convergence information.
+	\item{message}{: Convergence information.}
 	
-	conMat: The constraint matrix A, see details.
-	posterior: The posterior state probabilities.
+	\item{conMat}{: The constraint matrix A, see details.}
+
+	\item{posterior}{: The posterior state probabilities.}
 	
-	The print function shows the \code{message} and the parameter
-	estimates.
+	The print method shows the \code{message} and the summary method
+	shows the parameter estimates.
 	
 }
 
 \examples{
-	data(speed)
-	# 2-state model on the RTs of the speed data with random 
-	# starting values for the transition pars (without those EM does not get off the ground)
-	set.seed(1)
-	mod <- depmix(rt~1,data=speed,nstates=2,trstart=runif(4))
-	# fit the model
-	mod1 <- fit(mod)
-	mod1 # to see the logLik and optimization information
-	# to see the parameters
-	summary(mod1)
+
+data(speed)
+# 2-state model on the RTs of the speed data with random 
+# starting values for the transition pars (without those EM does not get off the ground)
+set.seed(1)
+mod <- depmix(rt~1,data=speed,nstates=2,trstart=runif(4))
+# fit the model
+mod1 <- fit(mod)
+mod1 # to see the logLik and optimization information
+# to see the parameters
+summary(mod1)
+
 }
 
 \author{Ingmar Visser}

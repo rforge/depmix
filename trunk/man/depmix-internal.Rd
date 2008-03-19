@@ -5,6 +5,8 @@
 \alias{fb}
 \alias{logDens}
 \alias{lystig}
+
+\alias{makeDepmix}
 \alias{makePriorModel}
 \alias{makeResponseModels}
 \alias{makeTransModels}

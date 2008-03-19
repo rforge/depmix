@@ -118,10 +118,10 @@ setMethod("GLMresponse",
 				pstart <- matrix(pstart,ncol(x),byrow=TRUE)
 				if(ncol(x)>1) parameters$coefficients[2:ncol(x),] <- pstart[2:ncol(x),]
 			} else {
-				parameters$coefficients <- family$linkfun(pstart[1:length(parameters$coefficients)])
+				parameters$coefficients <- family$linkfun(as.numeric(pstart[1:length(parameters$coefficients)]))
 			}
 			if(length(unlist(parameters))>length(parameters$coefficients)) {
-				if(family$family=="gaussian") parameters$sd <- pstart[(length(parameters$coefficients)+1)]
+				if(family$family=="gaussian") parameters$sd <- as.numeric(pstart[(length(parameters$coefficients)+1)])
 			}
 		}
 		mod <- switch(family$family,

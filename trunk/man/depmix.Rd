@@ -34,12 +34,22 @@
 \alias{show,depmix-method}
 \alias{summary,depmix-method}
 
+\alias{posterior}
+\alias{posterior,depmix-method}
+
 \title{Dependent Mixture Model Specifiction}
 
 \description{
+		
+	depmixS4 is a framework for specifying and fitting dependent mixture
+	models, otherwise known as hidden or latent Markov models.
+	Optimization is done with the EM algorithm or optionally with Rdonlp2
+	when constraints on parameters are imposed.  Models for different
+	distributions can easily be added.
 	
-	\item{depmix}{\code{depmix} creates an object of class \code{depmix}, a
-	dependent mixture model, or hidden Markov model.}
+	\code{depmix} creates an object of class \code{depmix}, a
+	dependent mixture model, otherwise known as hidden Markov 
+	model.
 	
 }
 
@@ -60,6 +70,7 @@
 	\S4method{setpars}{depmix}(object,which="pars",...)
 	\S4method{getpars}{depmix}(object,which="pars",...)	
 	
+	\S4method{posterior}{depmix}(object,...)	
 }
 
 \arguments{
@@ -117,11 +128,11 @@
 \details{ 
 
 	The function \code{depmix} creates an S4 object of class \code{depmix},
-	which needs to be fitted using \code{\link[depmix]{depmix.fit}} to
+	which needs to be fitted using \code{\link[depmixS4]{depmix.fit}} to
 	optimize the parameters.
 	
 	The response model(s) are created by call(s) to
-	\code{\link[depmix]{response}} providing the family and optional
+	\code{\link[depmixS4]{response}} providing the family and optional
 	predictors.  If response is a list of formulae, the response's are
 	assumed to be independent conditional on the latent state.
 	
@@ -129,14 +140,14 @@
 	state.  Hence, the transition matrix can be modeled as time-dependent,
 	depending on predictors.  The prior density is also modeled as a
 	multinomial logistic.  Both are created by calls to
-	\code{\link[depmix]{transInit}}.
+	\code{\link[depmixS4]{transInit}}.
 	
 	Starting values may be provided by the respective arguments.  The order
 	in which parameters must be provided can be easily studied by using the
 	\code{setpars} function (see example).
 	
 	Linear constraints on parameters can be provided as argument to the
-	\code{\link[depmix]{depmix.fit}} function.
+	\code{\link[depmixS4]{depmix.fit}} function.
 	
 }
 
@@ -185,8 +196,10 @@ number of observations, ie \code{sum(ntimes)} that is used in computing the
 \author{Ingmar Visser \email{i.visser@uva.nl}} 
 
 \seealso{
-	\code{\link[depmix]{depmix.fit}},\code{\link[depmix]{transInit}}, 
-	\code{\link[depmix]{response}}. 
+
+	\code{\link[depmixS4]{depmix.fit}}, \code{\link{transInit}},
+	\code{\link{response}}.
+
 }
 
 \references{
@@ -202,10 +215,23 @@ number of observations, ie \code{sum(ntimes)} that is used in computing the
 
 \examples{
 
-	# create a 2 state model with one continuous and one binary response
-	data(speed)
-	depmix(list(rt~1,corr~1),data=speed,nstates=2,family=list(gaussian(),multinomial()))
-	
+# create a 2 state model with one continuous and one binary response
+data(speed)
+mod <- depmix(list(rt~1,corr~1),data=speed,nstates=2,family=list(gaussian(),multinomial()))
+# print the model, formulae and parameter values
+mod
+
+# to see the ordering of parameters to use in setpars
+mod <- setpars(mod, value=1:npar(mod))
+mod
+
+# to see which parameters are fixed (by default only baseline parameters in
+# the multinomial logistic models for the transition models and the initial
+# state probabilities model
+mod <- setpars(mod, getpars(mod,which="fixed"))
+mod
+
+
 }
 
 \keyword{methods}

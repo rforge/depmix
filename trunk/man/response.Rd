@@ -9,11 +9,19 @@
 \alias{transInit,formula-method}
 \alias{GLMresponse,formula-method}
 
+\alias{getdf}
+\alias{getdf,response-method}
+
 \alias{show,GLMresponse-method}
 
 \title{Methods for creating depmix response models}
 
-\description{Create \code{\link[depmix]{response}} models.}
+\description{
+
+Create \code{response} objects for \code{\link{depmix}} models using
+formulae and family objects.
+
+}
 
 \usage{
 	
@@ -22,7 +30,8 @@
 	
 	transInit(formula, nstates, data=NULL, family=multinomial(),
 		pstart=NULL, fixed=NULL, prob=TRUE, ...)
-		
+	
+	\S4method{getdf}{response}(object)
 }
 
 \arguments{
@@ -38,6 +47,7 @@
 	\item{prob}{Logical indicating whether the starting values for
 		multinomial() family models are probabilities or logistic
 		parameters (see details).}
+	\item{object}{Object of class response.}
 	\item{...}{Not used currently.}
 }
 
@@ -63,11 +73,11 @@
 	
 	\code{GLMresponse} and \code{transInit} return objects of class
 	\code{GLMresponse} and \code{transInit} respectively; both classes
-	extend the \code{\link[depmix]{response-class}}. 
+	extend the \code{\link{response-class}}. 
 	
-	For extensibility, objects with class \code{response} have at least
-	methods: \code{predict} to return \code{predict}'ed responses,
-	\code{dens} to return the \code{dens}'ity of responses.  
+	\code{getdf} returns the number of free parameters of a
+	\code{response} model.
+
 }
 
 \author{Ingmar Visser} 

@@ -24,11 +24,11 @@ TODO list for depmix package release 0.0-1
 (this involves a latent class model rather than a hidden Markov model)
 Ingmar: done!!!!!
 
-- review summary/print functions for depmix and depmix.fitted
+- review summary/print functions for depmix and depmix.fitted: done!!!!!
 
-- viterbi algorithm to get maximum a posteriori states for hmmModel: Maarten, done !!!!!
+- viterbi algorithm to get maximum a posteriori states for depmix model: Maarten, done !!!!!
 
-- viterbi algorithm to get posterior probabilities as part of depmix.fitted
+- viterbi algorithm to get posterior probabilities as part of depmix.fitted: skip!!
 
 - general documentation: depmix-introduction.pdf needs updating
 

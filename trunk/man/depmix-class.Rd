@@ -3,29 +3,20 @@
 \docType{class}
 
 \alias{depmix-class}
-\alias{posterior}
-\alias{posterior,depmix-method}
 
 \title{Class "depmix"}
 
 \description{A \code{\link{depmix}} model.}
 
-\usage{
-	\S4method{posterior}{depmix}(object)
-}
-
-\arguments{
-	\item{object}{An object of class "depmix".}
-}
-
 \section{Slots}{
+
 	\describe{
 
 	\item{\code{response}:}{List of list of \code{response} objects.}
 
-	\item{\code{transition}}{List of \code{transInit} objects.}
+	\item{\code{transition}}{List of \code{\link{transInit}} objects.}
 	
-	\item{\code{prior}:}{\code{transInit} object.}
+	\item{\code{prior}:}{\code{\link{transInit}} object.}
 	
 	\item{\code{dens}:}{Array of dimension sum(ntimes)*nresp*nstates
 		providing the densities of the observed responses for each state.}

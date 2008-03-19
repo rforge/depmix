@@ -266,7 +266,6 @@ setMethod("npar","depmix",
 	function(object) return(object@npars)
 )
 
-setGeneric("ntimes", function(object, ...) standardGeneric("ntimes"))
 setMethod("ntimes","depmix",
 	function(object) return(object@ntimes)
 )
@@ -276,7 +275,6 @@ setMethod("nstates","depmix",
 	function(object) return(object@nstates)
 )
 
-setGeneric("nresp", function(object, ...) standardGeneric("nresp"))
 setMethod("nresp","depmix",
 	function(object) return(object@nresp)
 )
@@ -289,8 +287,6 @@ setMethod("freepars","depmix",
 		free
 	}
 )
-
-setGeneric("logLik", function(object, ...) standardGeneric("logLik"))
 
 # depends on getpars and nobs
 setMethod("logLik",signature(object="depmix"),

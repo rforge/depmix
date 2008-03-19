@@ -48,10 +48,13 @@ setGeneric("setpars", function(object,values,which="pars",...) standardGeneric("
 
 setGeneric("getpars", function(object,which="pars",...) standardGeneric("getpars"))
 
-setGeneric("fit",function(object,w,...) standardGeneric("fit"))
-
 setGeneric("logDens",function(object,...) standardGeneric("logDens"))
 
 setGeneric("dens",function(object,...) standardGeneric("dens"))
 
 setGeneric("summary")
+
+setGeneric("ntimes", function(object, ...) standardGeneric("ntimes"))
+
+setGeneric("nresp", function(object, ...) standardGeneric("nresp"))
+

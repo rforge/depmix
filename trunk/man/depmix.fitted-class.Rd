@@ -6,12 +6,12 @@
 
 \title{Class "depmix.fitted"}
 
-\description{Class \code{depmix.fitted}.}
+\description{A fitted \code{\link{depmix}} model.}
 
 \section{Slots}{
 	
-	A \code{depmix.fitted} object is a \code{depmix} object with two
-	additional slots:
+	A \code{depmix.fitted} object is a \code{depmix} object with three 
+	additional slots, here is the complete list:
 	
 	\describe{
 
@@ -63,6 +63,10 @@
 	The print function shows some convergence information, and the summary
 	method shows the parameter estimates.
 	
+}
+
+\section{Extends}{
+	\code{depmix.fitted} extends the \code{depmix} class.
 }
 
 \author{Ingmar Visser}
