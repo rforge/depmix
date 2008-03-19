@@ -14,15 +14,15 @@ TODO list for depmix package release 0.0-1
 		d) getpars, setpars: done!!!!
 		e) llratio: done!!!!!
 		
-	4) responses.Rd: detailed description on constructing response models
-	5) transInit.Rd: detailed description on constructing transition models
-	6) others: lystig, fb
+	4) responses.Rd: detailed description on constructing response models: done!!!!!
+	5) transInit.Rd: detailed description on constructing transition models: done!!!!!
+	6) others: lystig, fb: done!!!!
 
 - rework em function and add a working example for it: Maarten
 
 - balance scale data example with covariate on initial probabilities
 (this involves a latent class model rather than a hidden Markov model)
-Ingmar
+Ingmar: done!!!!!
 
 - review summary/print functions for depmix and depmix.fitted
 
@@ -30,11 +30,9 @@ Ingmar
 
 - viterbi algorithm to get posterior probabilities as part of depmix.fitted
 
-
 - general documentation: depmix-introduction.pdf needs updating
 
 
-- generate initial values?!?!?
 
 
 
@@ -45,6 +43,8 @@ Ingmar
 
 
 TODO long term 
+
+- generate initial values?!?!?
 
 Examples
 
