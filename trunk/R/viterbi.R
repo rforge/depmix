@@ -22,8 +22,13 @@ viterbi <- function(object) {
       # recursion
       for(i in ((bt[case]+1):et[case])) {
           for(j in 1:ns) {
-              delta[i,j] <- min(delta[i-1,] - log(A[i,,j])) - B[i,j]
-              k <- which.min(delta[i-1,] - log(A[i,,j]))
+              if(!object@stationary) {
+                delta[i,j] <- min(delta[i-1,] - log(A[i,,j])) - B[i,j]
+                k <- which.min(delta[i-1,] - log(A[i,,j]))
+              } else {
+                delta[i,j] <- min(delta[i-1,] - log(A[,,j])) - B[i,j]
+                k <- which.min(delta[i-1,] - log(A[,,j]))
+              }
               if(length(k) == 0) k <- 0
               psi[i,j] <- k
           }
