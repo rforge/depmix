@@ -1,19 +1,19 @@
-viterbi <- function(hmm) {
+viterbi <- function(object) {
     # returns the most likely state sequence
-    nt <- sum(hmm@ntimes)
-    lt <- length(hmm@ntimes)
-		et <- cumsum(hmm@ntimes)
+    nt <- sum(object@ntimes)
+    lt <- length(object@ntimes)
+		et <- cumsum(object@ntimes)
 		bt <- c(1,et[-lt]+1)
 		
-    ns <- hmm@nstates
+    ns <- object@nstates
     
     delta <- psi <- matrix(nrow=nt,ncol=ns)
     state <- vector(length=nt)
     
-    prior <- exp(logDens(hmm@initModel))
+    prior <- object@init
     
-    A <- hmm@trans
-    B <- apply(hmm@logdens,c(1,3),sum)
+    A <- object@trDens
+    B <- apply(log(object@dens),c(1,3),sum)
     
     for(case in 1:lt) {
     # initialization
