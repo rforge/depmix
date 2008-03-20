@@ -42,7 +42,7 @@
 	\item{method}{The optimization method; mostly determined by
 		constraints.}
 
-	\item{...}{Not used currently.}
+	\item{...}{Further arguments passed on to the optimization methods.}
 
 }
 

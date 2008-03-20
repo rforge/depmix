@@ -33,7 +33,7 @@ em <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 		# maximization
 				
 		# should become object@prior <- fit(object@prior)
-		object@prior@y <- fbo$gamma[bt,]
+		object@prior@y <- fbo$gamma[bt,,drop=FALSE]
 		object@prior <- fit(object@prior, w=NULL,ntimes=NULL)
 		object@init <- dens(object@prior)
 				
