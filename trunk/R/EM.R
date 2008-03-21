@@ -8,28 +8,21 @@ em <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 	lt <- length(ntimes)
 	et <- cumsum(ntimes)
 	bt <- c(1,et[-lt]+1)
-		
-	LL <- logLik(object)
 	
 	converge <- FALSE
 	j <- 0
 	
 	A <- object@trDens
+	B <- apply(object@dens,c(1,3),prod)
+	init <- object@init
+	
+	# initial expectation
+	fbo <- fb(init=object@init,A=object@trDens,B=apply(object@dens,c(1,3),prod),ntimes=ntimes(object))
+	LL <- fbo$logLike
+	LL.old <- LL + 1
+	
 	while(j <= maxit & !converge) {
-		
-		for(i in 1:ns) {
-			A[,,i] <- object@trDens[,,i]
-		}
-		
-		B <- apply(object@dens,c(1,3),prod)
-		init <- object@init
-		LL.old <- LL
-		j <- j+1
-		
-		# expectation
-		fbo <- fb(init=init,A=A,B=B,ntimes=ntimes(object))
-		LL <- fbo$logLike
-		
+				
 		# maximization
 				
 		# should become object@prior <- fit(object@prior)
@@ -62,13 +55,20 @@ em <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 				object@dens[,k,i] <- dens(object@response[[i]][[k]])
 			}
 		}
+		
+		# expectation
+		fbo <- fb(init=object@init,A=object@trDens,B=apply(object@dens,c(1,3),prod),ntimes=ntimes(object))
+		LL <- fbo$logLike
 				
-		LL <- logLik(object)
 		if(verbose&((j%%5)==0)) cat("iteration",j,"logLik:",LL,"\n")
 		if( (LL >= LL.old) & (LL - LL.old < tol))  {
 			cat("iteration",j,"logLik:",LL,"\n")
 			converge <- TRUE
 		}
+		
+		LL.old <- LL
+		j <- j+1
+		
 	}
 	
 	class(object) <- "depmix.fitted"
@@ -79,7 +79,8 @@ em <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 	object@conMat <- matrix()
 	
 	# what do we want in slot posterior?
-	object@posterior <- viterbi(object)
+	# this is moved to depmix.fit
+	# object@posterior <- viterbi(object)
 	
 	object
 }

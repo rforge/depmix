@@ -36,6 +36,8 @@ setGeneric("logLik", function(object, ...) standardGeneric("logLik"))
 
 setGeneric("fit", function(object, ...) standardGeneric("fit"))
 
+setGeneric("posterior", function(object, ...) standardGeneric("posterior"))
+
 setGeneric("predict", function(object, ...) standardGeneric("predict"))
 
 setGeneric("AIC", function(object, ..., k=2) standardGeneric("AIC"))

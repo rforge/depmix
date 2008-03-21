@@ -9,6 +9,10 @@
 # BALANCE SCALE data example with age as covariate on class membership
 # 
 
+setwd("/Users/ivisser/Documents/projects/depmixProject/depmixNew/rforge/depmix/trunk/")
+
+library(depmixS4)
+
 data(balance)
 
 # now fit some latent class models
@@ -26,9 +30,29 @@ mod <- depmix(list(d1~1,d2~1,d3~1,d4~1), data=balance, nstates=2,
 pars <- getpars(mod)
 fixed <- c(1,0,1,1,1,1,rep(c(1,0),8))
 
+gc()
+Rprof()
+mod1 <- em(mod)
+Rprof(NULL)
+summaryRprof()
+
+source("R/EM.R")
+source("R/responses.R")
+
+gc()
+Rprof()
 mod1 <- fit(mod,fixed=fixed)
+Rprof(NULL)
+summaryRprof()
+
 
 mod1
+
+setwd("/Users/ivisser/Documents/projects/depmixProject/depmixNew/rforge/depmix/trunk/")
+
+source("R/depmix.fitted.R")
+source("R/viterbi.R")
+
 
 # 'log Lik.' -1083.036 (df=9)
 
