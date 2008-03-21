@@ -79,7 +79,7 @@ em <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 	object@conMat <- matrix()
 	
 	# what do we want in slot posterior?
-	object@posterior <- fbo$gamma
+	object@posterior <- viterbi(object)
 	
 	object
 }
