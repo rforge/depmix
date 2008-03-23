@@ -13,9 +13,7 @@
 
 \alias{mlogit}
 \alias{multinomial}
-\alias{nresp}
 \alias{nstates}
-\alias{ntimes}
 \alias{pa2conr}
 \alias{viterbi}
 \alias{viterbi.fb}

@@ -30,7 +30,10 @@ Ingmar: done!!!!!
 
 - viterbi algorithm to get posterior probabilities as part of depmix.fitted: skip!!
 
-- general documentation: depmix-introduction.pdf needs updating
+- general documentation: depmix-introduction.pdf needs updating:
+	1) check credentials
+	2) add help for posterior
+	3) 
 
 
 

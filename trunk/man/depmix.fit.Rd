@@ -6,6 +6,9 @@
 \alias{depmix.fit}
 \alias{fit,depmix-method}
 
+\alias{posterior}
+\alias{posterior,depmix.fitted-method}
+
 \alias{show,depmix.fitted-method}
 \alias{summary,depmix.fitted-method}
 
@@ -21,6 +24,7 @@
 	\S4method{fit}{depmix}(object, fixed=NULL, equal=NULL, conrows=NULL,
 		conrows.upper=0, conrows.lower=0, method=NULL,...)
 	
+	\S4method{posterior}{depmix.fitted}(object,...)
 	\S4method{summary}{depmix.fitted}(object)
 	
 }
@@ -91,10 +95,20 @@
 	
 	\item{conMat}{: The constraint matrix A, see details.}
 
-	\item{posterior}{: The posterior state probabilities.}
+	\item{posterior}{: Returns a data.frame with nstates(object) + 1
+	columns; the first column has the viterbi states, the other columns
+	have the delta probabilities, see Rabiner (1989).}
 	
 	The print method shows the \code{message} and the summary method
 	shows the parameter estimates.
+	
+}
+
+\references{
+	
+	Lawrence R. Rabiner (1989).  A tutorial on hidden Markov models and
+	selected applications in speech recognition.  \emph{Proceedings of
+	IEEE}, 77-2, p.  267-295.
 	
 }
 
@@ -110,6 +124,39 @@ mod1 <- fit(mod)
 mod1 # to see the logLik and optimization information
 # to see the parameters
 summary(mod1)
+
+
+data(balance)
+# four binary items on the balance scale task
+
+# now fit some latent class models
+trstart=c(1,0,0,1) # as this is a latent class model, the transition are not optimized
+instart=c(0.5,0.5)
+set.seed(1)
+respstart=runif(16)
+# note that ntimes argument is used to make this a mixture model
+mod <- depmix(list(d1~1,d2~1,d3~1,d4~1), data=balance, nstates=2,
+	family=list(multinomial(),multinomial(),multinomial(),multinomial()),
+	respstart=respstart,trstart=trstart,instart=instart,
+	ntimes=rep(1,nrow(balance)))
+
+mod1 <- fit(mod)
+
+# add age as covariate on class membership by using the prior argument
+trstart=c(1,0,0,1) # as this is a latent class model, the transition are not optimized
+instart=c(0.5,0.5,0,0) # we need the initial probs and the coefficients of age 
+set.seed(2)
+respstart=c(runif(16))
+trstart=c(1,0,0,1)
+mod2 <- depmix(list(d1~1,d2~1,d3~1,d4~1), data=balance, nstates=2,
+	family=list(multinomial(),multinomial(),multinomial(),multinomial()),
+	trstart=trstart, instart=instart, respstart=respstart,
+	ntimes=rep(1,nrow(balance)), prior=~age, initdata=balance)
+
+mod3 <- fit(mod2)
+
+# check the likelihood ratio; adding age significantly improves the goodness-of-fit
+llratio(mod3,mod1)
 
 }
 

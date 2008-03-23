@@ -4,6 +4,12 @@
 
 \alias{depmix-class}
 
+\alias{nresp}
+\alias{nresp,depmix-method}
+
+\alias{ntimes}
+\alias{ntimes,depmix-method}
+
 \title{Class "depmix"}
 
 \description{A \code{\link{depmix}} model.}

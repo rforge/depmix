@@ -34,9 +34,6 @@
 \alias{show,depmix-method}
 \alias{summary,depmix-method}
 
-\alias{posterior}
-\alias{posterior,depmix-method}
-
 \title{Dependent Mixture Model Specifiction}
 
 \description{
@@ -70,7 +67,6 @@
 	\S4method{setpars}{depmix}(object,which="pars",...)
 	\S4method{getpars}{depmix}(object,which="pars",...)	
 	
-	\S4method{posterior}{depmix}(object,...)	
 }
 
 \arguments{
