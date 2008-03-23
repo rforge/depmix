@@ -1,6 +1,6 @@
 
 # 
-# Started by Ingmar Visser, march 2008
+# Ingmar Visser, 23-3-2008
 # 
 
 .First.lib <- function(lib, pkg) {

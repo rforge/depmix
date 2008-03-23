@@ -1,7 +1,8 @@
 
 # 
 # response, transition and prior models for DEPMIX models
-# 
+# 23-3-2008
+# Maarten Speekenbrink & Ingmar Visser
 
 # 
 # RESPONSE CLASS

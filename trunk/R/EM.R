@@ -1,3 +1,7 @@
+# 
+# Maarten Speekenbrink 23-3-2008
+# 
+
 em <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 	
 	if(!is(object,"depmix")) stop("object is not of class 'depmix'")
