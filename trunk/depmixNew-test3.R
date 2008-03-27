@@ -48,25 +48,6 @@ llratio(mod3,mod1)
 
 # mod4 <- fit(mod2,fixed=fixed,method="donlp")
 
-# profiling code
-
-
-
-
-gc()
-Rprof()
-mod1 <- em(mod)
-Rprof(NULL)
-summaryRprof()
-
-source("R/EM.R")
-source("R/responses.R")
-
-gc()
-Rprof()
-mod1 <- fit(mod,fixed=fixed)
-Rprof(NULL)
-summaryRprof()
 
 
 

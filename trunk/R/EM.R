@@ -17,11 +17,11 @@ em <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 	j <- 0
 	
 	A <- object@trDens
-	B <- apply(object@dens,c(1,3),prod)
+# 	B <- apply(object@dens,c(1,3),prod)
 	init <- object@init
 	
 	# initial expectation
-	fbo <- fb(init=object@init,A=object@trDens,B=apply(object@dens,c(1,3),prod),ntimes=ntimes(object))
+	fbo <- fb(init=object@init,A=object@trDens,B=object@dens,ntimes=ntimes(object))
 	LL <- fbo$logLike
 	LL.old <- LL + 1
 	
@@ -61,7 +61,7 @@ em <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 		}
 		
 		# expectation
-		fbo <- fb(init=object@init,A=object@trDens,B=apply(object@dens,c(1,3),prod),ntimes=ntimes(object))
+		fbo <- fb(init=object@init,A=object@trDens,B=object@dens,ntimes=ntimes(object))
 		LL <- fbo$logLike
 				
 		if(verbose&((j%%5)==0)) cat("iteration",j,"logLik:",LL,"\n")

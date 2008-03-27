@@ -1,74 +1,39 @@
 
-TODO list for depmix package release 0.1-0
+TODO list for depmix package release 0.2-0
 
 (priority to be determined)
 
-- add help files for all functions:
-	1) depmix.Rd: help on constructing models: done!!!!!
-	2) depmix-class.Rd: detailed description of depmix class: Ingmar, done!!!!!
-	3) depmix.fit.Rd: help on fitting models: Ingmar
-		Other methods for depmix.fitted objects include:
-		a) posterior: get posterior state sequence: we still need the code for this!
-		b) logLik: done!!!
-		c) AIC, BIC: done!!!
-		d) getpars, setpars: done!!!!
-		e) llratio: done!!!!!
-		
-	4) responses.Rd: detailed description on constructing response models: done!!!!!
-	5) transInit.Rd: detailed description on constructing transition models: done!!!!!
-	6) others: lystig, fb: done!!!!
+1) restructure R directory and help file directory by use of package.skeleton
 
-- rework em function and add a working example for it: Maarten
+2) make C versions of fb and lystig to speed things up a little bit 
+(have a look at the profile code in depmixNew-test4.R to see where 
+the speed problems are)
 
-- balance scale data example with covariate on initial probabilities
-(this involves a latent class model rather than a hidden Markov model)
-Ingmar: done!!!!!
-
-- review summary/print functions for depmix and depmix.fitted: done!!!!!
-
-- viterbi algorithm to get maximum a posteriori states for depmix model: Maarten, done !!!!!
-
-- viterbi algorithm to get posterior probabilities as part of depmix.fitted: skip!!
-
-- general documentation: depmix-introduction.pdf needs updating:
-	1) check credentials
-	2) add help for posterior
-	3) 
+3) add other distributions:
+	- glm options
+	- ???
 
 
+TODO Medium term
 
+1) look at initial value generation?
 
+2) Discrimination learning example, need covariates with these data!
 
-
-
-
-
+3) Factor depmix model as example of user specified model
 
 
 TODO long term 
-
-- generate initial values?!?!?
-
-Examples
-
-1) Discrimination learning example, need covariates with these data!
-
-2) Factor depmix model as example of user specified model
-
 
 Design issues
 
 1) Data simulation according to specified model
 
-2) Analytical gradients in lystig
+2) Analytical gradients in lystig + standard errors of parameters
 
-3) Speed optimization: lystig in C?
+3) Multi group possibilities: use group factor in call to depmix
 
-4) Multi group possibilities: use group factor in call to depmix
-
-5) Missing data options?
-
-6) Standard errors of parameters
+4) Missing data options?
 
 
 Other capabilities

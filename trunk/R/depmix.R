@@ -291,8 +291,8 @@ setMethod("freepars","depmix",
 # depends on getpars and nobs
 setMethod("logLik",signature(object="depmix"),
 	function(object,method="lystig") { 
-		if(method=="fb") ll <- fb(object@init,object@trDens,apply(object@dens,c(1,3),prod),object@ntimes,object@stationary)$logLike
-		if(method=="lystig") ll <- lystig(object@init,object@trDens,apply(object@dens,c(1,3),prod),object@ntimes,object@stationary)$logLike
+		if(method=="fb") ll <- fb(object@init,object@trDens,object@dens,object@ntimes,object@stationary)$logLike
+		if(method=="lystig") ll <- lystig(object@init,object@trDens,object@dens,object@ntimes,object@stationary)$logLike
 		attr(ll, "df") <- freepars(object)
 		attr(ll, "nobs") <- nobs(object)
 		class(ll) <- "logLik"
