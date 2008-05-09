@@ -4,7 +4,7 @@
 # 
 
 .First.lib <- function(lib, pkg) {
-	require(nnet)
+ 	require(nnet)
 }
 
 .Last.lib <- function(libpath) {}

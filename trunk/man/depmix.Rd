@@ -10,9 +10,6 @@
 \alias{logLik}
 \alias{logLik,depmix-method}
 
-\alias{AIC}
-\alias{AIC,depmix-method}
-
 \alias{BIC}
 \alias{BIC,depmix-method}
 
@@ -58,7 +55,7 @@
 	
 	\S4method{summary}{depmix}(object)
 	\S4method{logLik}{depmix}(object)
-	\S4method{AIC}{depmix}(object)
+
 	\S4method{BIC}{depmix}(object)
 	\S4method{nobs}{depmix}(object)
 	

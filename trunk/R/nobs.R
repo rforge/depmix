@@ -1,0 +1,1 @@
+setMethod("nobs", signature(object="depmix"),	function(object, ...) {		sum(object@ntimes)	})
