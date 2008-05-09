@@ -319,7 +319,7 @@ setMethod("fit","MULTINOMresponse",
 	}
 )
 
-# method 'logDens'
+# method 'logDens' & dens
 # use: instead of density slot in rModel
 # returns: matrix with log(p(y|x,parameters))
 setMethod("logDens","BINOMresponse",
