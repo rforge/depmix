@@ -43,6 +43,13 @@ mod3 <- fit(mod2)
 llratio(mod3,mod1)
 
 
+# 
+# fit these data as if the items were all parallel so the sumscore can be used as
+# a binomial with n=4 glm
+# 
+
+
+
 
 # donlp optimzation instead
 
