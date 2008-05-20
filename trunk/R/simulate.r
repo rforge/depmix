@@ -35,10 +35,10 @@ setMethod("simulate",signature(object="depmix"),
     }
 
     responses <- array("numeric",dim=c(nt,nresp,nsim))
-    for(j in 1:resp(object)) {
+    for(i in 1:resp(object)) {
       tmp <- array(,dim=c(nt,ns,nsim))
       for(j in 1:ns) {
-        tmp[,j,] <- simulate(object@response[[j]][[i]],n=nt)
+        tmp[,j,] <- simulate(object@response[[j]][[i]],nsim=nt*nsim)
       }
       for(j in 1:nsim) {
         responses[,i,j] <- tmp[cbind(1:nt,states[,j],j)]
@@ -80,11 +80,11 @@ setMethod("simulate",signature(object="NORMresponse"),
       # draw in one go
       mu <- predict(object)
       sd <- getpars(object)["sd"]
-      response <- rnorm(nsim,mean=mu,sd=sd)
+      response <- rnorm(nt*nsim,mean=mu,sd=sd)
     } else {
       mu <- predict(object)[time]
       sd <- getpars(object)["sd"]
-      response <- rnorm(nsim,mean=mu,sd=sd)
+      response <- rnorm(length(time)*nsim,mean=mu,sd=sd)
     }
   }
 )
