@@ -24,8 +24,9 @@ function(base=1) {
 	linkinv <- function(eta,base) {
 		linv <- function(eta,base) {
 			pp <- numeric(length(eta))
-			if(any(is.infinite(eta))) {
+			if(any(is.infinite(eta)) || any(eta > log(.Machine$double.xmax)) || any(eta < log(.Machine$double.xmin))) {
 				pp[which(is.infinite(eta))] <- 1
+				pp[which(eta > log(.Machine$double.xmax))] <- 1 # change this to something better!
 			} else {
 				expb <- exp(eta)
 				sumb <- sum(expb)

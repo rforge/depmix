@@ -16,12 +16,12 @@ em <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 	converge <- FALSE
 	j <- 0
 	
-	A <- object@trDens
-	B <- apply(object@dens,c(1,3),prod)
-	init <- object@init
+	# A <- object@trDens
+	# B <- object@dens
+	# init <- object@init
 	
 	# initial expectation
-	fbo <- fb(init=object@init,A=object@trDens,B=apply(object@dens,c(1,3),prod),ntimes=ntimes(object))
+	fbo <- fb(init=object@init,A=object@trDens,B=object@dens,ntimes=ntimes(object),stationary=object@stationary)
 	LL <- fbo$logLike
 	LL.old <- LL + 1
 	
@@ -52,6 +52,9 @@ em <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 				# update trDens slot of the model
 				object@trDens[,,i] <- dens(object@transition[[i]])
 			}
+		}
+		
+		for(i in 1:ns) {
 			
 			for(k in 1:nresp(object)) {
 				object@response[[i]][[k]] <- fit(object@response[[i]][[k]],w=fbo$gamma[,i])
@@ -61,7 +64,7 @@ em <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 		}
 		
 		# expectation
-		fbo <- fb(init=object@init,A=object@trDens,B=apply(object@dens,c(1,3),prod),ntimes=ntimes(object))
+		fbo <- fb(init=object@init,A=object@trDens,B=object@dens,ntimes=ntimes(object),stationary=object@stationary)
 		LL <- fbo$logLike
 				
 		if(verbose&((j%%5)==0)) cat("iteration",j,"logLik:",LL,"\n")
