@@ -10,9 +10,10 @@ setGeneric("is.stationary", function(object,...) standardGeneric("is.stationary"
 
 setMethod("simulate",signature(object="depmix"),
   function(object,nsim=1,seed=NULL,...) {
-   	nt <- sum(object@ntimes)
-  	lt <- length(object@ntimes)
-  	et <- cumsum(object@ntimes)
+    ntim <- ntimes(object) 
+   	nt <- sum(ntim)
+  	lt <- length(ntim)
+  	et <- cumsum(ntim)
   	bt <- c(1,et[-lt]+1)
 
   	nr <- nresp(object)
@@ -20,31 +21,40 @@ setMethod("simulate",signature(object="depmix"),
 
     # simulate state sequences first, then observations
 
-  	states <- array("numeric",dim=c(nt,nsim))
+    # random generation is slow when done separately for each t, so first draw 
+    #   variates for all t, and then determine state sequences iteratively
+  	states <- array(,dim=c(nt,nsim))
+  	states[bt,] <- simulate(object@prior,n=nsim,is.prior=T)
+  	sims <- array(,dim=c(nt,ns,nsim))
+  	for(i in 1:ns) {
+      sims[,i,] <- simulate(object@transition[[i]],nsim=nsim)
+ 	  }
+ 	  # track states
   	for(case in 1:lt) {
-      states[bt,] <- simulate(object@prior,n=nsim,is.prior=T)
       for(i in (bt[case]+1):et[case]) {
-        for(j in 1:n) {
-          if(is.stationary(object)) {
-            states[i,j] <- simulate(object@transition[[states[i-1,j]]],n=nsim)
-          } else {
-            states[i,j] <- simulate(object@transition[[states[i-1,j]]],n=nsim,time=i)
-          }
-        }
+        states[i,] <- sims[cbind(i,states[i-1,],1:nsim)]
       }
     }
+#        for(j in 1:nsim) {
+#          if(is.stationary(object)) {
+#            states[i,j] <- simulate(object@transition[[states[i-1,j]]],nsim=1)
+#          } else {
+#            states[i,j] <- simulate(object@transition[[states[i-1,j]]],nsim=1,time=i)
+#          }
+#        }
+#      }
+#    }
 
-    responses <- array("numeric",dim=c(nt,nresp,nsim))
-    for(i in 1:resp(object)) {
+    responses <- array(,dim=c(nt,nr,nsim))
+    for(i in 1:nr) {
       tmp <- array(,dim=c(nt,ns,nsim))
       for(j in 1:ns) {
-        tmp[,j,] <- simulate(object@response[[j]][[i]],nsim=nt*nsim)
+        tmp[,j,] <- simulate(object@response[[j]][[i]],nsim=nsim)
       }
       for(j in 1:nsim) {
         responses[,i,j] <- tmp[cbind(1:nt,states[,j],j)]
       }
     }
-
     return(list(states=states,responses=responses))
   }
 )
@@ -53,23 +63,22 @@ setMethod("simulate",signature(object="transInit"),
   function(object,nsim=1,seed=NULL,is.prior=FALSE,time) {
     if(is.prior) {
       pr <- dens(object)
-      states <- vector()
-      for(i in 1:nrow(prob)) {
-        states <- c(states,which(rmultinom(n=nsim,size=1,prob=pr[i,]))==1)
-      }
-      states <- as.vector(matrix(states,nrow=nrow(prob),ncol=nsim,byrow=T))
+      sims <- array(apply(pr,1,rmultinom,n=nsim,size=1),dim=c(ncol(pr),nsim,nrow(pr)))
+      states <- t(apply(sims,c(2,3), function(x) which(x==1)))
       return(states)
     } else {
       if(missing(time)) {
         # this is likely to be a stationary model...
         pr <- predict(object)
-        states <- apply(rmultinom(nsim,size=1,prob=pr),2,function(x) which(x==1))
-        return(states)
       } else {
         pr <- predict(object)[time,]
-        states <- apply(rmultinom(nsim,size=1,prob=pr),2,function(x) which(x==1))
-        return(states)
+        if(length(time)==1) pr <- matrix(pr,ncol=length(pr))
       }
+      nt <- nrow(pr)
+      sims <- array(apply(pr,1,rmultinom,n=nsim,size=1),dim=c(ncol(pr),nsim,nt))
+      states <- t(apply(sims,c(2,3), function(x) which(x==1)))
+      # states <- apply(apply(pr,2,rmultinom rmultinom(nt*nsim,size=1,prob=pr),2,function(x) which(x==1))
+      return(states)
     }
   }
 )
@@ -79,13 +88,14 @@ setMethod("simulate",signature(object="NORMresponse"),
     if(missing(time)) {
       # draw in one go
       mu <- predict(object)
-      sd <- getpars(object)["sd"]
-      response <- rnorm(nt*nsim,mean=mu,sd=sd)
     } else {
       mu <- predict(object)[time]
-      sd <- getpars(object)["sd"]
-      response <- rnorm(length(time)*nsim,mean=mu,sd=sd)
-    }
+    }  
+    nt <- length(mu)
+    sd <- getpars(object)["sd"]
+    response <- rnorm(nt*nsim,mean=mu,sd=sd)
+    if(nsim > 1) response <- matrix(response,ncol=nsim)
+    return(response)
   }
 )
 
@@ -94,11 +104,20 @@ setMethod("simulate",signature(object="MULTINOMresponse"),
     if(missing(time)) {
       # draw all times in one go
       pr <- predict(object)
-      response <- t(apply(pr,1,function(x) apply(rmultinom(n=nsim,size=1,pr=x),2,function(y) which(y==1))))
     } else {
       pr <- predict(object)[time,]
-      response <- t(apply(pr,1,function(x) apply(rmultinom(n=nsim,size=1,pr=x),2,function(y) which(y==1))))
+      if(length(time)==1) pr <- matrix(pr,ncol=length(pr))
     }
+    nt <- nrow(pr)
+    sims <- array(apply(pr,1,rmultinom,n=nsim,size=1),dim=c(ncol(pr),nsim,nt))
+    response <- t(apply(sims,c(2,3), function(x) which(x==1)))
+    
+#    if(nsim > 1) {
+#      response <- t(apply(pr,1,function(x) apply(rmultinom(n=nsim,size=1,pr=x),2,function(y) which(y==1))))
+#    } else {
+#      response <- apply(pr,1,function(x) apply(rmultinom(n=nsim,size=1,pr=x),2,function(y) which(y==1)))
+#    }
+    return(response)
   }
 )
 
