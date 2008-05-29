@@ -60,3 +60,5 @@ setGeneric("ntimes", function(object, ...) standardGeneric("ntimes"))
 
 setGeneric("nresp", function(object, ...) standardGeneric("nresp"))
 
+setGeneric("is.stationary", function(object,...) standardGeneric("is.stationary"))
+

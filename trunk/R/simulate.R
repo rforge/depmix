@@ -1,8 +1,8 @@
 # simulate data from a depmix model
 
 # TODO: move this to all generics etc...
-setGeneric("is.stationary", function(object,...) standardGeneric("is.stationary"))
- setMethod("is.stationary",signature(object="depmix"),
+#setGeneric("is.stationary", function(object,...) standardGeneric("is.stationary"))
+setMethod("is.stationary",signature(object="depmix"),
   function(object) {
 		return(object@stationary)
 	}
@@ -80,44 +80,6 @@ setMethod("simulate",signature(object="transInit"),
       # states <- apply(apply(pr,2,rmultinom rmultinom(nt*nsim,size=1,prob=pr),2,function(x) which(x==1))
       return(states)
     }
-  }
-)
-
-setMethod("simulate",signature(object="NORMresponse"),
-  function(object,nsim=1,seed=NULL,time) {
-    if(missing(time)) {
-      # draw in one go
-      mu <- predict(object)
-    } else {
-      mu <- predict(object)[time]
-    }  
-    nt <- length(mu)
-    sd <- getpars(object)["sd"]
-    response <- rnorm(nt*nsim,mean=mu,sd=sd)
-    if(nsim > 1) response <- matrix(response,ncol=nsim)
-    return(response)
-  }
-)
-
-setMethod("simulate",signature(object="MULTINOMresponse"),
-  function(object,nsim=1,seed=NULL,time) {
-    if(missing(time)) {
-      # draw all times in one go
-      pr <- predict(object)
-    } else {
-      pr <- predict(object)[time,]
-      if(length(time)==1) pr <- matrix(pr,ncol=length(pr))
-    }
-    nt <- nrow(pr)
-    sims <- array(apply(pr,1,rmultinom,n=nsim,size=1),dim=c(ncol(pr),nsim,nt))
-    response <- t(apply(sims,c(2,3), function(x) which(x==1)))
-    
-#    if(nsim > 1) {
-#      response <- t(apply(pr,1,function(x) apply(rmultinom(n=nsim,size=1,pr=x),2,function(y) which(y==1))))
-#    } else {
-#      response <- apply(pr,1,function(x) apply(rmultinom(n=nsim,size=1,pr=x),2,function(y) which(y==1)))
-#    }
-    return(response)
   }
 )
 
