@@ -1,4 +1,4 @@
-setClass("POISSIONresponse",contains="GLMresponse")
+setClass("POISSONresponse",contains="GLMresponse")
 
 # method 'fit'
 # use: in EM (M step)
