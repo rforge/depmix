@@ -29,7 +29,8 @@ setMethod("simulate",signature(object="POISSONresponse"),
     }
     nt <- nrow(lambda)
     response <- rpois(nt*nsim,lambda=lambda)
-    if(nsim > 1) response <- matrix(response,ncol=nsim)
+    #if(nsim > 1) response <- matrix(response,ncol=nsim)
+    response <- as.matrix(response)
     return(response)
   }
 )

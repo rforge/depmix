@@ -29,7 +29,8 @@ setMethod("simulate",signature(object="GAMMAresponse"),
     }
     nt <- nrow(shape)
     response <- rgamma(nt*nsim,shape=shape)
-    if(nsim > 1) response <- matrix(response,ncol=nsim)
+    # if(nsim > 1) response <- matrix(response,ncol=nsim)
+    response <- as.matrix(response)
     return(response)
   }
 )

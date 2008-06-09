@@ -2,6 +2,13 @@
 
 # TODO: move this to all generics etc...
 #setGeneric("is.stationary", function(object,...) standardGeneric("is.stationary"))
+setClass("depmix.sim",
+  contains="depmix",
+  representation(
+    states="matrix"
+  )
+)
+
 setMethod("is.stationary",signature(object="depmix"),
   function(object) {
 		return(object@stationary)
@@ -35,27 +42,53 @@ setMethod("simulate",signature(object="depmix"),
         states[i,] <- sims[cbind(i,states[i-1,],1:nsim)]
       }
     }
-#        for(j in 1:nsim) {
-#          if(is.stationary(object)) {
-#            states[i,j] <- simulate(object@transition[[states[i-1,j]]],nsim=1)
-#          } else {
-#            states[i,j] <- simulate(object@transition[[states[i-1,j]]],nsim=1,time=i)
-#          }
-#        }
-#      }
-#    }
 
-    responses <- array(,dim=c(nt,nr,nsim))
+    states <- as.vector(states)
+    responses <- list(length=nr)
+    #responses <- array(,dim=c(nt,nr,nsim))
     for(i in 1:nr) {
-      tmp <- array(,dim=c(nt,ns,nsim))
+      tmp <- matrix(,nrow=nt*nsim,ncol=NCOL(object@response[[1]][[i]]@y))
       for(j in 1:ns) {
-        tmp[,j,] <- simulate(object@response[[j]][[i]],nsim=nsim)
+        tmp[states==j,] <- simulate(object@response[[j]][[i]],nsim=nsim)[states==j,]
       }
-      for(j in 1:nsim) {
-        responses[,i,j] <- tmp[cbind(1:nt,states[,j],j)]
+      responses[[i]] <- tmp
+    }
+    
+    # generate new depmix.sim object
+    class(object) <- "depmix.sim"
+    object@states <- as.matrix(states)
+    
+    object@prior@x <- apply(object@prior@x,2,rep,nsim)
+    for(j in 1:ns) {
+      if(!is.stationary(object)) object@transition[[j]]@x <- as.matrix(apply(object@transition[[j]]@x,2,rep,nsim))
+      for(i in 1:nr) {
+        object@response[[j]][[i]]@y <- as.matrix(responses[[i]])
+        object@response[[j]][[i]]@x <- as.matrix(apply(object@response[[j]][[i]]@x,2,rep,nsim))
       }
     }
-    return(list(states=states,responses=responses))
+    object@ntimes <- rep(object@ntimes,nsim)
+    
+   	# make appropriate array for transition densities
+  	nt <- sum(object@ntimes)
+  	if(is.stationary(object)) trDens <- array(0,c(1,ns,ns)) else trDens <- array(0,c(nt,ns,ns))
+
+  	# make appropriate array for response densities
+  	dns <- array(,c(nt,nr,ns))
+
+  	# compute observation and transition densities
+  	for(i in 1:ns) {
+  		for(j in 1:nr) {
+  			dns[,j,i] <- dens(object@response[[i]][[j]]) # remove this response as an argument from the call to setpars
+  		}
+  		trDens[,,i] <- dens(object@transition[[i]])
+  	}
+
+  	# compute initial state probabilties
+  	object@init <- dens(object@prior)
+    object@trDens <- trDens
+    object@dens <- dns
+    
+    return(object)
   }
 )
 
