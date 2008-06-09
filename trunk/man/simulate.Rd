@@ -19,7 +19,7 @@
 
 \usage{
 
-    \S4method{simulate}{depmix}(object, nsim=1, seed=NULL, times=NULL, ...)
+  \S4method{simulate}{depmix}(object, nsim=1, seed=NULL, times=NULL, ...)
     
 	\S4method{simulate}{response}(object)
 	
@@ -60,10 +60,11 @@
 
 \value{
 
-	For a \code{depmix} object, a \code{list} with two elements;
-	\code{states}, an N*nsim matrix with a state sequence in each column,
-	and \code{responses}, an N*nobs*nsim array with observation sequences,
-	where N = \code{sum(ntimes(object))} 
+	For a \code{depmix} object, a new object of class \code{depmix.sim}. 
+	
+	For a \code{transInit} object, a state sequence
+	
+	For a \code{response} object, an observation sequence.
 
 }
 
