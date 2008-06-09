@@ -106,6 +106,38 @@
 
 \examples{
 
+\dontshow{
+data(speed)
+
+pars <- c(1,0.916,0.084,0.101,0.899,6.39,0.24,0.098,0.902,5.52,0.202,0.472,0.528,1,0)
+
+rModels <- list(
+	list(
+		GLMresponse(formula=rt~1,data=speed,family=gaussian(),pstart=c(5.52,.202)),
+		GLMresponse(formula=corr~1,data=speed,family=multinomial(),pstart=c(0.472,0.528))
+	),
+	list(
+		GLMresponse(formula=rt~1,data=speed,family=gaussian(),pstart=c(6.39,.24)),
+		GLMresponse(formula=corr~1,data=speed,family=multinomial(),pstart=c(.098,.902))
+	)
+)
+
+trstart=c(0.899,0.101,0.084,0.916)
+
+transition <- list()
+transition[[1]] <- transInit(~1,nstates=2,data=data.frame(1),pstart=c(trstart[1:2]))
+transition[[2]] <- transInit(~1,nstates=2,data=data.frame(1),pstart=c(trstart[3:4]))
+
+instart=c(0,1)
+inMod <- transInit(~1,ns=2,ps=instart,data=data.frame(rep(1,3)))
+
+mod <- makeDepmix(response=rModels,transition=transition,prior=inMod,ntimes=attr(speed,"ntimes"))
+
+ll <- logLik(mod)
+ll.fb <- logLik(mod,method="fb")
+
+} #end dontshow
+
 data(speed)
 # 2-state model on the RTs of the speed data with random 
 # starting values for the transition pars (without those EM does not get off the ground)

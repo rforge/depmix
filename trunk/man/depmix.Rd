@@ -165,6 +165,11 @@ following slots:
 
 \examples{
 
+\dontshow{
+# these should not be shown but they should be run by R CMD check
+error("don't show example")
+}
+
 # create a 2 state model with one continuous and one binary response
 data(speed)
 mod <- depmix(list(rt~1,corr~1),data=speed,nstates=2,family=list(gaussian(),multinomial()))
@@ -180,7 +185,6 @@ mod
 # state probabilities model
 mod <- setpars(mod, getpars(mod,which="fixed"))
 mod
-
 
 }
 
