@@ -6,9 +6,6 @@
 \alias{depmix.fit}
 \alias{fit,depmix-method}
 
-\alias{posterior}
-\alias{posterior,depmix.fitted-method}
-
 \alias{show,depmix.fitted-method}
 \alias{summary,depmix.fitted-method}
 
@@ -24,7 +21,6 @@
 	\S4method{fit}{depmix}(object, fixed=NULL, equal=NULL, conrows=NULL,
 		conrows.upper=0, conrows.lower=0, method=NULL,...)
 	
-	\S4method{posterior}{depmix.fitted}(object,...)
 	\S4method{summary}{depmix.fitted}(object)
 	
 }
@@ -94,10 +90,6 @@
 	\item{message}{: Convergence information.}
 	
 	\item{conMat}{: The constraint matrix A, see details.}
-
-	\item{posterior}{: Returns a data.frame with nstates(object) + 1
-	columns; the first column has the viterbi states, the other columns
-	have the delta probabilities, see Rabiner (1989).}
 	
 	The print method shows the \code{message} and the summary method
 	shows the parameter estimates.

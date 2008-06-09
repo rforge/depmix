@@ -3,30 +3,11 @@
 
 \docType{methods}
 
-\alias{depmixS4}
 \alias{depmix}
 \alias{depmix,ANY-method}
 
-\alias{logLik}
-\alias{logLik,depmix-method}
-
-\alias{BIC}
-\alias{BIC,depmix-method}
-
-\alias{nobs}
-\alias{nobs,depmix-method}
-
-\alias{npar}
-\alias{npar,depmix-method}
-
-\alias{freepars}
-\alias{freepars,depmix-method}
-
-\alias{setpars}
-\alias{setpars,depmix-method}
-
-\alias{getpars}
-\alias{getpars,depmix-method}
+\alias{show}
+\alias{summary}
 
 \alias{show,depmix-method}
 \alias{summary,depmix-method}
@@ -54,15 +35,7 @@
 		ntimes=NULL,...)
 	
 	\S4method{summary}{depmix}(object)
-	\S4method{logLik}{depmix}(object)
-
-	\S4method{BIC}{depmix}(object)
-	\S4method{nobs}{depmix}(object)
 	
-	\S4method{npar}{depmix}(object)
-	\S4method{freepars}{depmix}(object)
-	\S4method{setpars}{depmix}(object,which="pars",...)
-	\S4method{getpars}{depmix}(object,which="pars",...)	
 	
 }
 
@@ -103,16 +76,6 @@
 		independent, time series. If not specified, the responses are
 		assumed to form a single time series. If the data argument has an
 		attribute ntimes, then this is used.}
-	
-	\item{which}{The default "pars" returns a vector of all parameters of a
-		\code{depmix} object; the alternative value "fixed" return a
-		logical vector of the same length indicating which parameters are
-		fixed. The setpars functions sets parameters (or the logical fixed 
-		vector) to new values; \code{setpars} also recomputes the dens,
-		trans and init slots of \code{depmix} objects. Note that the 
-		\code{getpars} and \code{setpars} functions for \code{depmix} 
-		objects simply call the functions of the same name for the response
-		and transition models.}
 		
 	\item{...}{Not used currently.}
 	
@@ -177,12 +140,6 @@ following slots:
 		the degrees of freedom, ie there are redundancies in the
 		parameters, in particular in the multinomial models for the
 		transitions and prior.}
-
-\code{logLik}, \code{AIC}, and \code{BIC} return the respective values
-associated with the current parameter values.  \code{nobs} returns the
-number of observations, ie \code{sum(ntimes)} that is used in computing the
-\code{BIC}.  \code{npar} returns the number of paramters of a model;
-\code{freepars} returns the number of non-fixed parameters.
 
 }
 

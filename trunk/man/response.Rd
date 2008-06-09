@@ -77,7 +77,7 @@ formulae and family objects.
 	
 	\code{getdf} returns the number of free parameters of a
 	\code{response} model.
-
+	
 }
 
 \author{Ingmar Visser} 

@@ -16,11 +16,17 @@
 \alias{nstates}
 \alias{pa2conr}
 \alias{viterbi}
+\alias{viterbi2}
 \alias{viterbi.fb}
 
 \alias{dens,GLMresponse-method}
 \alias{dens,BINOMresponse-method}
 \alias{dens,NORMresponse-method}
+
+\alias{dens,GAMMAresponse-method}
+\alias{dens,POISSONresponse-method}
+\alias{dens,MVNresponse-method}
+
 \alias{dens,MULTINOMresponse-method}
 \alias{dens,transInit-method}
 
@@ -56,4 +62,4 @@
 
 \author{Ingmar Visser}
 
-\keyword{methods}
+\keyword{internal}

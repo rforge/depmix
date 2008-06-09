@@ -19,8 +19,14 @@ participants' ages are included.}
 	\item{\code{sex}}{Participants' sex.}
 	\item{\code{agedays}}{Age in days.}
 	\item{\code{age}}{Age in years.}
-	\item{\code{t1-t4}}{Trichotomously scored distance items.}
-	\item{\code{d1-d4}}{Dichotomously scored distance items.}
+	\item{\code{t1}}{Trichotomously scored distance item.}
+	\item{\code{t2}}{Trichotomously scored distance item.}
+	\item{\code{t3}}{Trichotomously scored distance item.}
+	\item{\code{t4}}{Trichotomously scored distance item.}
+	\item{\code{d1}}{Dichotomously scored distance item.}
+	\item{\code{d2}}{Dichotomously scored distance item.}
+	\item{\code{d3}}{Dichotomously scored distance item.}
+	\item{\code{d4}}{Dichotomously scored distance item.}
   }
 }
 
