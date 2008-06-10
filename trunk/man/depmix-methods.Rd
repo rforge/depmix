@@ -20,25 +20,38 @@
 \alias{getpars}
 \alias{getpars,depmix-method}
 
-\title{ The log likelihood. }
+\title{ Depmix methods. }
+
 \description{
 Computes the log likelihood of a depmix object.
 }
-\usage{
-	\S4method{logLik}{depmix}(object)
 
-	\S4method{nobs}{depmix}(object)
+\usage{
+	\S4method{logLik}{depmix}(object,method="lystig")
+
+	\S4method{nobs}{depmix}(object, ...)
 	
 	\S4method{npar}{depmix}(object)
 	\S4method{freepars}{depmix}(object)
-	\S4method{setpars}{depmix}(object,which="pars",...)
+	\S4method{setpars}{depmix}(object,values, which="pars",...)
 	\S4method{getpars}{depmix}(object,which="pars",...)	
 
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{object}{A \code{depmix} pobject}
 
+  \item{object}{A \code{depmix} pobject}
+  
+  \item{method}{The log likelihood can be computed by either the forward
+  backward algorithm from Rabiner, 1989, or by the method of Lystig &
+  Hughes, 2002.  The latter is the default as it is faster because in the
+  forward backward routine the state and transition smoothed probabilities
+  are also computed which are not neccessary for the log likelihood. Those
+  smoothed variables, and the forward and backward variables are accessible
+  through the \code{forwardbackward} function.}
+  
+  \item{values}{To be used in \code{setpars} to set new parameter values.}
+  
   \item{which}{The default "pars" returns a vector of all parameters of a
 	  \code{depmix} object; the alternative value "fixed" return a
 	  logical vector of the same length indicating which parameters are

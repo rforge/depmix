@@ -14,7 +14,7 @@
 }
 
 \usage{
-	\S4method{posterior}{depmix.fitted}(object,...)
+	\S4method{posterior}{depmix.fitted}(object)
 }
 
 \arguments{
