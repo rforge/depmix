@@ -4,8 +4,12 @@ Changes in depmixS4 version 0.2-0
 
   o restructured R and Rd files
   
-  o 
+  o added function simulate to generate new data from a (fitted) model
 
+  o added function forwardbackward to access the forward and backward 
+    variables as well as the smoothed transition and state variables
+  
+  o added new glm distributions: gamma, poisson
 
 
 Changes in depmixS4 version 0.1-1

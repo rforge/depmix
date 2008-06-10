@@ -2,6 +2,7 @@
 
 \docType{class}
 
+\alias{depmix.fitted}
 \alias{depmix.fitted-class}
 
 \title{Class "depmix.fitted"}

@@ -46,53 +46,63 @@
 
 }
 
-\details{
-	The method fits depmix models by the EM algorithm if there are no
-	linear constraints on the parameters and if the transition model has
-	no covariates. Otherwise the general optimizer donlp is used which 
-	handles general linear (in-)equality constraints. 
+\details{ 
+
+	Models are fitted by the EM algorithm if there are no constraints on
+	the parameters.  Otherwise the general optimizer \code{donlp2} from the
+	package \code{Rdonlp2} is used which handles general linear
+	(in-)equality constraints.
 	
 	Three types of constraints can be specified on the parameters: fixed,
-	equality, and general constraints. Constraint vectors should be of
-	length npar(object). See help on getpars and setpars about the
-	ordering of parameters. 
+	equality, and general linear (in-)equality constraints.  Constraint
+	vectors should be of length npar(object).  See help on
+	\code{\link{getpars}} and \code{\link{setpars}} about the ordering of
+	parameters.
 	
 	The \code{equal} argument is used to specify equality constraints:
 	parameters that get the same integer number in this vector are
-	estimated to be equal. Any integers can be used in the vector except 0
-	and 1, which indicate fixed and free parameters respectively. 
+	estimated to be equal. Any integers can be used in this way except 0
+	and 1, which indicate fixed and free parameters, respectively. 
 
-	Using the donlp optimizer a Newton-Raphson scheme is employed to
-	estimate parameters subject to linear constraints by imposing: 
+	Using the \code{donlp2} optimizer a Newton-Raphson scheme is employed
+	to estimate parameters subject to linear constraints by imposing:
 	
 			bl <= A*x <= bu,
 	
-	where x is the parameter vector, bl is a vector of lower bounds, bu
-	is a vector of upper bounds, and A is the constraint matrix. 
+	where x is the parameter vector, bl is a vector of lower bounds, bu is
+	a vector of upper bounds, and A is the constraint matrix.
 
-	The \code{conrows} argument is used to specify rows of A directly, and 
-	the conrows.lower and conrows.upper arguments to specify the bounds on 
-	the constraints. \code{conrows} is a matrix of npar(object) columns and
-	one row for each constraint (ie a vector in the case of a single
-	constraint). 
+	The \code{conrows} argument is used to specify rows of A directly, and
+	the conrows.lower and conrows.upper arguments to specify the bounds on
+	the constraints.  \code{conrows} is a matrix of npar(object) columns
+	and one row for each constraint (a vector in the case of a single
+	constraint).
 	
-	\code{llratio} performs a log-likelihood ratio test on two
-	\code{fit}ted models; the first object should have the largest degrees 
-	of freedom. 
+	\code{\link{llratio}} performs a log-likelihood ratio test on two
+	\code{fit}'ted models; the first object should have the largest degrees
+	of freedom (find out by using \code{\link{freepars}}).
 	
 }
 
 \value{
 	
-	\code{fit} returns an object of class \code{\link[depmix.fitted-class]{depmix.fitted}} which contains 
-	the original depmix object, and further has slots: 
+	\code{fit} returns an object of class
+	\code{\link{depmix.fitted}} which contains the
+	original \code{depmix} object, and further has slots:
 	
 	\item{message}{: Convergence information.}
 	
 	\item{conMat}{: The constraint matrix A, see details.}
 	
-	The print method shows the \code{message} and the summary method
-	shows the parameter estimates.
+	\item{posterior}{: The posterior state sequence (computed with the
+	viterbi algorithm), and the posterior probabilities (delta
+	probabilities in Rabiner, 1989, notation).}
+	
+	The print method shows the \code{message} along with the likelihood and
+	AIC and BIC; the summary method prints the parameter estimates.
+
+	Posterior densities and the viterbi state sequence can be accessed
+	through \code{\link{posterior}}.
 	
 }
 
@@ -105,38 +115,6 @@
 }
 
 \examples{
-
-\dontshow{
-data(speed)
-
-pars <- c(1,0.916,0.084,0.101,0.899,6.39,0.24,0.098,0.902,5.52,0.202,0.472,0.528,1,0)
-
-rModels <- list(
-	list(
-		GLMresponse(formula=rt~1,data=speed,family=gaussian(),pstart=c(5.52,.202)),
-		GLMresponse(formula=corr~1,data=speed,family=multinomial(),pstart=c(0.472,0.528))
-	),
-	list(
-		GLMresponse(formula=rt~1,data=speed,family=gaussian(),pstart=c(6.39,.24)),
-		GLMresponse(formula=corr~1,data=speed,family=multinomial(),pstart=c(.098,.902))
-	)
-)
-
-trstart=c(0.899,0.101,0.084,0.916)
-
-transition <- list()
-transition[[1]] <- transInit(~1,nstates=2,data=data.frame(1),pstart=c(trstart[1:2]))
-transition[[2]] <- transInit(~1,nstates=2,data=data.frame(1),pstart=c(trstart[3:4]))
-
-instart=c(0,1)
-inMod <- transInit(~1,ns=2,ps=instart,data=data.frame(rep(1,3)))
-
-mod <- makeDepmix(response=rModels,transition=transition,prior=inMod,ntimes=attr(speed,"ntimes"))
-
-ll <- logLik(mod)
-ll.fb <- logLik(mod,method="fb")
-
-} #end dontshow
 
 data(speed)
 # 2-state model on the RTs of the speed data with random 

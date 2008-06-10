@@ -2,6 +2,8 @@
 
 \docType{methods}
 
+\alias{depmix-methods}
+
 \alias{logLik}
 \alias{logLik,depmix-method}
 
@@ -52,8 +54,9 @@ Computes the log likelihood of a depmix object.
   forward backward routine the state and transition smoothed probabilities
   are also computed which are not neccessary for the log likelihood.  Those
   smoothed variables, and the forward and backward variables are accessible
-  through the \code{forwardbackward} function.} \item{which}{The default
-  "pars" returns a vector of all parameters of a
+  through the \code{\link{forwardbackward}} function.} 
+
+  \item{which}{The default "pars" returns a vector of all parameters of a
 	  
   \code{depmix} object; the alternative value "fixed" return a logical
   vector of the same length indicating which parameters are fixed.  The
@@ -69,22 +72,41 @@ Computes the log likelihood of a depmix object.
 
 \value{
   
-	\item{logLik} {returns a \code{logLik} object with attributes \code{df} and \code{nobs}.}
+	\item{logLik}{returns a \code{logLik} object with attributes \code{df} and \code{nobs}.}
 	
-	\item{nobs} {returns the number of observations (used in computing the BIC).}
+	\item{nobs}{returns the number of observations (used in computing the BIC).}
 
-	\item{npar} {returns the number of paramters of a model.}
+	\item{npar}{returns the number of paramters of a model.}
 
-	\item{freepars} {returns the number of non-fixed parameters.}
+	\item{freepars}{returns the number of non-fixed parameters.}
 
-	\item{setpars} {returns a depmix object with new parameter values.}
+	\item{setpars}{returns a depmix object with new parameter values.}
 
-	\item{getpars} {returns a vector with the current parameter values.}
+	\item{getpars}{returns a vector with the current parameter values.}
 
 }
+
 \author{Ingmar Visser}
+
 \examples{
-	# add some examples here in the future
+
+# create a 2 state model with one continuous and one binary response
+data(speed)
+mod <- depmix(list(rt~1,corr~1),data=speed,nstates=2,family=list(gaussian(),multinomial()))
+
+# get the loglikelihood of the model
+logLik(mod)
+
+# to see the ordering of parameters to use in setpars
+mod <- setpars(mod, value=1:npar(mod))
+mod
+
+# to see which parameters are fixed (by default only baseline parameters in
+# the multinomial logistic models for the transition models and the initial
+# state probabilities model
+mod <- setpars(mod, getpars(mod,which="fixed"))
+mod
+
 }
 
 \keyword{methods}

@@ -15,16 +15,10 @@
 \title{Dependent Mixture Model Specifiction}
 
 \description{
-		
-	depmixS4 is a framework for specifying and fitting dependent mixture
-	models, otherwise known as hidden or latent Markov models.
-	Optimization is done with the EM algorithm or optionally with Rdonlp2
-	when constraints on parameters are imposed.  Models for different
-	distributions can easily be added.
 	
-	\code{depmix} creates an object of class \code{depmix}, a
-	dependent mixture model, otherwise known as hidden Markov 
-	model.
+	\code{depmix} creates an object of class \code{depmix}, a dependent
+	mixture model, otherwise known as hidden Markov model.  For a short
+	description of the package see \code{\link{depmixS4}}.
 	
 }
 
@@ -32,26 +26,23 @@
 	
 	depmix(response, data=NULL, nstates, transition=~1, family=gaussian(), 
 		prior=~1, initdata=NULL, respstart=NULL, trstart=NULL, instart=NULL,
-		ntimes=NULL,...)
-	
-	\S4method{summary}{depmix}(object)
-	
+		ntimes=NULL,...)	
 	
 }
 
 \arguments{
-	\item{object}{An object with class \code{depmix}.}
 	
 	\item{response}{The response to be modeled; either a formula or a list 
-		of formulae in the multivariate case. See details.}
+		of formulae in the multivariate case; this interfaces to the glm
+		distributions. See 'Details'.}
 	
 	\item{data}{An optional data.frame to interpret the variables in
-		response and transition.}
+		the response and transition arguments.}
 	
 	\item{nstates}{The number of states of the model.}
 
 	\item{transition}{A one-sided formula specifying the model for the 
-		transitions. See details.}
+		transitions. See 'Details'.}
 	
 	\item{family}{A family argument for the response. This must be a list
 		of family's if the response is multivariate.}
@@ -61,7 +52,7 @@
 	
 	\item{initdata}{An optional data.frame to interpret the variables
 		occuring in prior. The number of rows of this data.frame must be
-		equal to the number of cases being modeled. See details.}
+		equal to the number of cases being modeled. See 'Details'.}
 	
 	\item{respstart}{Starting values for the parameters of the response
 		models.}
@@ -79,31 +70,36 @@
 		
 	\item{...}{Not used currently.}
 	
+	\item{object}{An object of class \code{depmix}.}
+	
 }
 
 \details{ 
 
 	The function \code{depmix} creates an S4 object of class \code{depmix},
-	which needs to be fitted using \code{\link[depmixS4]{depmix.fit}} to
-	optimize the parameters.
+	which needs to be fitted using \code{\link{fit}} to optimize the
+	parameters.
 	
-	The response model(s) are created by call(s) to
-	\code{\link[depmixS4]{response}} providing the family and optional
-	predictors.  If response is a list of formulae, the response's are
-	assumed to be independent conditional on the latent state.
+	The response model(s) are created by call(s) to \code{\link{response}}
+	providing the response formula and the family specifying the error
+	distribution.  If response is a list of formulae, the \code{response}'s
+	are assumed to be independent conditional on the latent state.
 	
 	The transitions are modeled as a multinomial logistic model for each
 	state.  Hence, the transition matrix can be modeled as time-dependent,
 	depending on predictors.  The prior density is also modeled as a
 	multinomial logistic.  Both are created by calls to
-	\code{\link[depmixS4]{transInit}}.
+	\code{\link{transInit}}.
 	
 	Starting values may be provided by the respective arguments.  The order
 	in which parameters must be provided can be easily studied by using the
-	\code{setpars} function (see example).
+	\code{\link{setpars}} function.
 	
 	Linear constraints on parameters can be provided as argument to the
-	\code{\link[depmixS4]{depmix.fit}} function.
+	\code{\link{fit}} function.
+	
+	The print function prints the formulae for the response, transition and
+	prior models along with their parameter values.
 	
 }
 
@@ -122,8 +118,8 @@ following slots:
 	\item{prior}{A multinomial logistic model for the initial state
 		probabilities.}
 
-	\item{dens,trDens,init}{See depmix-class help for details. For internal
-		use.}
+	\item{dens,trDens,init}{See \code{\link{depmix-class}} help for
+		details.  For internal use.}
 	
 	\item{stationary}{Logical indicating whether the transitions are
 		time-dependent or not; for internal use.}
@@ -136,19 +132,20 @@ following slots:
 	
 	\item{nresp}{The number of independent responses.}
 
-	\item{npars}{The total number of parameters of the model. This is not
-		the degrees of freedom, ie there are redundancies in the
-		parameters, in particular in the multinomial models for the
-		transitions and prior.}
+	\item{npars}{The total number of parameters of the model.  Note: this
+	is \emph{not} the degrees of freedom because there are redundancies in the
+	parameters, in particular in the multinomial models for the transitions
+	and prior probabilities.}
 
 }
 
-\author{Ingmar Visser \email{i.visser@uva.nl}} 
+\author{Ingmar Visser & Maarten Speekenbrink}
 
 \seealso{
 
-	\code{\link[depmixS4]{depmix.fit}}, \code{\link{transInit}},
-	\code{\link{response}}.
+	\code{\link{fit}}, \code{\link{transInit}}, \code{\link{response}},
+	\code{\link{depmix-methods}} for accessor functions to \code{depmix}
+	objects.
 
 }
 
@@ -169,16 +166,6 @@ following slots:
 data(speed)
 mod <- depmix(list(rt~1,corr~1),data=speed,nstates=2,family=list(gaussian(),multinomial()))
 # print the model, formulae and parameter values
-mod
-
-# to see the ordering of parameters to use in setpars
-mod <- setpars(mod, value=1:npar(mod))
-mod
-
-# to see which parameters are fixed (by default only baseline parameters in
-# the multinomial logistic models for the transition models and the initial
-# state probabilities model
-mod <- setpars(mod, getpars(mod,which="fixed"))
 mod
 
 }
