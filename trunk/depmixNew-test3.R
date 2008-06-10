@@ -9,9 +9,7 @@
 # BALANCE SCALE data example with age as covariate on class membership
 # 
 
-setwd("/Users/ivisser/Documents/projects/depmixProject/depmixNew/rforge/depmix/trunk/")
-
-library(depmixS4)
+require(depmixS4)
 
 data(balance)
 # four binary items on the balance scale task
@@ -47,9 +45,6 @@ llratio(mod3,mod1)
 # fit these data as if the items were all parallel so the sumscore can be used as
 # a binomial with n=4 glm
 # 
-
-
-
 
 # donlp optimzation instead
 

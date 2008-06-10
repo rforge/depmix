@@ -18,7 +18,7 @@
 # TEST 1: speed data model with optimal parameters, compute the likelihood
 # 
 
-# bye
+require(depmixS4)
 
 data(speed)   
 

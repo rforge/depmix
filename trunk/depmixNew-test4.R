@@ -17,7 +17,7 @@
 # optimization speed profile: case 1: latent class data
 # 
 
-# source("depmixNew-test4.R")
+require(depmixS4)
 
 data(balance)
 
