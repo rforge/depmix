@@ -18,7 +18,9 @@
 # TEST 1: speed data model with optimal parameters, compute the likelihood
 # 
 
-data(speed)
+# bye
+
+data(speed)   
 
 pars <- c(1,0.916,0.084,0.101,0.899,6.39,0.24,0.098,0.902,5.52,0.202,0.472,0.528,1,0)
 
