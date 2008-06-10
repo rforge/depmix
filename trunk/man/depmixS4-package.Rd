@@ -18,22 +18,26 @@ response densities are easy to add.
 \tabular{ll}{
 Package: \tab depmixS4\cr
 Type: \tab Package\cr
-Version: \tab 0.2\cr
-Date: \tab 2008-06-09\cr
+Version: \tab 0.2-0\cr
+Date: \tab 2008-06-10\cr
 License: \tab GPL\cr
 }
 
 Model fitting is done in two steps; first, models are specified through the
-depmix function, which uses standard arguments to eg specify GLM densities
-for the responses; second, the model is fitted; the fit function is used to 
+\code{depmix} function, which uses standard arguments to eg specify GLM densities
+for the responses; second, the model is fitted; the \code{fit} function is used to 
 provide extra arguments concerning the optimization, such as providing 
 constraints on parameters. 
 
 }
 \author{
+
 Ingmar Visser & Maarten Speekenbrink
+
 Maintainer: i.visser@uva.nl
+
 }
+
 \references{
 
 On hidden Markov models: Lawrence R. Rabiner (1989).  A tutorial on
@@ -44,10 +48,15 @@ On latent class models: A. L. McCutcheon (1987).  \emph{Latent class
 analysis}.  Sage Publications.
 
 }
+
 \keyword{ package }
+
 \seealso{
-\code{\link[<depmixS4>:<depmixS4>-package]{depmix}}
+
+\code{\link[depmixS4]{depmix}}
+
 }
+
 \examples{
 # These should be added at some point ...
 }

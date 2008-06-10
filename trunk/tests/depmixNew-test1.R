@@ -141,18 +141,10 @@ resp <- c(5.52,0.202,0.472,0.528,6.39,0.24,0.098,0.902)
 
 mod <- depmix(list(rt~1,corr~1),data=speed,family=list(gaussian(),multinomial()),transition=~Pacc,trstart=trstart,instart=instart,respst=resp,nst=2)
 
-
 mod1 <- setpars(mod,getpars(mod))
 
 cat("Test 5: ", all.equal(getpars(mod),getpars(mod1)), "(getpars and setpars) \n")
 
-
-# 
-# SPECIFYING MODELS THE EASY WAY
-# 
-
-# mod <- depmix(rt~1,data=speed,nstates=2)
-# mod
 
 
 

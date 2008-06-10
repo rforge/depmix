@@ -14,7 +14,7 @@
 
 \usage{
 
-	\S4method{posterior}{depmix}(object, return.all=TRUE, ...)
+	\S4method{forwardbackward}{depmix}(object, return.all=TRUE, ...)
 
 }
 
@@ -32,7 +32,7 @@
 \value{
 	
 	\code{forwardbackward} returns a list of the following (the variables 
-	are named after the notation from Rabiner (1989).
+	are named after the notation from Rabiner, 1989):
 
 	\item{alpha}{The forward variables.}
 	

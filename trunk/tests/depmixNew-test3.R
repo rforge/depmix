@@ -9,6 +9,8 @@
 # BALANCE SCALE data example with age as covariate on class membership
 # 
 
+rm(list=ls())
+
 require(depmixS4)
 
 data(balance)

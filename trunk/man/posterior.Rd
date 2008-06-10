@@ -19,7 +19,6 @@
 
 \arguments{
   \item{object}{A depmix object.}
-  \item{\dots}{Not currently used.}
 }
 
 \value{
