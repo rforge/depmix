@@ -2,7 +2,7 @@
 # Maarten Speekenbrink, 23-3-2008
 # 
 
-viterbi2 <-
+viterbi <-
 function(object) {
 	# returns the most likely state sequence
 	nt <- sum(object@ntimes)
