@@ -3,7 +3,7 @@
 # Ingmar Visser, 23-3-2008
 # 
 
-.First.lib <- function(lib, pkg) {
+.First.lib <- function(lib, pkg) { 
  	require(nnet)
 }
 
@@ -37,6 +37,8 @@ setGeneric("logLik", function(object, ...) standardGeneric("logLik"))
 setGeneric("fit", function(object, ...) standardGeneric("fit"))
 
 setGeneric("posterior", function(object, ...) standardGeneric("posterior"))
+
+setGeneric("forwardbackward", function(object, ...) standardGeneric("forwardbackward"))
 
 setGeneric("simulate", function(object, ...) standardGeneric("simulate"))
 

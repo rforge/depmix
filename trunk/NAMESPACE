@@ -6,11 +6,11 @@ export(
 	makeDepmix,
 	lystig,
 	fb,
+	forwardbackward,
 	llratio,
 	multinomial,
 	em,
 	viterbi,
-	viterbi.fb,
 	mlogit
 )
 

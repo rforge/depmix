@@ -8,7 +8,7 @@
 
 \description{
 
-	Compute the posterior states for a (fitted) depmix object.  In the case
+	Return the posterior states for a fitted depmix object.  In the case
 	of a latent class or mixture model these are the class probabilities.
 
 }
