@@ -117,16 +117,65 @@
 \examples{
 
 data(speed)
-# 2-state model on the RTs of the speed data with random 
+
+# 2-state model on rt and corr from speed data set with Pacc as covariate on the transition matrix
 # starting values for the transition pars (without those EM does not get off the ground)
 set.seed(1)
-mod <- depmix(rt~1,data=speed,nstates=2,trstart=runif(4))
+tr=runif(6)
+trst=c(tr[1:2],0,tr[3:5],0,tr[6])
+mod <- depmix(list(rt~1,corr~1),data=speed,transition=~Pacc,nstates=2,family=list(gaussian(),multinomial()),
+	trstart=trst)
 # fit the model
 mod1 <- fit(mod)
 mod1 # to see the logLik and optimization information
 # to see the parameters
 summary(mod1)
 
+\dontrun{
+# NOTE: this requires Rdonlp2 package to be installed
+
+# FIX SOME PARAMETERS
+
+# get the starting values of this model to the optimized 
+# values of the previously fitted model to speed optimization
+
+pars <- c(unlist(getpars(mod1)))
+
+# constrain the initial state probs to be 0 and 1 
+# also constrain the guessing probs to be 0.5 and 0.5 
+# (ie the probabilities of corr in state 1)
+# change the ones that we want to constrain
+pars[2]=+Inf # this means the process will always start in state 2
+pars[14]=0 # the corr parameters in state 1 are now both 0, corresponding the 0.5 prob
+mod <- setpars(mod,pars)
+
+# fix the parameters by setting: 
+free <- c(0,0,rep(c(0,1),4),1,1,0,0,1,1,0,1)
+# fit the model
+mod2 <- fit(mod,fixed=!free)
+
+# likelihood ratio insignificant, hence mod2 better than mod1
+llratio(mod1,mod2)
+
+# NOW ADD SOME GENERAL LINEAR CONSTRAINTS
+
+# set the starting values of this model to the optimized 
+# values of the previously fitted model to speed optimization
+
+pars <- c(unlist(getpars(mod2)))
+mod <- setpars(mod,pars)
+
+# start with fixed and free parameters
+conpat <- c(0,0,rep(c(0,1),4),1,1,0,0,1,1,0,1)
+# constrain the beta's on the transition parameters to be equal
+conpat[4] <- conpat[8] <- 2
+conpat[6] <- conpat[10] <- 3
+
+mod3 <- fit(mod,equal=conpat)
+
+llratio(mod2,mod3)
+
+}
 
 data(balance)
 # four binary items on the balance scale task
