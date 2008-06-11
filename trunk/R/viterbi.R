@@ -17,7 +17,7 @@ function(object) {
 	
 	prior <- object@init
 	
-	A <- object@trDens
+	if(max(ntimes(object)>1)) A <- object@trDens
 	B <- apply((object@dens),c(1,3),prod)
 	
 	for(case in 1:lt) {

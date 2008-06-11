@@ -1,3 +1,42 @@
+# 
+# Ingmar Visser, 11-6-2008
+# 
+
+# 
+# Main function to construct mix models
+# 
+
+#
+# UNIVARIATE AND MULTIVARIATE MIXTURE OF GLM'S
+# 
+
+
+setGeneric("mix", function(response,data=NULL,nstates,family=gaussian(),prior=~1,initdata=NULL,
+		respstart=NULL,instart=NULL, ...) standardGeneric("mix"))
+
+
+setMethod("mix",
+	signature(response="ANY"),
+	function(response, data=NULL, nstates, family=gaussian(), prior=~1, initdata=NULL,
+		respstart=NULL, instart=NULL, ...) {
+		
+		# make response models
+		response <- makeResponseModels(response=response,data=data,nstates=nstates,family=family,values=respstart)
+		
+		# FIX ME: this only works if data are actually provided ... (maybe make this obligatory ...)
+		ntimes <- rep(1,nrow(data))
+		
+		# make prior model
+		prior <- makePriorModel(nstates=nstates,ncases=length(ntimes),formula=prior,data=initdata,values=instart)
+		
+		# call main depmix with all these models, ntimes and stationary
+		model <- makeMix(response=response,prior=prior)
+		
+		# deal with starting values here!!!!!!
+		
+		return(model)
+	}
+)
 
 # 
 # Ingmar Visser, 23-3-2008

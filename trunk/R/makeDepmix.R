@@ -1,4 +1,43 @@
 
+
+# the main function constructing a mix model with full information, ie all models already in place
+# this function is probably not ever called by users ...
+
+makeMix <-
+function(response, prior, ...) {
+		
+	nstates <- length(response)
+	nresp <- length(response[[1]])
+		
+	# count the number of parameters	
+	npars <- npar(prior) 
+	for(i in 1:nstates) {
+		npars <- npars + sum(sapply(response[[i]],npar))
+	}
+	
+	# make appropriate array for response densities
+	nt <- nrow(response[[1]][[1]]@y)
+	ntimes <- rep(1,nt)
+	dens <- array(,c(nt,nresp,nstates))
+	
+	# compute observation and transition densities
+	for(i in 1:nstates) {
+		for(j in 1:nresp) {
+			dens[,j,i] <- dens(response[[i]][[j]]) # remove this response as an argument from the call to setpars
+		}
+	}
+	
+	# compute initial state probabilties
+	init <- dens(prior)
+	
+	new("mix",response=response,prior=prior,
+		dens=dens,init=init,nstates=nstates,
+		nresp=nresp,ntimes=ntimes,npars=npars)
+	
+}
+
+
+
 # the main function constructing a depmix model with full information, ie all models already in place
 # this function is probably not ever called by users
 

@@ -1,1 +1,1 @@
-# depends on nlin(object) and getpars(object)setMethod("freepars","depmix",	function(object) {		free <- sum(!getpars(object,which="fixed"))# 		free <- free-nlin(object) # FIX ME!!!!		free	})
+# depends on nlin(object) and getpars(object)setMethod("freepars","mix",	function(object) {		free <- sum(!getpars(object,which="fixed"))# 		free <- free-nlin(object) # FIX ME!!!!		free	})

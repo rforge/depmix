@@ -21,6 +21,10 @@ depmixS4 provides classes for specifying and fitting hidden Markov models
 	observations.  The response densities for each state may be chosen from
 	the GLM family, or a multinomial.  User defined response densities are
 	easy to add.
+	
+	Mixture or latent class (regression) models can also be fitted; these
+	are the limit case in which the length of observed time series is 1 for
+	all cases. 
 
 }
 
@@ -35,7 +39,8 @@ depmixS4 provides classes for specifying and fitting hidden Markov models
 	}
 
 	Model fitting is done in two steps; first, models are specified through
-	the \code{\link{depmix}} function, which uses standard
+	the \code{\link{depmix}} function (or the \code{\link{mix}} function for
+	mixture and latent class models), which both use standard
 	\code{\link{glm}} style arguments to specify the observed
 	distributions; second, the model needs to be fitted by using the
 	\code{\link{fit}} function; imposing constraints is done through the

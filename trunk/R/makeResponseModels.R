@@ -22,7 +22,7 @@ function(response,data=NULL,nstates,family,values=NULL,...) {
 		}
 	}
 	
-	# multi variate response data
+	# multivariate response data
 	if(is.list(resp)) {
 		nresp <- length(resp)
 		for(i in 1:nstates) {

@@ -4,7 +4,7 @@
 
 em <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 	
-	if(!is(object,"depmix")) stop("object is not of class 'depmix'")
+	if(!is(object,"mix")) stop("object is not of class '(dep)mix'")
 	
 	ns <- object@nstates
 	
@@ -36,7 +36,6 @@ em <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 				
 		trm <- matrix(0,ns,ns)
 		for(i in 1:ns) {
-			
 			if(max(ntimes(object)>1)) { # skip transition parameters update in case of latent class model
 				if(!object@stationary) {
 					object@transition[[i]]@y <- fbo$xi[,,i]/fbo$gamma[,i]
@@ -48,7 +47,6 @@ em <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 					# FIX THIS; it will only work with a specific trinModel
 					object@transition[[i]]@parameters$coefficients <- object@transition[[i]]@family$linkfun(trm[i,],base=object@transition[[i]]@family$base)
 				}
-				
 				# update trDens slot of the model
 				object@trDens[,,i] <- dens(object@transition[[i]])
 			}
@@ -78,16 +76,14 @@ em <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 		
 	}
 	
-	class(object) <- "depmix.fitted"
+	if(class(object)=="depmix") class(object) <- "depmix.fitted"
+	if(class(object)=="mix") class(object) <- "mix.fitted"
+	
 	if(converge) object@message <- "Log likelihood converged to within tol."
 	else object@message <- "'maxit' iterations reached in EM without convergence."
 	
 	# no constraints in EM
 	object@conMat <- matrix()
-	
-	# what do we want in slot posterior?
-	# this is moved to depmix.fit
-	# object@posterior <- viterbi(object)
 	
 	object
 }
