@@ -3,8 +3,90 @@
 # 
 
 em <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
+  if(!is(object,"mix")) stop("object is not of class '(dep)mix'")
+  call <- match.call()
+  if(is(object,"depmix")) {
+    call[[1]] <- as.name("em.depmix")
+  } else {
+    call[[1]] <- as.name("em.mix")
+  }
+  object <- eval(call, parent.frame())
+  object
+}
+
+
+em.mix <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
+  if(!is(object,"mix")) stop("object is not of class 'mix'")
+
+  ns <- object@nstates
+
+	ntimes <- ntimes(object)
+	lt <- length(ntimes)
+	et <- cumsum(ntimes)
+	bt <- c(1,et[-lt]+1)
+
+	converge <- FALSE
+	j <- 0
 	
-	if(!is(object,"mix")) stop("object is not of class '(dep)mix'")
+	# compute responsibilities
+  B <- apply(object@dens,c(1,3),prod)
+  gamma <- object@init*B
+  LL <- sum(log(rowSums(gamma)))
+  # normalize
+  gamma <- gamma/rowSums(gamma)
+
+	LL.old <- LL + 1
+
+	while(j <= maxit & !converge) {
+
+		# maximization
+
+		# should become object@prior <- fit(object@prior)
+		object@prior@y <- gamma[bt,,drop=FALSE]
+		object@prior <- fit(object@prior, w=NULL,ntimes=NULL)
+		object@init <- dens(object@prior)
+
+		for(i in 1:ns) {
+			for(k in 1:nresp(object)) {
+				object@response[[i]][[k]] <- fit(object@response[[i]][[k]],w=gamma[,i])
+				# update dens slot of the model
+				object@dens[,k,i] <- dens(object@response[[i]][[k]])
+			}
+		}
+
+		# expectation
+    B <- apply(object@dens,c(1,3),prod)
+    gamma <- object@init*B
+    LL <- sum(log(rowSums(gamma)))
+    # normalize
+    gamma <- gamma/rowSums(gamma)
+
+		if(verbose&((j%%5)==0)) cat("iteration",j,"logLik:",LL,"\n")
+		if( (LL >= LL.old) & (LL - LL.old < tol))  {
+			cat("iteration",j,"logLik:",LL,"\n")
+			converge <- TRUE
+		}
+
+		LL.old <- LL
+		j <- j+1
+
+	}
+
+	class(object) <- "mix.fitted"
+
+	if(converge) object@message <- "Log likelihood converged to within tol."
+	else object@message <- "'maxit' iterations reached in EM without convergence."
+
+	# no constraints in EM
+	object@conMat <- matrix()
+
+	object
+	
+}
+
+em.depmix <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
+	
+	if(!is(object,"depmix")) stop("object is not of class '(dep)mix'")
 	
 	ns <- object@nstates
 	
@@ -76,8 +158,10 @@ em <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 		
 	}
 	
-	if(class(object)=="depmix") class(object) <- "depmix.fitted"
-	if(class(object)=="mix") class(object) <- "mix.fitted"
+	#if(class(object)=="depmix") class(object) <- "depmix.fitted"
+	#if(class(object)=="mix") class(object) <- "mix.fitted"
+	
+	class(object) <- "depmix.fitted"
 	
 	if(converge) object@message <- "Log likelihood converged to within tol."
 	else object@message <- "'maxit' iterations reached in EM without convergence."
