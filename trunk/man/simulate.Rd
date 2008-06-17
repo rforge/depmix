@@ -19,13 +19,13 @@
 
 \usage{
 
-  \S4method{simulate}{depmix}(object, nsim=1, seed=NULL, times=NULL, ...)
+  \S4method{simulate}{depmix}(object, nsim=1, seed=NULL, ...)
     
-	\S4method{simulate}{response}(object)
+	\S4method{simulate}{response}(object, nsim=1, seed=NULL, times=NULL, ...)
 	
-	\S4method{simulate}{GLMresponse}(object)
+	\S4method{simulate}{GLMresponse}(object, nsim=1, seed=NULL, times=NULL, ...)
 	
-	\S4method{simulate}{transInit}(object)
+	\S4method{simulate}{transInit}(object, nsim=1, seed=NULL, times=NULL, ...)
 }
 
 \arguments{
@@ -54,7 +54,7 @@
 
 	Setting the \code{times} option selects the time points in the total
 	state/observation sequence (i.e., counting is continued over ntimes).
-	Usage of the \code{times} option is not recommended.
+	Direct calls of simulate with the \code{times} option are not recommended.
 
 }
 
@@ -62,7 +62,7 @@
 
 	For a \code{depmix} object, a new object of class \code{depmix.sim}. 
 	
-	For a \code{transInit} object, a state sequence
+	For a \code{transInit} object, a state sequence.
 	
 	For a \code{response} object, an observation sequence.
 
