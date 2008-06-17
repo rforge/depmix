@@ -1,5 +1,5 @@
 makeResponseModels <-
-function(response,data=NULL,nstates,family,values=NULL,...) {
+function(response,data=NULL,nstates,family,values=NULL,prob=TRUE,...) {
 	
 	resp <- response
 	response <- list()
@@ -33,7 +33,7 @@ function(response,data=NULL,nstates,family,values=NULL,...) {
 		for(i in 1:nstates) {
 			for(j in 1:nresp) {
 				bp <- npar(response[[i]][[j]])
-				response[[i]][[j]] <- setpars(response[[i]][[j]],val=values[1:bp])
+				response[[i]][[j]] <- setpars(response[[i]][[j]],val=values[1:bp],prob=prob)
 				bp <- bp+1
 				values <- values[bp:length(values)]
 			}
