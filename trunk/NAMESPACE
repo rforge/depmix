@@ -49,6 +49,6 @@ exportMethods(
 	predict,
 	dens,
 	show,
-	simulate
+	simulate,
 	summary
 )
