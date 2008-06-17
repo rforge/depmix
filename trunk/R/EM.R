@@ -53,15 +53,17 @@ em.mix <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 				object@dens[,k,i] <- dens(object@response[[i]][[k]])
 			}
 		}
-
+		
 		# expectation
-    B <- apply(object@dens,c(1,3),prod)
-    gamma <- object@init*B
-    LL <- sum(log(rowSums(gamma)))
-    # normalize
-    gamma <- gamma/rowSums(gamma)
-
+		B <- apply(object@dens,c(1,3),prod)
+		gamma <- object@init*B
+		LL <- sum(log(rowSums(gamma)))
+		# normalize
+		gamma <- gamma/rowSums(gamma)
+		
+		# print stuff
 		if(verbose&((j%%5)==0)) cat("iteration",j,"logLik:",LL,"\n")
+		
 		if( (LL >= LL.old) & (LL - LL.old < tol))  {
 			cat("iteration",j,"logLik:",LL,"\n")
 			converge <- TRUE
