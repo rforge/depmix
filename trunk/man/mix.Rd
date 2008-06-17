@@ -68,7 +68,7 @@
 	The response model(s) are created by call(s) to \code{\link{response}}
 	providing the response formula and the family specifying the error
 	distribution.  If response is a list of formulae, the \code{response}'s
-	are assumed to be independent conditional on the latent state.
+	are assumed to be independent conditional on the latent class.
 	
 	The prior density is modeled as a multinomial logistic.  This model is
 	created by a call to \code{\link{transInit}}.
@@ -87,7 +87,7 @@
 
 \value{
 	
-\code{depmix} returns an object of class \code{depmix} which has the
+\code{mix} returns an object of class \code{mix} which has the
 following slots:
 
 	\item{response}{A list of a list of response models; the first
@@ -100,9 +100,8 @@ following slots:
 	\item{dens,init}{See \code{\link{mix-class}} help for details.  For
 	internal use.}
 		
-	\item{ntimes}{A vector containing the lengths of independent time
-		series; if data is provided, sum(ntimes) must be equal to
-		nrow(data).}
+	\item{ntimes}{A vector made by \code{rep(1,nrow(data))}; for internal
+	use only.}
 	
 	\item{nstates}{The number of states of the model.}
 	
@@ -126,10 +125,6 @@ following slots:
 }
 
 \references{
-	
-	On hidden Markov models: Lawrence R. Rabiner (1989).  A tutorial on
-	hidden Markov models and selected applications in speech recognition.
-	\emph{Proceedings of IEEE}, 77-2, p.  267-295.
 	
 	On latent class models: A. L. McCutcheon (1987).  \emph{Latent class
 	analysis}.  Sage Publications.

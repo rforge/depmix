@@ -9,12 +9,19 @@
 \alias{show,depmix.fitted-method}
 \alias{summary,depmix.fitted-method}
 
-\title{Fit depmix models}
+\alias{mix.fit}
+\alias{fit,mix-method}
+
+\alias{show,mix.fitted-method}
+\alias{summary,mix.fitted-method}
+
+\title{Fit 'depmix' or 'mix' models}
 
 \description{
 
-	\code{fit} optimizes parameters of \code{\link{depmix}} models, optionally
-	subject to general linear (in)equality constraints.}
+	\code{fit} optimizes parameters of \code{\link{depmix}} or
+	\code{\link{mix}} models, optionally subject to general linear
+	(in)equality constraints.}
 
 \usage{
 	
@@ -22,12 +29,18 @@
 		conrows.upper=0, conrows.lower=0, method=NULL,...)
 	
 	\S4method{summary}{depmix.fitted}(object)
+
+	\S4method{fit}{mix}(object, fixed=NULL, equal=NULL, conrows=NULL,
+		conrows.upper=0, conrows.lower=0, method=NULL,...)
+	
+	\S4method{summary}{mix.fitted}(object)
+
 	
 }
 
 \arguments{
 
-	\item{object}{An object of class \code{depmix}.}
+	\item{object}{An object of class \code{(dep-)mix}.}
 	
 	\item{fixed}{Vector of mode logical indicating which parameters should 
 		be fixed.}

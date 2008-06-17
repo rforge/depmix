@@ -10,7 +10,6 @@ export(
 	forwardbackward,
 	llratio,
 	multinomial,
-	binomial,
 	em,
 	viterbi,
 	mlogit

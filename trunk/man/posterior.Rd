@@ -3,22 +3,26 @@
 \alias{posterior}
 
 \alias{posterior,depmix.fitted-method}
+\alias{posterior,mix.fitted-method}
+
 
 \title{ Posterior states/classes }
 
 \description{
 
-	Return the posterior states for a fitted depmix object.  In the case
-	of a latent class or mixture model these are the class probabilities.
+	Return the posterior states for a fitted \code{(dep-)mix} object.  In
+	the case of a latent class or mixture model these are the class
+	probabilities.
 
 }
 
 \usage{
 	\S4method{posterior}{depmix.fitted}(object)
+	\S4method{posterior}{mix.fitted}(object)
 }
 
 \arguments{
-  \item{object}{A depmix object.}
+  \item{object}{A (dep-)mix object.}
 }
 
 \value{

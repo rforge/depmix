@@ -10,6 +10,10 @@
 \alias{ntimes}
 \alias{ntimes,depmix-method}
 
+\alias{nstates}
+\alias{nstates,depmix-method}
+
+
 \title{Class "depmix"}
 
 \description{A \code{\link{depmix}} model.}

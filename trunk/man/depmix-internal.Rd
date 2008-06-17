@@ -7,13 +7,14 @@
 \alias{lystig}
 
 \alias{makeDepmix}
+\alias{makeMix}
 \alias{makePriorModel}
 \alias{makeResponseModels}
 \alias{makeTransModels}
 
 \alias{mlogit}
 \alias{multinomial}
-\alias{nstates}
+
 \alias{pa2conr}
 \alias{viterbi}
 \alias{viterbi2}
