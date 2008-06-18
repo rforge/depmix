@@ -2,12 +2,11 @@
 
 \docType{class}
 
-\alias{depmix-class}
+\alias{depmix.sim}
+\alias{depmix.sim-class}
 
 \alias{nresp,depmix.sim-method}
-
 \alias{ntimes,depmix.sim-method}
-
 \alias{nstates,depmix.sim-method}
 
 

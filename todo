@@ -1,17 +1,16 @@
 
 TODO list for depmix package release 0.2-0
 
-(priority to be determined)
-
-1) restructure R directory and help file directory by use of package.skeleton
-
-2) make C versions of fb and lystig to speed things up a little bit 
+1) make C versions of fb and lystig to speed things up a little bit 
 (have a look at the profile code in depmixNew-test4.R to see where 
 the speed problems are)
 
-3) add other distributions:
-	- glm options
-	- ???
+2) adjust freepars to take care of constraints
+
+3) add examples of response models, ie binomial etc:
+	a) specify a model
+	b) generate data
+	c) fit the model to check parameter recovery
 
 
 
@@ -19,17 +18,13 @@ TODO list for depmix package release 0.2-0
 
 Ingmar
 
-1) Documentatie en files splitsen volgens conventies
-
-2) JSS paper opzetje maken
+1) JSS paper opzetje maken
 
 
 Maarten
 
-1) EM voor transitie modellen
+1) Simulate examples (see 3 above)
 
-2) Data simuleren volgens gespecificeerd model
-(inclusief test om modellen terug te fitten)
 
 
 
