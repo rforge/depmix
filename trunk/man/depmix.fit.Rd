@@ -193,31 +193,23 @@ llratio(mod2,mod3)
 data(balance)
 # four binary items on the balance scale task
 
-# now fit some latent class models
-trstart=c(1,0,0,1) 
-# as this is a latent class model, the transitions are not optimized 
-# and hence these values are arbitrary
 instart=c(0.5,0.5)
 set.seed(1)
 respstart=runif(16)
 # note that ntimes argument is used to make this a mixture model
-mod <- depmix(list(d1~1,d2~1,d3~1,d4~1), data=balance, nstates=2,
+mod <- mix(list(d1~1,d2~1,d3~1,d4~1), data=balance, nstates=2,
 	family=list(multinomial(),multinomial(),multinomial(),multinomial()),
-	respstart=respstart,trstart=trstart,instart=instart,
-	ntimes=rep(1,nrow(balance)))
+	respstart=respstart,instart=instart)
 
 mod1 <- fit(mod)
 
 # add age as covariate on class membership by using the prior argument
-trstart=c(1,0,0,1) 
 instart=c(0.5,0.5,0,0) # we need the initial probs and the coefficients of age 
 set.seed(2)
 respstart=runif(16)
-trstart=c(1,0,0,1)
-mod2 <- depmix(list(d1~1,d2~1,d3~1,d4~1), data=balance, nstates=2,
+mod2 <- mix(list(d1~1,d2~1,d3~1,d4~1), data=balance, nstates=2,
 	family=list(multinomial(),multinomial(),multinomial(),multinomial()),
-	trstart=trstart, instart=instart, respstart=respstart,
-	ntimes=rep(1,nrow(balance)), prior=~age, initdata=balance)
+	instart=instart, respstart=respstart, prior=~age, initdata=balance)
 
 mod3 <- fit(mod2)
 
