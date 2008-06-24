@@ -105,31 +105,50 @@ brief description of these here.}
 
 \section{examples}{
 	
-	mod <- GLMresponse(sample(1:3,1000,rep=TRUE)~1,family=multinomial())
+	mod <- GLMresponse(rnorm(1000)~1)
 	fit(mod)
 	
+	mod <- GLMresponse(sample(1:3,1000,rep=TRUE)~1,family=multinomial())
+	fit(mod)
+	colSums(mod@y)/1000
+	
+	x <- sample(0:1,1000,rep=TRUE)
+	mod <- GLMresponse(sample(1:3,1000,rep=TRUE)~x,family=multinomial(),pstart=c(0.33,0.33,0.33,0,0,1))
+	mod@y <- simulate(mod)
+	fit(mod)
+	colSums(mod@y[which(x==0),])/length(which(x==0))
+	colSums(mod@y[which(x==1),])/length(which(x==1))
+
 	x <- rnorm(1000)
+	library(boot)
 	p <- inv.logit(x)
 	ss <- rbinom(1000,1,p)
 	mod <- GLMresponse(cbind(ss,1-ss)~x,family=binomial())
 	fit(mod)
 	
-	mod <- GLMresponse(sample(1:3,1000,rep=TRUE)~1,family=multinomial())
+	glm(cbind(ss,1-ss)~x, family=binomial)
+	
+	x <- rnorm(1000,2)^2
+	res <- rpois(1000,x)
+	mod <- GLMresponse(res~x,family=poisson())
 	fit(mod)
-
-	mod <- GLMresponse(sample(1:3,1000,rep=TRUE)~1,family=multinomial())
+	
+	glm(res~x, family=poisson)
+	
+	x=runif(1000,1,5)
+	res <- rgamma(1000,x)
+	mod <- GLMresponse(res~x,family=Gamma())
 	fit(mod)
-
-	mod <- GLMresponse(sample(1:3,1000,rep=TRUE)~1,family=multinomial())
+	
+	glm(res~x,family=Gamma)
+	
+	library(mvtnorm)
+	mn <- c(1,2,3)
+	sig <- matrix(c(1,.5,0,.5,1,0,0,0,2),3,3)
+	y <- rmvnorm(1000,mn,sig)
+	mod <- MVNresponse(y)
 	fit(mod)
-
-	mod <- GLMresponse(sample(1:3,1000,rep=TRUE)~1,family=multinomial())
-	fit(mod)
-
-	mod <- GLMresponse(sample(1:3,1000,rep=TRUE)~1,family=multinomial())
-	fit(mod)
-
-
+	
 }
 
 \author{Maarten Speekenbrink}
