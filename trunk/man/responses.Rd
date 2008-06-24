@@ -103,6 +103,35 @@ brief description of these here.}
 
 }
 
+\section{examples}{
+	
+	mod <- GLMresponse(sample(1:3,1000,rep=TRUE)~1,family=multinomial())
+	fit(mod)
+	
+	x <- rnorm(1000)
+	p <- inv.logit(x)
+	ss <- rbinom(1000,1,p)
+	mod <- GLMresponse(cbind(ss,1-ss)~x,family=binomial())
+	fit(mod)
+	
+	mod <- GLMresponse(sample(1:3,1000,rep=TRUE)~1,family=multinomial())
+	fit(mod)
+
+	mod <- GLMresponse(sample(1:3,1000,rep=TRUE)~1,family=multinomial())
+	fit(mod)
+
+	mod <- GLMresponse(sample(1:3,1000,rep=TRUE)~1,family=multinomial())
+	fit(mod)
+
+	mod <- GLMresponse(sample(1:3,1000,rep=TRUE)~1,family=multinomial())
+	fit(mod)
+
+	mod <- GLMresponse(sample(1:3,1000,rep=TRUE)~1,family=multinomial())
+	fit(mod)
+
+
+}
+
 \author{Maarten Speekenbrink}
 
 \keyword{models}
