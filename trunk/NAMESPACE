@@ -8,6 +8,7 @@ export(
 	lystig,
 	fb,
 	forwardbackward,
+	MVNresponse,
 	llratio,
 	multinomial,
 	em,
