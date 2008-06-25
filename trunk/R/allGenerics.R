@@ -32,6 +32,8 @@ setGeneric("nresp", function(object, ...) standardGeneric("nresp"))
 
 setGeneric("freepars", function(object, ...) standardGeneric("freepars"))
 
+setGeneric("nlin", function(object, ...) standardGeneric("nlin"))
+
 setGeneric("logLik", function(object, ...) standardGeneric("logLik"))
 
 setGeneric("fit", function(object, ...) standardGeneric("fit"))

@@ -33,6 +33,7 @@ exportMethods(
 	fit,
 	npar,
 	freepars,
+	nlin,
 	getdf,
 	nobs,
 	nresp,

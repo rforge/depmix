@@ -81,7 +81,9 @@ em.mix <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 
 	# no constraints in EM
 	object@conMat <- matrix()
-
+	object@lin.lower <- numeric()
+	object@lin.upper <- numeric()
+	
 	object
 	
 }
@@ -170,6 +172,8 @@ em.depmix <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 	
 	# no constraints in EM
 	object@conMat <- matrix()
+	object@lin.lower <- numeric()
+	object@lin.upper <- numeric()
 	
 	object
 }
