@@ -9,6 +9,13 @@
 \alias{simulate,GLMresponse-method}
 \alias{simulate,transInit-method}
 
+\alias{simulate,BINOMresponse-method}
+\alias{simulate,GAMMAresponse-method}
+\alias{simulate,MULTINOMresponse-method}
+\alias{simulate,MVNresponse-method}
+\alias{simulate,NORMresponse-method}
+\alias{simulate,POISSONresponse-method}
+
 \title{Methods to simulate from depmix models}
 
 \description{

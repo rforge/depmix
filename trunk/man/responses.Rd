@@ -9,6 +9,8 @@
 \alias{NORMresponse}
 \alias{POISSONresponse}
 
+\alias{show,MVNresponse-method}
+
 \title{Response models currently implemented in depmix.}
 
 \description{Depmix contains a number of default response models. We provide a
@@ -141,7 +143,7 @@ brief description of these here.}
 	
 	glm(cbind(ss,1-ss)~x, family=binomial)
 	
-	x <- rnorm(1000,2)^2
+	x <- abs(rnorm(1000,2))
 	
 	res <- rpois(1000,x)
 	

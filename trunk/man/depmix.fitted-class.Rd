@@ -54,6 +54,10 @@
 		\item{\code{conMat}:}{The linear constraint matrix, which has zero rows
 			if there were no constraints.}
 		
+		\item{\code{lin.lower}}{The lower bounds on the linear constraints.}
+
+		\item{\code{lin.upper}}{The upper bounds on the linear constraints.}		
+		
 		\item{\code{posterior}:}{Posterior (Viterbi) state sequence (not
 			implemented currently).}
 	}

@@ -20,6 +20,10 @@
 \alias{viterbi2}
 \alias{viterbi.fb}
 
+\alias{nlin}
+\alias{nlin,depmix.fitted-method}
+\alias{nlin,mix.fitted-method}
+
 \alias{dens,GLMresponse-method}
 \alias{dens,BINOMresponse-method}
 \alias{dens,NORMresponse-method}

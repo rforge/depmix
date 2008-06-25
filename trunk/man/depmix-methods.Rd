@@ -19,6 +19,8 @@
 \alias{freepars}
 \alias{freepars,depmix-method}
 \alias{freepars,mix-method}
+\alias{freepars,depmix.fitted-method}
+\alias{freepars,mix.fitted-method}
 
 \alias{setpars}
 \alias{setpars,depmix-method}
