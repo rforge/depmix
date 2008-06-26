@@ -20,12 +20,13 @@ setMethod("dens","GAMMAresponse",
 )
 
 setMethod("simulate",signature(object="GAMMAresponse"),
-  function(object,nsim=1,seed=NULL,time) {
-    if(missing(time)) {
+  function(object,nsim=1,seed=NULL,times) {
+    if(!is.null(seed)) set.seed(seed)
+    if(missing(times)) {
       # draw in one go
       shape <- predict(object)
     } else {
-      shape <- predict(object)[time,]
+      shape <- predict(object)[times,]
     }
     nt <- nrow(shape)
     response <- rgamma(nt*nsim,shape=shape)

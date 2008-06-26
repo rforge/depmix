@@ -20,12 +20,13 @@ setMethod("dens","POISSONresponse",
 )
 
 setMethod("simulate",signature(object="POISSONresponse"),
-  function(object,nsim=1,seed=NULL,time) {
-    if(missing(time)) {
+  function(object,nsim=1,seed=NULL,times) {
+    if(!is.null(seed)) set.seed(seed)
+    if(missing(times)) {
       # draw in one go
       lambda <- predict(object)
     } else {
-      lambda <- predict(object)[time,]
+      lambda <- predict(object)[times,]
     }
     nt <- nrow(lambda)
     response <- rpois(nt*nsim,lambda=lambda)

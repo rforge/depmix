@@ -93,19 +93,20 @@ setMethod("simulate",signature(object="depmix"),
 )
 
 setMethod("simulate",signature(object="transInit"),
-  function(object,nsim=1,seed=NULL,is.prior=FALSE,time) {
+  function(object,nsim=1,seed=NULL,times,is.prior=FALSE) {
+    if(!is.null(seed)) set.seed(seed)
     if(is.prior) {
       pr <- dens(object)
       sims <- array(apply(pr,1,rmultinom,n=nsim,size=1),dim=c(ncol(pr),nsim,nrow(pr)))
       states <- t(apply(sims,c(2,3), function(x) which(x==1)))
       return(states)
     } else {
-      if(missing(time)) {
+      if(missing(times)) {
         # this is likely to be a stationary model...
         pr <- predict(object)
       } else {
-        pr <- predict(object)[time,]
-        if(length(time)==1) pr <- matrix(pr,ncol=length(pr))
+        pr <- predict(object)[times,]
+        if(length(times)==1) pr <- matrix(pr,ncol=length(pr))
       }
       nt <- nrow(pr)
       sims <- array(apply(pr,1,rmultinom,n=nsim,size=1),dim=c(ncol(pr),nsim,nt))

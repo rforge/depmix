@@ -28,11 +28,11 @@
 
   \S4method{simulate}{depmix}(object, nsim=1, seed=NULL, ...)
     
-	\S4method{simulate}{response}(object, nsim=1, seed=NULL, times=NULL, ...)
+	\S4method{simulate}{response}(object, nsim=1, seed=NULL, times, ...)
 	
-	\S4method{simulate}{GLMresponse}(object, nsim=1, seed=NULL, times=NULL, ...)
+	\S4method{simulate}{GLMresponse}(object, nsim=1, seed=NULL, times, ...)
 	
-	\S4method{simulate}{transInit}(object, nsim=1, seed=NULL, times=NULL, ...)
+	\S4method{simulate}{transInit}(object, nsim=1, seed=NULL, times, is.prior=FALSE, ...)
 }
 
 \arguments{
@@ -45,8 +45,11 @@
 	
 	\item{seed}{Set the seed.}
 	
-	\item{times}{An indicator vector indicating for which times in the
+	\item{times}{(optional) An indicator vector indicating for which times in the
 	complete series to generate the data.  For internal use.}
+	
+	\item{is.prior}{For \code{transInit} objects, indicates whether it is a prior 
+  (init) model, or not (i.e., it is a transition model)}
 	
 	\item{...}{Not used currently.}
 }
