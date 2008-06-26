@@ -32,7 +32,7 @@
 	
 	\S4method{simulate}{GLMresponse}(object, nsim=1, seed=NULL, times, ...)
 	
-	\S4method{simulate}{transInit}(object, nsim=1, seed=NULL, times, is.prior=FALSE, ...)
+	\S4method{simulate}{transInit}(object, nsim=1, seed=NULL, times, is.prior=FALSE)
 }
 
 \arguments{
