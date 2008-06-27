@@ -163,13 +163,11 @@ brief description of these here.}
 	
 	glm(res~x,family=Gamma)
 	
-	library(mvtnorm)
-	
 	mn <- c(1,2,3)
 	
 	sig <- matrix(c(1,.5,0,.5,1,0,0,0,2),3,3)
 	
-	y <- rmvnorm(1000,mn,sig)
+	y <- mvrnorm(1000,mn,sig)
 	
 	mod <- MVNresponse(y~1)
 	
