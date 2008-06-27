@@ -93,7 +93,7 @@ setMethod("simulate",signature(object="depmix"),
 )
 
 setMethod("simulate",signature(object="transInit"),
-  function(object,nsim=1,seed=NULL,times,is.prior=FALSE) {
+  function(object,nsim=1,seed=NULL,times,is.prior=FALSE,...) {
     if(!is.null(seed)) set.seed(seed)
     if(is.prior) {
       pr <- dens(object)
