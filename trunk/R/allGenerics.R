@@ -42,7 +42,7 @@ setGeneric("posterior", function(object, ...) standardGeneric("posterior"))
 
 setGeneric("forwardbackward", function(object, ...) standardGeneric("forwardbackward"))
 
-#setGeneric("simulate", function(object, ...) standardGeneric("simulate"))
+setGeneric("simulate", function(object,nsim=1,seed=NULL, ...) standardGeneric("simulate"))
 
 setGeneric("predict", function(object, ...) standardGeneric("predict"))
 

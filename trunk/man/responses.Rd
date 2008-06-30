@@ -157,7 +157,9 @@ brief description of these here.}
 	
 	res <- rgamma(1000,x)
 	
-	mod <- GLMresponse(res~x,family=Gamma())
+	# note that gamma needs proper starting values which are not
+	# provided by depmixS4 (even with them, this may produce warnings)
+	mod <- GLMresponse(res~x,family=Gamma(),pst=c(0.8,1/0.8))
 	
 	fit(mod)
 	
