@@ -6,7 +6,6 @@
 \alias{logDens}
 \alias{lystig}
 
-\alias{makeDepmix}
 \alias{makeMix}
 \alias{makePriorModel}
 \alias{makeResponseModels}
