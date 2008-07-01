@@ -22,7 +22,7 @@ Ingmar
 
 Maarten
 
-1) Simulate examples (see 3 above)
+1) Simulate examples (see 3 above) (done...by Ingmar)
 
 
 
@@ -65,3 +65,5 @@ Other capabilities
 6) stochmod pack for stochastic models
 
 7) use relevel function to recode factors into different base
+
+8) Standard errors (Hessian) for EM (computed by e.g. Louis' method)
