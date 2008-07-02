@@ -126,6 +126,7 @@ setMethod("is.stationary",signature(object="depmix"),
 
 setMethod("simulate",signature(object="depmix"),
   function(object,nsim=1,seed=NULL,...) {
+    if(!is.null(seed)) set.seed(seed)
     ntim <- ntimes(object)
    	nt <- sum(ntim)
   	lt <- length(ntim)
@@ -167,7 +168,7 @@ setMethod("simulate",signature(object="depmix"),
     class(object) <- "depmix.sim"
     object@states <- as.matrix(states)
 
-    object@prior@x <- apply(object@prior@x,2,rep,nsim)
+    object@prior@x <- as.matrix(apply(object@prior@x,2,rep,nsim))
     for(j in 1:ns) {
       if(!is.stationary(object)) object@transition[[j]]@x <- as.matrix(apply(object@transition[[j]]@x,2,rep,nsim))
       for(i in 1:nr) {
