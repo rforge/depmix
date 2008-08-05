@@ -1,29 +1,17 @@
 
-TODO list for depmix package release 0.2-0
+TODO list for paper
 
-1) make C versions of fb and lystig to speed things up a little bit 
-(have a look at the profile code in depmixNew-test4.R to see where 
-the speed problems are)
+1) do extensive testing
 
-2) adjust freepars to take care of constraints
+2) add example of adding new response model
 
-3) add examples of response models, ie binomial etc:
-	a) specify a model
-	b) generate data
-	c) fit the model to check parameter recovery
+3) check models with boundary values in the transition and initial
+state probabilities (possibly work on identity link for multinomial
+models, but this involves also adding parstruct or something like it
+to the response models to incorporate linear constraints within those
+parameter vectors)
 
-
-TODO list for depmix package release 0.2-0
-
-Ingmar
-
-1) JSS paper opzetje maken
-
-
-Maarten
-
-1) Simulate examples (see 3 above) (done...by Ingmar)
-
+4) write the paper
 
 
 
@@ -35,18 +23,20 @@ TODO Medium term
 
 3) Factor depmix model as example of user specified model
 
+4) make C versions of fb and lystig to speed things up a little bit 
+(have a look at the profile code in depmixNew-test4.R to see where 
+the speed problems are)
+
 
 TODO long term 
 
 Design issues
 
-1) Data simulation according to specified model
+1) Analytical gradients in lystig + standard errors of parameters
 
-2) Analytical gradients in lystig + standard errors of parameters
+2) Multi group possibilities: use group factor in call to depmix??
 
-3) Multi group possibilities: use group factor in call to depmix
-
-4) Missing data options?
+3) Missing data options?
 
 
 Other capabilities
