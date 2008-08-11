@@ -1,4 +1,9 @@
 
+Changes in depmixS4 version 0.2-1
+
+  o Fixed a bug in the Viterbi algorithm used to compute posterior states
+  
+  o 
 
 Changes in depmixS4 version 0.2-0
 
@@ -27,8 +32,6 @@ Changes in depmixS4 version 0.2-0
   
   o minor changes to make depmixS4 compatible with R 2.7.1
   
-  o 
-
 
 Changes in depmixS4 version 0.1-1
 
