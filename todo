@@ -15,6 +15,9 @@ parameter vectors)
 
 
 
+
+
+
 TODO Medium term
 
 1) look at initial value generation?
@@ -26,6 +29,10 @@ TODO Medium term
 4) make C versions of fb and lystig to speed things up a little bit 
 (have a look at the profile code in depmixNew-test4.R to see where 
 the speed problems are)
+
+5) Change stop criterion in EM: make it relative to the magnitude of the 
+likelihood to avoid overly long iterations with large likelihoods, ie for 
+thousands of cases
 
 
 TODO long term 
