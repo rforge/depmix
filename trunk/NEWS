@@ -3,7 +3,10 @@ Changes in depmixS4 version 0.2-1
 
   o Fixed a bug in the Viterbi algorithm used to compute posterior states
   
+  o Restructured test files somewhat
+
   o 
+
 
 Changes in depmixS4 version 0.2-0
 
