@@ -96,7 +96,7 @@ setMethod("simulate",signature(object="mix"),
 			responses[[i]] <- tmp
 		}
 		
-		# generate new depmix.sim object
+		# generate new mix.sim object
 		class(object) <- "mix.sim"
 		object@states <- as.matrix(states)
 		
