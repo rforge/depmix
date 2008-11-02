@@ -344,12 +344,12 @@ possibility to include covariates on the prior probabilities of class
 membership. 
 
 
-\subsection{Reponse distributions and parameters}
+\subsection{Response distributions and parameters}
 
 % this needs some more on the design, interface to glm and similar
 % other models etc. 
 The package is built using S4 classes (object oriented classes in R)
-to allow easy extensibility (REFERENCE to S4 methodology). 
+to allow easy extensibility (Chambers, 1998). 
 
 Each row of the transition matrix and the initial state probabilities:
 \begin{itemize}
@@ -488,7 +488,65 @@ different types of behavior, shifting from B/D strategy to C/D
 
 \subsection{Weather prediction task}
 
-Still to add models and data. 
+%Still to add models and data. 
+
+The Weather Prediction Task (WPT, Knowlton, Squire \& Gluck, 1994) 
+is a probabilistic categorization task, in which participants learn to 
+predict the state of the weather (sunny, or rainy) on the basis 
+of four ``tarot'' cards (cards with abstract geometrical patterns). 
+Each cue pattern is associated with a particular probability distribution 
+over the states of the weather. In order to perform in the task, 
+participants must predict the weather in accordance with these
+conditional probabilities.
+
+%The WPT has been popular in neuropsychological research, 
+%particularly because amnesic patients perform this task rather
+%well, despite not being able to remember actually many aspects
+%of the task (or in some cases, even performing the task at all).
+%This has led to the conclusion that probabilistic category learning
+%depends on implicit memory, which is separate from explicit
+%memory. While this conclusion is debatable (Speekenbrink, Channon 
+%\& Shanks, 2008), the finding of relatively unimpaired performance
+%by amnesic individuals remains striking.
+
+There are different accounts of probabilistic category learning. 
+According to instance or exemplar learning theories, participants
+learn by storing each encountered cue-outcome pairing. When presented
+with a cue pattern, these exemplars are retrieved from memory, and weighted
+according to their similarity to the probe cue pattern, to form a 
+classification. According to associative theories, participants gradually 
+learn by gradually associating the individual cues (or cue patterns in 
+configural learning) to the outcomes. In rule-learning, participants are 
+taken to extract rules by which to categorize the different cue patterns. 
+Gluck, Shohamy and Myers (2002) proposed a number of such rules (or strategies). A main
+difference between these is whether responses are based on the 
+presence/absence of a single cue, or whether responses are based on 
+cue patterns. Gluck et al. formulated all strategies in a deterministic and
+optimal manner (e.g., the multi-cue strategy corresponded to giving the optimal
+response to each cue pattern). Meeter et al. allowed for probabilistic 
+responding (a small probability of giving the non-optimal response). 
+
+Alternative non-strategy based analyses of the WPT (Lagnado et al, Speekenbrink et al) 
+have estimated response strategies by variations of logistic regression. 
+
+%associative, rule-based.  
+Here, we analyze the behavior of a single individual performing the
+WPT for 200 trials. We let each state be characterized by a Generalized
+Linear Model with a Bernoulli response and logistic link function. We are
+interested in whether a DMM can recover a strategy model in line with Gluck et al. 
+As we fit the data to a single subject, we must place some constraints.
+Specifically, we constrain the state transitions to be in a ``left-right'' format
+(states can only proceed to the immediately adjacent state and never back) and 
+the initial state 
+
+A single state model (usual GLM) 
+We started with a 3-state model, 
+
+\begin{itemize}
+	\item N=200
+	\item 4 choice data, displayed in blocks of 20 trials
+	\item optimal strategy is choosing C or D
+\end{itemize}
 
 
 \section{Discussion}
@@ -516,6 +574,9 @@ Bechara, A., Damasio, A. R., Damasio, H., \& Anderson, S. W.(1994).
 Insensitivity to future consequences following damage to human
 prefrontal cortex.  Cognition, 50(1Ð3), 7Ð15.
 
+Chambers, J. M. (1998). Programming with Data: A Guide to the S Lan-
+guage. New York: Springer-Verlag.
+
 Crone, E. A.,  \& van der Molen, M. W. (2004).  Developmental changes in
 real life decision making: Performance on a gambling task previously
 shown to depend on the ventromedial prefrontal cortex.  Developmental
@@ -525,10 +586,18 @@ Dunn, B. D., Dalgleish, T.,  \& Lawrence, A. D. (2006).  The somatic
 marker hypothesis: A critical evaluation.  Neuroscience and
 Biobehavioral Reviews, 30(2), 239-271.
 
+Gluck, M. A., Shohamy, D., \& Myers, C. (2002). How do people solve the 
+weather prediction task?: Individual variability in strategies for 
+probabilistic category learning. Learning \& Memory, 9, 408-418.
+
 Huizenga, H. M., Crone, E. A., \& Jansen, B. R. J. (2007).
 Decision-making in healthy children, adolescents and adults explained
 by the use of increasingly complex proportional reasoning rules.
 Developmental Science, 10(6), 814-825.
+
+Knowlton, B. J., Squire, L. R., \& Gluck, M. A. (1994). 
+Probabilistic classification learning in amnesia. 
+Learning \& Memory, 1 , 106-120.
 
 Siegler, R. S. (1981).  Developmental sequences within and between
 concepts.  Monographs of the Society for Research in Child
@@ -542,7 +611,8 @@ Ingmar Visser was supported by an EC Framework 6 grant, project 516542
 (NEST).  Maarten Speekenbrink was supported by the ESRC Centre for
 Economic Learning and Social Evolution (ELSE).  Thanks to Hilde
 Huizenga, Brenda Jansen and Anna van Duijvenvoorde for the Iowa
-Gambling task data.
+Gambling task data and David Lagnado for the Weather Prediction Task
+data.
 
 
 \bibliography{all,ingmar}
