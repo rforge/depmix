@@ -1,0 +1,317 @@
+\begin{thebibliography}{}
+
+\bibitem[\protect\citeauthoryear{%
+Baum%
+\ \BBA{} Petrie%
+}{%
+Baum%
+\ \BBA{} Petrie%
+}{%
+{\protect\APACyear{1966}}%
+}]{%
+Baum1966}%
+\APACinsertmetastar{%
+Baum1966}%
+Baum, L.~E.%
+\BCBT{}\ \BBA{} Petrie, T.%
+%
+\newblock{}\BBOP{}1966\BBCP{}.
+\newblock{}\BBOQ{}Statistical inference for probabilistic functions of finite
+  state {M}arkov chains.\BBCQ{}
+\newblock{}\Bem{Annals of Mathematical Statistics}, \Bem{67}, 1554--40.
+
+\bibitem[\protect\citeauthoryear{%
+Collins%
+\ \BBA{} Wugalter%
+}{%
+Collins%
+\ \BBA{} Wugalter%
+}{%
+{\protect\APACyear{1992}}%
+}]{%
+Collins1992}%
+\APACinsertmetastar{%
+Collins1992}%
+Collins, L.~M.%
+\BCBT{}\ \BBA{} Wugalter, S.~E.%
+%
+\newblock{}\BBOP{}1992\BBCP{}.
+\newblock{}\BBOQ{}Latent class models for stage-sequential dynamic latent
+  variables.\BBCQ{}
+\newblock{}\Bem{Multivariate Behavioral Research}, \Bem{27}(1), 131-157.
+
+\bibitem[\protect\citeauthoryear{%
+Kaplan%
+}{%
+Kaplan%
+}{%
+{\protect\APACyear{2008}}%
+}]{%
+Kaplan2008}%
+\APACinsertmetastar{%
+Kaplan2008}%
+Kaplan, D.%
+%
+\newblock{}\BBOP{}2008\BBCP{}.
+\newblock{}\BBOQ{}An overview of markov chain methods for the study of
+  stage-sequential developmental processes.\BBCQ{}
+\newblock{}\Bem{Developmental Psychology}, \Bem{44}(2), 457-467.
+
+\bibitem[\protect\citeauthoryear{%
+Kim%
+}{%
+Kim%
+}{%
+{\protect\APACyear{1994}}%
+}]{%
+Kim1994}%
+\APACinsertmetastar{%
+Kim1994}%
+Kim, C.-J.%
+%
+\newblock{}\BBOP{}1994\BBCP{}.
+\newblock{}\BBOQ{}Dynamic linear models with {M}arkov-switching.\BBCQ{}
+\newblock{}\Bem{Journal of Econometrics}, \Bem{60}, 1--22.
+
+\bibitem[\protect\citeauthoryear{%
+Langeheine%
+\ \BBA{} {Van de Pol}%
+}{%
+Langeheine%
+\ \BBA{} {Van de Pol}%
+}{%
+{\protect\APACyear{1990}}%
+}]{%
+Langeheine1990}%
+\APACinsertmetastar{%
+Langeheine1990}%
+Langeheine, R.%
+\BCBT{}\ \BBA{} {Van de Pol}, F.%
+%
+\newblock{}\BBOP{}1990\BBCP{}.
+\newblock{}\BBOQ{}A unifying framework for {M}arkov modeling in discrete space
+  and discrete time.\BBCQ{}
+\newblock{}\Bem{Sociological Methods and Research}, \Bem{18}(4), 416--441.
+
+\bibitem[\protect\citeauthoryear{%
+Lystig%
+\ \BBA{} Hughes%
+}{%
+Lystig%
+\ \BBA{} Hughes%
+}{%
+{\protect\APACyear{2002}}%
+}]{%
+Lystig2002}%
+\APACinsertmetastar{%
+Lystig2002}%
+Lystig, T.~C.%
+\BCBT{}\ \BBA{} Hughes, J.~P.%
+%
+\newblock{}\BBOP{}2002\BBCP{}.
+\newblock{}\BBOQ{}Exact computation of the observed information matrix for
+  hidden markov models.\BBCQ{}
+\newblock{}\Bem{Journal of Computational and Graphical Statistics}.
+
+\bibitem[\protect\citeauthoryear{%
+McCutcheon%
+}{%
+McCutcheon%
+}{%
+{\protect\APACyear{1987}}%
+}]{%
+McCutcheon1987}%
+\APACinsertmetastar{%
+McCutcheon1987}%
+McCutcheon, A.~L.%
+%
+\newblock{}\BBOP{}1987\BBCP{}.
+\newblock{}\Bem{Latent class analysis}\ (\BNUM\ 07-064).
+\newblock{}Beverly Hills: Sage Publications.
+
+\bibitem[\protect\citeauthoryear{%
+Miller%
+}{%
+Miller%
+}{%
+{\protect\APACyear{1952}}%
+}]{%
+Miller1952}%
+\APACinsertmetastar{%
+Miller1952}%
+Miller, G.~A.%
+%
+\newblock{}\BBOP{}1952\BBCP{}.
+\newblock{}\BBOQ{}Finite {M}arkov processes in psychology.\BBCQ{}
+\newblock{}\Bem{Psychometrika}, \Bem{17}, 149--167.
+
+\bibitem[\protect\citeauthoryear{%
+Miller%
+\ \BBA{} Chomsky%
+}{%
+Miller%
+\ \BBA{} Chomsky%
+}{%
+{\protect\APACyear{1963}}%
+}]{%
+Miller1963}%
+\APACinsertmetastar{%
+Miller1963}%
+Miller, G.~A.%
+\BCBT{}\ \BBA{} Chomsky, N.%
+%
+\newblock{}\BBOP{}1963\BBCP{}.
+\newblock{}\BBOQ{}Finitary models of language users.\BBCQ{}
+\newblock{}\BIn{} R.~Luce, R.~R. Bush\BCBL{}\ \BBA{} E.~Galanter\ (\BEDS),
+  \Bem{Handbook of mathematical psychology}\ (\BCHAP~13).
+\newblock{}New York: Wiley.
+
+\bibitem[\protect\citeauthoryear{%
+{R Development Core Team}%
+}{%
+{R Development Core Team}%
+}{%
+{\protect\APACyear{2008}}%
+}]{%
+R2008}%
+\APACinsertmetastar{%
+R2008}%
+{R Development Core Team}.%
+%
+\newblock{}\BBOP{}2008\BBCP{}.
+\newblock{}\Bem{R: A language and environment for statistical computing.}
+\newblock{}Vienna, Austria.
+\newblock{}({ISBN} 3-900051-07-0)
+
+\bibitem[\protect\citeauthoryear{%
+Rabiner%
+}{%
+Rabiner%
+}{%
+{\protect\APACyear{1989}}%
+}]{%
+Rabiner1989}%
+\APACinsertmetastar{%
+Rabiner1989}%
+Rabiner, L.~R.%
+%
+\newblock{}\BBOP{}1989\BBCP{}.
+\newblock{}\BBOQ{}A tutorial on hidden {M}arkov models and selected
+  applications in speech recognition.\BBCQ{}
+\newblock{}\Bem{Proceedings of IEEE}, \Bem{77}(2), 267--295.
+
+\bibitem[\protect\citeauthoryear{%
+Reboussin%
+, Reboussin%
+, Liang%
+\BCBL{}\ \BBA{} Anthony%
+}{%
+Reboussin%
+\ \protect\BOthers{.}}{%
+{\protect\APACyear{1998}}%
+}]{%
+Reboussin1998}%
+\APACinsertmetastar{%
+Reboussin1998}%
+Reboussin, B.~A.%
+, Reboussin, D.~M.%
+, Liang, K.-Y.%
+\BCBL{}\ \BBA{} Anthony, J.~C.%
+%
+\newblock{}\BBOP{}1998\BBCP{}.
+\newblock{}\BBOQ{}Latent transition modeling of progression of health-risk
+  behavior.\BBCQ{}
+\newblock{}\Bem{Multivariate Behavioral Research}, \Bem{33}(4), 457-478.
+
+\bibitem[\protect\citeauthoryear{%
+Spellucci%
+}{%
+Spellucci%
+}{%
+{\protect\APACyear{2002}}%
+}]{%
+Spellucci2002}%
+\APACinsertmetastar{%
+Spellucci2002}%
+Spellucci, P.%
+%
+\newblock{}\BBOP{}2002\BBCP{}.
+\newblock{}\BBOQ{}Donlp2.\BBCQ{}
+\newblock{}
+
+\bibitem[\protect\citeauthoryear{%
+Tamura%
+}{%
+Tamura%
+}{%
+{\protect\APACyear{2007}}%
+}]{%
+Tamura2007}%
+\APACinsertmetastar{%
+Tamura2007}%
+Tamura, R.%
+%
+\newblock{}\BBOP{}2007\BBCP{}.
+\newblock{}\Bem{Rdonlp2: an r extension library to use {Peter Spelluci's
+  DONLP2} from {R}.}
+\newblock{}(R package version 0.3-1)
+
+\bibitem[\protect\citeauthoryear{%
+{Van de Pol}%
+, Langeheine%
+\BCBL{}\ \BBA{} Jong%
+}{%
+{Van de Pol}%
+\ \protect\BOthers{.}}{%
+{\protect\APACyear{1996}}%
+}]{%
+Pol1996}%
+\APACinsertmetastar{%
+Pol1996}%
+{Van de Pol}, F.%
+, Langeheine, R.%
+\BCBL{}\ \BBA{} Jong, W.~D.%
+%
+\newblock{}\BBOP{}1996\BBCP{}.
+\newblock{}\Bem{Panmark 3. panel analysis using {M}arkov chains. a latent class
+  analysis program [user manual].}
+\newblock{}Voorburg: The Netherlands: Statistics Netherlands.
+\newblock{}
+
+\bibitem[\protect\citeauthoryear{%
+Vermunt%
+\ \BBA{} Magidson%
+}{%
+Vermunt%
+\ \BBA{} Magidson%
+}{%
+{\protect\APACyear{2003}}%
+}]{%
+Vermunt2003}%
+\APACinsertmetastar{%
+Vermunt2003}%
+Vermunt, J.~K.%
+\BCBT{}\ \BBA{} Magidson, J.%
+%
+\newblock{}\BBOP{}2003\BBCP{}.
+\newblock{}\Bem{Latent gold 3.0 [computer program and user's guide].}
+\newblock{}Belmont (MA), USA: Statistical Innovations Inc.
+\newblock{}
+
+\bibitem[\protect\citeauthoryear{%
+Wickens%
+}{%
+Wickens%
+}{%
+{\protect\APACyear{1982}}%
+}]{%
+Wickens1982}%
+\APACinsertmetastar{%
+Wickens1982}%
+Wickens, T.~D.%
+%
+\newblock{}\BBOP{}1982\BBCP{}.
+\newblock{}\Bem{Models for behavior: Stochastic processes in psychology}.
+\newblock{}San Francisco: W. H. Freeman and Company.
+
+\end{thebibliography}
