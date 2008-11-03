@@ -1,0 +1,696 @@
+%&LaTeX
+
+\documentclass[a4paper,man,nobf]{apa}
+ \usepackage[]{amsmath, amsfonts, amstext, amsthm}
+ \usepackage[oztex, final]{graphics}
+ \usepackage[]{epsfig}
+
+\usepackage[round]{natbib}
+
+\title{A comprehensive approach to fitting multivariate latent Markov 
+models and latent transition models: An implementation and 
+applications}
+
+\author{Ingmar Visser}
+\affiliation{Developmental Processes Research Group, Department of 
+Psychology, University of Amsterdam}
+\date{\today}
+ 
+% \acknowledgements{Author notes etc.}   
+ \rightheader{Depedent Mixtures}                    % defaults to title
+\shorttitle{Depedent Mixtures}                      % defaults to title
+% \leftheader{Authors}         
+
+%\batchmode
+	
+%\newcommand{\citep}{\cite}
+%\newcommand{\citet}{\citeA}
+
+\newcommand{\vc}{\mathbf}
+\newcommand{\mat}{\mathbf}
+
+\abstract{In this article, an outline is presented for a program that 
+computes parameter estimates with standard errors for the 
+multivariate hidden Markov model. The model itself can be seen as an 
+extension and generalization of both the hidden or latent Markov 
+model and latent class models. The parameter procedure is different 
+from the traditional approach with these models. This approach allows 
+modeling of arbitrarily long time series efficiently and without 
+exponentially growing computational effort. Moreover, because 
+analytical gradients and Hessian are available, models can easily be 
+fitted subject to arbitrary linear and non-linear constraints. 
+Multi-group and mixture analyses are also possible. A number of 
+illustrative examples are presented: 1) mixture analysis of 
+(Markovian) learning data , 2) analysis of sleep stages from EEG, and 
+3) intra- and inter-individual differences in personality structure.}
+
+%\keywords{latent Markov model; latent class model; latent transition model; mixtures; gradients; 
+%%%% Hessian; estimation}
+
+\begin{document}
+
+%\bibliographystyle{plainnat}
+
+\maketitle
+
+
+
+In this paper an outline is provided for a program that computes 
+parameter estimates for the latent/hidden Markov mode (LMM) and for 
+latent transition analysis (LTA), both univariate and multivariate.  
+The difference between the two types of model is not a principled one 
+but rather of degree, being N is small and T large in LMM and vice 
+versa in LTA. Even so, when T is indeed large as is usually the case 
+in the hidden Markov model literature, the transition matrix is taken 
+to be stationary. The basis for the current approach is to use the 
+hidden Markov model (HMM) estimation equations since these are 
+suitable for long time series which is not the case for the standard 
+EM algorithm used for latent class analysis (LCA) and LTA which soon 
+runs into the problem of sparse contingency tables and underflow 
+problems during computation.  The approach is illustrated using a 
+number of simulated and real data examples.
+
+
+\section{Introduction}
+
+The model that is considered in this paper is the multivariate (or 
+multi indicator) latent Markov model. The main contribution of this 
+paper is the extension of estimation algorithms to allow for 
+arbitrary length time series of observations. In traditional 
+estimation methods this is impossible due to underflow problems. 
+Moreover, the estimation procedure that I present is not based on the 
+complete contingency table, which is impossible or impractical in the 
+case of long time series. In particular, one might want to model a 
+single time series. The usual approach to latent Markov models is 
+then faced with a huge contingency table, $2^{T}$ cells for a binary 
+variable measured at $T$ time points, in which only a single cell has 
+a one and the others are zero. Howzthat for sparsity? 
+
+The model can be seen as an extension of several other models, in 
+particular, the hidden Markov model (HMM), the latent class model 
+(LCM), the latent transition model (LTM) and also the simple Markov 
+model (MM). Markov models (and their subsequent refinements) have a 
+long history in psychology, mainly in the psychology of learning 
+\citep{Wic82}. These models have in common that they are all used to 
+describe one or more sequences of responses $O_{1}, \ldots, O_{T}$, 
+where each of the $O_{t}$'s may be multivariate. In this paper mixed 
+categorical and continuous observations are considered. 
+
+The model concerned in this paper is the combination of the latent 
+class model and the hidden Markov model. There is quite some work 
+already on this model, but it is usually limited to small numbers of 
+repeated meausurements, in which case this model is usually called 
+the latent transition model: it is the repeated measurements 
+extension of the latent class model. It is customary in those models 
+to have time-varying (transition) parameters. In the time series 
+literature on the other hand, where hidden Markov models are 
+frequently used, transition parameters are taken to be 
+time-homogeneous.  This assumption is necessary when analyzing single 
+time-series since at each time $t$ only a single transition is 
+observed. The multi-variate latent Markov model is defined by the 
+following elements:
+\begin{enumerate}
+  	\item a set $\vc{S}$ of latent states $S_{i},\, i=1, \ldots , n$,
+  	\item a matrix $\mat{A}$ of transition probabilities $a_{ij}$ for 
+the transition 
+	from state $S_{i}$ to state $S_{j}$,
+  	\item a set $\vc{B}$ of observation functions $b_{j}(\cdot)$ that 
+provide the conditional 	probabilities associated with latent state 
+$S_{j}$, 
+  	\item a vector $\pmb{\pi}$ of latent state initial probabilities 
+$\pi_{i}$.
+\end{enumerate}
+When transitions are added to the latent class model, it is more 
+appropriate to refer to the classes as states. The word class is 
+rather more associated with a stable trait-like attribute whereas a 
+state can change over time. 
+
+The data has the general form $O_{1}^{1}, \ldots, O_{1}^{m}, 
+O_{2}^{1}, \ldots, O_{2}^{m}, \ldots, O_{T}^{1}, \ldots, O_{T}^{m}$ 
+for an $m$-variate time series of length $T$ and independent 
+realizations of such series. It is important to note that the latent 
+Markov model is commonly associated with data of this type, but the 
+estimation procedures that are used are not suitable for long time 
+series due to underflow problems. Conversely the hidden Markov model 
+is only used for univariate time series and multiple dependent time 
+series or multivariate time series have not been considered in 
+previous literature on hidden Markov models. In the next section, the 
+likelihood and estimation procedure for this model is described, 
+given data of the above form, for arbitrary $m$ and $T$. 
+
+
+\section{Computing likelihood, gradients and Hessian}
+
+Single-indicator latent class models. Estimation logic is different: 
+the starting point is not a complete contingency table, which is then 
+weeded. The starting point is a stochastic automaton which produces 
+time series. In time series analysis, one does not expect a complete 
+contingency table; in the contingency table logic, a single time 
+series produces an enormous table with only a single filled cell. 
+
+For computing the likelihood and its partial derivatives, I follow 
+the strategy used by \cite{Lys2002}. They developed a method to 
+compute exact gradients and information matrix by reformulating the 
+forward procedure of the Baum-Welch  algorithm for estimating hidden 
+Markov model parameters. Scores and information are computed at a 
+single pass through the data, using the intermediate variables from 
+the forward recursion. Their article only discusses univariate time 
+series. Our aim in this section is to generalize their results to 
+multiple dependent and independent time series. With the gradients 
+available, it is possible to use general purpose optimization 
+routines that allow box constraints and arbitrary (non-) linear 
+constraints. 
+
+
+\subsection{Likelihood}
+
+The loglikelihood of hidden Markov models is usually computed by the 
+so-called forward-backward algorithm \citep{Bau66,Rab89}, or rather 
+by the forward part of this algorithm.
+\cite{Lys2002} change the forward algorithm in such a way as to allow 
+computing the gradients of the loglikelihood at the same time. They 
+start by rewriting the likelihood as follows (for ease of exposition 
+the dependence on the model parameters is dropped): 
+\begin{equation}
+	L_{T} = Pr(\vc{O}_{1}, \ldots, \vc{O}_{T}) = \prod_{t=1}^{T} 
+Pr(\vc{O}_{t}|\vc{O}_{1}, 
+	\ldots, \vc{O}_{t-1}), 
+	\label{condLike}
+\end{equation}
+where $Pr(\vc{O}_{1}|\vc{O}_{0}):=Pr(\vc{O}_{1})$. Note that for a 
+simple Markov chain these probabilities reduce to 
+$Pr(\vc{O}_{t}|\vc{O}_{1},\ldots, 
+\vc{O}_{t-1})=Pr(\vc{O}_{t}|\vc{O}_{t-1})$.
+The log-likelihood can now be expressed as:
+\begin{equation}
+	l_{T} = \sum_{t=1}^{T} \log[Pr(\vc{O}_{t}|\vc{O}_{1}, \ldots, 
+\vc{O}_{t-1})].
+	\label{eq:condLogl}
+\end{equation}
+
+To compute the log-likelihood, \cite{Lys2002} define the following 
+(forward) recursion:
+\begin{align}
+	\phi_{1}(j) &:= Pr(\vc{O}_{1}, S_{1}=j) = \pi_{j} b_{j}(\vc{O}_{1}) 
+	\label{eq:fwd1} \\
+\begin{split}
+	\phi_{t}(j) &:= Pr(\vc{O}_{t}, S_{t}=j|\vc{O}_{1}, \ldots, 
+\vc{O}_{t-1}) \\
+	&= \sum_{i=1}^{N} [\phi_{t-1}(i)a_{ij}b_{j}(\vc{O}_{t})] \times 
+(\Phi_{t-1})^{-1},
+	\label{eq:fwdt} 
+\end{split} 
+\end{align}
+where $\Phi_{t}=\sum_{i=1}^{N} \phi_{t}(i)$. Combining 
+$\Phi_{t}=Pr(\vc{O}_{t}|\vc{O}_{1}, \ldots, \vc{O}_{t-1})$, and 
+equation~(\ref{eq:condLogl}) gives the following expression for the 
+log-likelihood:
+\begin{equation}
+	l_{T} = \sum_{t=1}^{T} \log \Phi_{t}.
+\end{equation}
+
+The above forward recursion can readily be generalized to mixture 
+models, in which it is assumed that the data are realizations of a 
+number of different LMMs and the goal is to assign posterior 
+probabilities to sequences of observations. This situation occurs, 
+for example, in learning data where different learning strategies may 
+lead to different answer patterns. From an observed sequence of 
+responses, it may not be immediately clear from which learning 
+process they stem. Hence, it is interesting to consider a mixture of 
+latent Markov models which incorporate restrictions that are 
+consistent with each of the learning strategies. 
+
+\subsection{Likelihood for mixtures}
+
+The easiest way to compute the likelihood of a mixture of LMMs is by 
+realizing that such a mixture is itself an LMM with a number of 
+constraints on the initial parameters and the transition matrix. For 
+example, consider a mixture of two LMMs, in which one component has 
+two states and the other three states. Later in this paper I will 
+present an example of such a mixture when  analyzing discrimination 
+learning data. The  assumption is that children and adults use 
+different strategies in such a task which can be translated into 
+different latent Markov models. In this example the first component 
+has two states and the following parameters: 
+\begin{gather*}
+\mat{A} =\begin{pmatrix} 
+1 & 0\\ \alpha & 1-\alpha
+\end{pmatrix} \quad \text{and} \quad
+\pmb{\pi}=\begin{pmatrix} \pi_{1}\\ \pi_{2} \end{pmatrix}.
+\end{gather*}
+The response parameters $b$ are all to freely estimated. The second 
+component has three  states and the following parameters:
+\begin{gather*}
+\mat{A} =\begin{pmatrix} 
+1 & 0 & 0\\ 0 & g & 1-g \\ \alpha & \beta & \gamma
+\end{pmatrix} \quad \text{and} \quad
+\pmb{\pi}=\begin{pmatrix} \pi_{1}\\\pi_{2}\\\pi_{3}  \end{pmatrix}.
+\end{gather*}
+By combing the transition matrices and the initial vectors the 
+following model results:
+\begin{gather*}
+\mat{A} =\begin{pmatrix} 
+1 & 0 & 0 & 0 & 0\\
+\alpha & 1-\alpha & 0 & 0 & 0 \\
+0 & 0 & 1 & 0 & 0
+\\0 & 0 & 0 & g & 1-g 
+\\ 0 & 0 & \alpha & \beta & \gamma
+\end{pmatrix} \quad \text{and} \quad
+\pmb{\pi}=\begin{pmatrix} \pi_{1}^{1}\\ \pi_{2}^{1}  \\ 
+\pi_{1}^{2}\\\pi_{2}^{2}\\\pi_{3}^{2} \end{pmatrix},
+\end{gather*}
+whith the constraint that the $\pi$'s sum to unity. It can easily be 
+seen that computing the log-likelihood of such a model leads to many 
+unneccessary computations because the transition matrix $\mat{A}$ 
+contains blocks of zeroes that have to be multiplied $T$ times for 
+each time series under consideration. Therefor, below the 
+log-likelihood is computed as a real mixture of the components above 
+with mixture parameters $p_{k}$. 
+
+To compute the likelihood of a mixture of $K$ models, define the 
+forward recursion variables as follows (these variables now have an 
+extra index $k$ indicating that observation and transition 
+probabilities are from latent model $k$):
+\begin{align}
+\begin{split}
+\phi_{1}(j_{k}) &=  Pr(\vc{O}_{1}, 
+S_{1}=j_{k})=p_{k}\pi_{j_{k}}b_{j_{k}}(\vc{O}_{1}).
+\end{split}\label{eq:fwd1mix} \\
+\begin{split}
+\phi_{t}(j_{k})   &=   Pr(\vc{O}_{t}, S_{t}=j_{k}|\vc{O}_{1}, \ldots, 
+\vc{O}_{t-1}) \\
+			&= \left[ \sum_{k=1}^{K} \sum_{i=1}^{n_{k}} \phi_{t-1}(i_{k}) 
+			a_{ij_{k}}b_{j_{k}}(\vc{O}_{t}) \right] \times (\Phi_{t-1})^{-1},
+\end{split}\label{eq:fwdtmix} 
+\end{align}
+where $\Phi_{t} =  \sum_{k=1}^{K}\sum_{i=1}^{n_{k}} 
+\phi_{t}(j_{k})$.  Note that the double sum over $k$ and $n_{k}$ is 
+simply an enumeration of all the states of the model. Now, because 
+$a_{ij_{k}}=0$ whenever $S_{i}$ is not part of component $k$, the sum 
+over $k$ can be dropped and hence equation~\ref{eq:fwdtmix} reduces 
+to:
+\begin{equation}
+	\phi_{t}(j_{k}) = \left[ \sum_{i=1}^{n_{k}} \phi_{t-1}(i_{k}) 
+			a_{ij_{k}}b_{j_{k}}(\vc{O}_{t}) \right] \times (\Phi_{t-1})^{-1}
+\end{equation}
+
+Writing this out in matrices and vectors and rearranging provides 
+useful expressions for implementational  purposes, for each $k$ we 
+get:
+\begin{align}
+	\vc{\phi}_{1} &=  p_{k} \times \pmb{\pi} \otimes 
+\vc{b}(\vc{O}_{1}),\\
+	\vc{\phi}_{t} &= \left[ \mat{A}^{t} \times \pmb{\phi}_{t-1} \right ] 
+		\otimes \vc{b} (\vc{O}_{t}) \times (\Phi_{t-1})^{-1},
+\end{align}
+where $^{t}$ denotes matrix tranpose, $\times$ denotes matrix/vector 
+multiplication and $\otimes$ denotes the Hadamard product of 
+vectors/matrices. 
+
+\paragraph{Computational considerations} From 
+equations~(\ref{eq:fwd1}--\ref{eq:fwdt}), it can be seen that 
+computing the forward variables, and hence the log-likelihood, takes 
+$O(Tn^{2})$ computations, for an $n$-state model and a time series of 
+length $T$. Consider the mixture of two components, one with two 
+states and the other with three states, as in the example above. 
+Using equations~(\ref{eq:fwd1}--\ref{eq:fwdt}) to compute the 
+log-likelihood of this model one needs $O(Tn^{2})=O(T\times 25)$ 
+computations whereas with the mixture 
+equationsequations~(\ref{eq:fwd1mix}--\ref{eq:fwdtmix}), one only 
+needs $\sum_{n_{i}} O(n_{i}^{2}T)$ computations, in this case $O(T 
+\times 13)$. So, it can  be seen that in this easy example the 
+computational cost is almost halved.  
+
+
+Note that in above equations $b_{j}(\vc{O}_{t})$ factors into 
+$\prod_{i=1}^{m} b_{j} (O_{t}^{i})$, as is the case in the latent 
+class model. 
+
+%\subsection{Posterior probabilities}
+
+%Viterbi algorithm?
+
+%Using the equations above for the likelihood of single and mixture 
+models, arriving at the posterior probabilities of membership of the 
+components can be easily accomplished. 
+
+%Nou, nee dus!
+
+%The posterior probability is the probability that data $\vc{O}$ are 
+generated by mixture component $k$, i.e., $Pr(C=k|\vc{O})$, where $C$ 
+denotes the mixture component. This probability can be expressed as:
+%\begin{eqnarray}
+%	Pr(C=k|\vc{O}) &=& \frac{Pr(C=k) Pr(\vc{O}|C=k)}
+%	{\sum_{k=1}^{K} Pr(C=k)Pr(\vc{O}|C=k)} \\
+%	&=& \frac {p_{k} l_{TMC=k}}
+%	{\sum}
+%\end{eqnarray}
+
+
+\subsection{Gradients}
+
+\newcommand{\fpp}{\frac{\partial} {\partial \lambda_{1}}}
+
+See equations 10--12  in \cite{Lys2002} for the score recursion 
+functions of the hidden Markov model for a univariate time series. 
+Here the corresponding score recursion for the multivariate mixture 
+case are provided. The $t=1$ components of this score recursion are 
+defined as (for an arbitrary parameter $\lambda_{1}$):
+\begin{align}
+\psi_{1}(j_{k};\lambda_{1}) &:=  \fpp Pr(\vc{O}_{1}|S_{1}=j_{k}) \\
+\begin{split} 
+	&= \left[  \fpp p_{k} \right] \pi_{j_{k}}b_{j_{k}}(\vc{O}_{1}) + 
+	p_{k}\left[ \fpp \pi_{j_{k}} \right] b_{j_{k}}(\vc{O}_{1}) \\
+	& \qquad  + p_{k}\pi_{j_{k}} \left[ \fpp 
+b_{j_{k}}(\vc{O}_{1})\right],
+\end{split} \label{eq:psi1}
+\end{align}
+and for $t>1$ the definition is:
+\begin{align}
+\psi_{t}(j_{k};\lambda_{1})  & =  \frac{\fpp Pr(\vc{O}_{1}, \ldots, 
+\vc{O}_{t}, S_{t}=j_{k})}
+			{Pr(\vc{O}_{1}, \ldots, \vc{O}_{t-1})}  \\
+\begin{split} 
+			 & =  %\sum_{k=1}^{K} klopt dit?? is \fpp a_{ij} wel altijd 0 voor andere componenten??
+			 \sum_{i=1}^{n_{k}} \Bigg\{ \psi_{t-1}(i;\lambda_{1})a_{ij_{k}} 
+			 b_{j_{k}}(\vc{O}_{t}) \\ 
+			 &\qquad +\phi_{t-1}(i) \left[ \fpp a_{ij_{k}} \right] b_{j_{k}} 
+(\vc{O}_{t}) \\
+			&\qquad +\phi_{t-1}(i)a_{ij_{k}}  \left[ \fpp b_{j_{k}} 
+(\vc{O}_{t}) \right] \Bigg\} 
+			\times (\Phi_{t-1})^{-1}.
+\end{split} \label{eq:psit}
+\end{align}
+
+Writing this out in matrix notation (and dropping the $k$-subscripts 
+for components) we get for $t=1$ and for each $k$:
+\begin{eqnarray}
+	\pmb{\psi}_{1}(\lambda_{1}) = \vc{\fpp} p_{k} \times \pmb{\pi} 
+\otimes \vc{b}(O_{1})+
+		p_{k} \times \vc{\fpp}\pmb{\pi} \otimes \vc{b}(O_{1}) +
+		p_{k} \times \pmb{\pi} \otimes \fpp \vc{b}(O_{1}),
+\end{eqnarray}
+and for $\pmb{\psi}_{t}$ we get: 
+\begin{equation}
+\begin{split} 
+	\pmb{\psi}_{t}(\lambda_{1}) 
+	&= \left[ \mat{A}^{t} \times \pmb{\psi_{t-1}}(\lambda_{1})  \right ] 
+\otimes \vc{b}(O_{t}) +
+	\left [ \left[ \fpp \mat{A} \right ]^{t} \times \pmb{\phi}_{t-1} 
+\right ] \otimes \vc{b}(O_{t}) \\
+	& \qquad + \left [ \mat{A}^{t} \times \pmb{\phi}_{t-1}  \right ] 
+\otimes \fpp \vc{b}(O_{t}).
+\end{split} 
+\end{equation}
+
+Using above equations, \cite{Lys2002} derive the following equation 
+for the partial derivative of the likelihood:
+\begin{equation}
+	\fpp l_{T}= 	
+		\frac{\mathbf{\Psi}_{T}(\lambda_{1})}{\mathbf{\Phi}_{T}},
+\end{equation}
+where $\Psi_{t}=\sum_{k=1}^{K} \sum_{i=1}^{n_{k}} 
+\psi_{t}(j_{k};\lambda_{1})$. 
+Starting from the equation from the logarithm of the likelihood, this 
+is easily seen to be correct: 
+\begin{eqnarray}
+	\fpp \log Pr(\vc{O}_{1}, \ldots, \vc{O}_{T}) &=& Pr(\vc{O}_{1}, 
+\ldots, \vc{O}_{T})^{-1} 
+	\fpp Pr(\vc{O}_{1}, \ldots, \vc{O}_{T}) \\
+	&=& Pr(\vc{O}_{1}, \ldots, \vc{O}_{T})^{-1} \Psi_{T}(\lambda_{1}) 
+Pr(\vc{O}_{1}, \ldots, \vc{O}_{T-1}) \\
+	&=&  \frac{Pr(\vc{O}_{1}, \ldots, \vc{O}_{T-1})}{Pr(\vc{O}_{1}, 
+\ldots, \vc{O}_{T})}  \Psi_{T} (\lambda_{1}) \\
+	&=&  \frac{\mathbf{\Psi}_{T}(\lambda_{1})}{\mathbf{\Phi}_{T}}.
+\end{eqnarray}
+
+
+Having provided the global computations above we now need expressions 
+for $\fpp p_{k}$, $\fpp \pi_{i}$, $\fpp a_{ij}$, and $\fpp 
+b_{i}(\vc{O}_{t})$, which are dependent on the particular 
+$\lambda_{1}$ under consideration. This generates   special cases for 
+each combination of $\lambda_{1}$ and each of the components of the 
+gradient computation. These cases are worked out below for each of 
+the choices $\lambda_{1} \in \pmb{\lambda}=\{ 
+\vc{p},\pmb{\pi},\mat{A},\vc{b} \}$.
+
+
+%%p-k cases
+\paragraph{Case 1: $\fpp p_{k}$}
+
+\begin{align} 
+        \fpp p_{k} = \left\{ \begin{array}{ll} 
+            1 & \mbox{if $\lambda_{1}=p_{k}$} \\ 
+            0 & \mbox{otherwise} 
+            \end{array} \right. 
+\end{align} 
+
+%%pipi-k cases
+
+\paragraph{Case 2: $\fpp \pi_{i}$ }
+
+\begin{align} 
+        \fpp \pi_{i}^{k} = \left\{ \begin{array}{ll} 
+            1 & \mbox{if $\lambda_{1}=\pi_{i}^{k}$} \\ 
+            0 & \mbox{otherwise} 
+            \end{array} \right. 
+\end{align} 
+
+\paragraph{Case 3: $\fpp a_{ij}$ }
+
+\begin{align} 
+        \fpp a_{ij}^{k}= \left\{ \begin{array}{ll} 
+            1 & \mbox{if $\lambda_{1}=a_{ij}^{k}$} \\ 
+            0 & \mbox{otherwise} 
+            \end{array} \right. 
+\end{align} 
+
+The cases below for $\fpp b_{j}(\vc{O}_{t})$ are slightly more 
+interesting. First, remember that in the case of an $m$-variate time 
+series of observations, $\fpp b_{j}(\vc{O}_{t})=\fpp b_{j}(O_{t}^{1}, 
+\ldots, O_{t}^{m})$, of which we need partial derivatives for 
+arbitrary parameters $\lambda_{1}$. First note that because of local 
+independence we can write:
+\begin{equation}
+	\fpp [b_{j}(O_{t}^{1}, \ldots, O_{t}^{m})]= \frac{\partial} 
+{\partial \lambda_{1} } [b_{j}(O_{t}^{1})] \times  
+[b_{j}(O_{t}^{2})], \ldots,  [b_{j}(O_{t}^{m})].  
+\end{equation}
+Applying the chain rule for products we get:
+\begin{equation}
+	\fpp [b_{j}(O_{t}^{1}, \ldots, O_{t}^{m})] =
+	\sum_{l=1}^{m} \left[ \prod_{i=1, \ldots, \hat{l}, \ldots, m} 
+b_{j}(O_{t}^{i}) \right] \times
+	\fpp  [b_{j}(O_{t}^{l})],
+	\label{partialProd}
+\end{equation}
+where $\hat{l}$ means that that term is left out of the product. 
+These latter terms, $\frac{\partial} {\partial \lambda_{1} }  
+[b_{j}(O_{t}^{k})]$, are easy to compute given either multinomial or 
+gaussian observation densities. As a consequence, this provides 
+gradients for the multivariate time series model for mixed 
+categorical and gaussian observations, e.g.\ correct/incorrect 
+responses and reaction times, and a categorical latent state or 
+class.  Hence, we need the partial derivatives $\fpp 
+b_{j}({O}_{t}^{l})$ instead of $\fpp b_{j}(\vc{O}_{t})$ (if 
+$\lambda_{1} \in \{ \vc{p}, \pmb{\pi},\mat{A} \} $, then $\fpp 
+b_{j}=0$).
+
+
+\paragraph{Case 4: $\fpp b_{j}({O}_{t}^{l})$ and $\lambda_{1} \in 
+\vc{b}$.}  These derivatives depend on the response function of the 
+item, i.e.\ whether the item is multinomial or gaussian (other 
+itemtypes are easy to add). For the derivatives of the response 
+functions there are two cases depending on the type of the response 
+function. For a gaussian item we have the following:
+\begin{align} 
+        \fpp b_{j_{k}}(O_{t}^{l})= \left\{ 
+	\begin{array}{ll} 
+		b_{j_{k}}(O_{t}^{l}) \times  \left[  \frac{O_{t}-\mu}{\sigma^{2}}  
+\right] & 
+			\mbox{if $\lambda_{1} = \mu_{j_{k}}^{l} $ }  \\ 
+            	b_{j_{k}}(O_{t}^{l}) \times \left[  
+\frac{(O_{t}-\mu)^{2}}{\sigma^{3}} - \frac{1}{\sigma} \right] & 
+			\mbox{if $\lambda_{1} = \sigma_{j_{k}}^{l} $} \\
+		0 & \mbox{otherwise} 
+            \end{array} \right. 
+\end{align}
+		
+For an $c$-category item $l$ with response probabilities $p_{1}, 
+\ldots, p_{c}$ we have the following:
+\begin{align} 
+        \fpp b_{j_{k}}(O_{t}^{l})= \left\{ 
+	\begin{array}{ll} 
+		1 & \mbox{if $\lambda_{1} = p_{i}$ \& $O_{t}=i$}  \\ 
+		0 & \mbox{otherwise} 
+            \end{array} \right. 
+\end{align}
+
+
+\subsection{Observed information}
+
+\newcommand{\fpt}{\frac{\partial}{\partial \lambda_{2}} }
+
+\newcommand{\fps}{\frac{\partial^{2}}{\partial\lambda_{1}\partial\lambda_{2}}}
+
+
+
+To compute the observed information, again the formulae by 
+\citet{Lys2002} are applied and generalized to the m-variate mixture 
+case. Define the information recursion as follows:
+\begin{align}
+\begin{split}
+	\omega_{1}(j_{k};\lambda_{1},\lambda_{2}) 
+	=  & \, \fps Pr(\vc{O}_{1}, S_{1}=j_{k}) = \fps p_{k} \pi_{j_{k}} 
+b_{j_{k}}(\vc{O}_{1})
+	\\  = & \, \fpp \left[ \fpt p_{k} \pi_{j_{k}} b_{j_{k}}(\vc{O}_{1}) 
+\right] 
+	\\  =  & \fpp  \bigg\{  \left[ \fpt p_{k} \right]  \pi_{j_{k}} 
+b_{j_{k}}(\vc{O}_{1}) +
+		\, p_{k} \left[ \fpt \pi_{j_{k}} \right]  b_{j_{k}}(\vc{O}_{1}) + 
+	\\  &  \, p_{k} \pi_{j_{k}} \left[ \fpt  b_{j_{k}}(\vc{O}_{1}) 
+\right] \bigg\}
+	\\  =  & \,  \left[ \fps p_{k} \right] \pi_{j_{k}} 
+b_{j_{k}}(\vc{O}_{1}) + 
+		\left[ \fpt p_{k} \right] \cdot \left[\fpp \pi_{j_{k}} \right] 
+b_{j_{k}}(\vc{O}_{1}) +
+	\\  &   \, \left[ \fpt p_{k} \right] \pi_{k} \left[ \fpp b_{j_{k}} 
+(\vc{O}_{1}) \right] +
+		\left[ \fpp p_{k} \right] \pi_{j_{k}} b_{j_{k}}(\vc{O}_{1}) + 
+	\\ &   \, p_{k} \left[ \fps \pi_{j_{k}} \right] 
+b_{j_{k}}(\vc{O}_{1}) +
+		p_{k} \left[ \fpt \pi_{j_{k}} \right] \cdot \left[ \fpp 
+b_{j_{k}}(\vc{O}_{1}) \right] +
+	\\ &   \, \left[ \fpp p_{k} \right] \pi_{j_{k}} \left[ \fpt 
+b_{j_{k}}(\vc{O}_{1}) \right] +
+		p_{k} \left[ \fpp \pi_{j_{k}} \right] \cdot \left[ \fpt 
+b_{j_{k}}(\vc{O}_{1}) \right] +
+	\\ &   \, p_{k} \pi_{j_{k}} \left[ \fps b_{j_{k}}(\vc{O}_{1}) 
+\right].
+\end{split}
+\end{align}
+
+Similarly, for $t>1$, the information recursion is defined as:
+\begin{align}
+\begin{split}
+	\omega_{t}(j_{k};\lambda_{1},\lambda_{2}) =  
+	&\frac{\fps Pr(\vc{O}_{1}, \ldots, 
+\vc{O}_{t},S_{t}=j_{k})}{Pr(\vc{O}_{1}, \ldots, \vc{O}_{t-1})}
+	\\ = &\sum_{k=1}^{K} \sum_{i=1}^{n_{k}} \Bigg\{ 
+	\omega_{t-1}(i;\lambda_{1},\lambda_{2}) a_{ij_{k}} 
+b_{j_{k}}(\vc{O}_{t}) +
+	\psi_{t-1}(i;\lambda_{1}) \left[ \fpt a_{ij_{k}} \right] 
+b_{j_{k}}(\vc{O}_{t}) +
+	\\  &\psi_{t-1}(i;\lambda_{1})  a_{ij_{k}}  \left[ \fpt 
+b_{j_{k}}(\vc{O}_{t}) \right] +
+	\psi_{t-1}(i;\lambda_{2}) \left[ \fpp a_{ij_{k}} \right] 
+b_{j_{k}}(\vc{O}_{t}) + 
+	\\ & \psi_{t-1}(i;\lambda_{2}) a_{ij_{k}} \left[ \fpp 
+b_{j_{k}}(\vc{O}_{t})\right]  + 
+	\phi_{t-1}(i) \left[ \fps a_{ij_{k}} \right]  b_{j_{k}}(\vc{O}_{t}) +
+	\\ & \phi_{t-1}(i) a_{ij_{k}} \left[ \fps b_{j_{k}}(\vc{O}_{t}) 
+\right]  +
+	\phi_{t-1}(i) \left[ \fpp a_{ij_{k}} \right] \left[ \fpt 
+b_{j_{k}}(\vc{O}_{t}) \right]  +
+	\\ & \phi_{t-1}(i) \left[ \fpt a_{ij_{k}}\right] \left[ \fpp 
+b_{j_{k}}(\vc{O}_{t}) \right]  \Bigg\} 
+	\times \frac{1}{\Phi_{t-1}}
+\end{split}
+\end{align}
+
+It is important here to provide the second order partial derivatives 
+of the terms that are involved in the multi-variate case. These are 
+the $b_{j_{k}}(\cdot)$ terms. Remember that these terms can be 
+factored and hence the derivatives can be derived from repeatedly 
+applying the chain rule for products and using equation 
+\ref{partialProd} from above for the first order derivatives: 
+\begin{align}
+\begin{split}
+	\fps b_{j_{k}} (\vc{O}_{t}) & = \fps \prod_{i=1}^{m} b_{j_{k}}^{i} 
+(O_{t}^{i}) 
+	\\ & = \fpp \left[ \fpt \prod_{i=1}^{m} b_{j_{k}}^{i} (O_{t}^{i})  
+\right] 
+	\\ & = \fpp \Bigg\{ \sum_{l=1}^{m} \left[ \prod_{i=1, \ldots, 
+\hat{l}, \ldots, m} b_{j}(O_{t}^{i}) 
+	\right] \times \fpt  [b_{j}(O_{t}^{l})] \Bigg\}  
+	\\ & = \sum_{l=1}^{m} \left[ \fpp \prod_{i=1, \ldots, \hat{l}, 
+\ldots, m} b_{j}(O_{t}^{i}) \right] 
+	\times \fpt  \left[ b_{j}(O_{t}^{l}) \right] \; + 
+	\\ &\phantom{=}\;\,  \sum_{l=1}^{m}  \left[ \prod_{i=1, \ldots, 
+\hat{l}, \ldots, m} b_{j}(O_{t}^{i}) 
+	\right] \times \fpp \fpt  \left[ b_{j}(O_{t}^{l})\right]  
+	\\ & = \sum_{k=1,k\neq	l}^{m} \sum_{l=1}^{m}  \left[ \prod_{i=1, 
+\ldots, \hat{l}, \hat{k}, \ldots, m}
+	b_{j}(O_{t}^{i}) \right] \fpt  \left[ b_{j}(O_{t}^{k})\right]  \fpt  
+\left[ b_{j}(O_{t}^{l})\right] \;+ 
+	\\ &\phantom{=}\;\, \sum_{l=1}^{m}  \left[ \prod_{i=1, \ldots, 
+\hat{l}, \ldots, m} b_{j}(O_{t}^{i}) 
+	\right] \times \fps  \left[b_{j}(O_{t}^{l}) \right] 
+\end{split}
+\end{align}
+
+
+In order to compute the above terms we need for arbitrary parameters 
+$\lambda_{1}$ the terms $\fps  \lambda_{1}$. Fortunately, these are 
+easy to compute as most of them are zero. In particular, with 
+$\lambda_{1} \in \{\mat{A},\vc{p},\pmb{\pi} \}$, the double 
+derivatives are zero and we only need them when 
+$\lambda_{1}\in\{\mat{B}\}$.
+These latter ones are again zero in the case of multinomial items and 
+so only the gaussian observations remain which are given here in four 
+cases:  
+
+%%p-k cases
+\paragraph{Case 1: $\fps b_{j}(O_{t}^{l}), \lambda_{1}=\mu, 
+\lambda_{2}=\mu$}
+
+\begin{align} 
+        \fps b_{j_{k}}(O_{t}^{l})=b_{j}(O_{t}^{l}) \left[ \left[ 
+\frac{O_{t}^{l}-\mu}{\sigma^{2}} \right]^{2} - \frac{1}{\sigma^{2}} 
+\right]
+\end{align}
+
+\paragraph{Case 2: $\fps b_{j}(O_{t}^{l}), \lambda_{1}=\mu, 
+\lambda_{2}=\sigma$}
+
+\begin{align} 
+        \fps b_{j_{k}}(O_{t}^{l})=b_{j}(O_{t}^{l}) \left[ \left[ 
+\frac{(O_{t}^{l}-\mu)^{2}}{\sigma^{3}} -
+	\frac{1}{\sigma}\right]  \cdot \left[ 
+\frac{O_{t}^{l}-\mu}{\sigma^{2}} \right] + 
+	\left[ \frac{2\mu-2O_{t}^{l}}{\sigma^{3}} \right] \right]
+\end{align}
+
+
+\paragraph{Case 3: $\fps b_{j}(O_{t}^{l}), \lambda_{1}=\sigma, 
+\lambda_{2}=\mu$}
+
+\begin{align} 
+        \fps b_{j_{k}}(O_{t}^{l})=b_{j}(O_{t}^{l})  \left[ \left[ 
+\frac{(O_{t}^{l}-\mu)^{2}}{\sigma^{3}} -
+	\frac{1}{\sigma}\right]  \cdot \left[ 
+\frac{O_{t}^{l}-\mu}{\sigma^{2}} \right] + 
+	\left[ \frac{2\mu-2O_{t}^{l}}{\sigma^{3}} \right] \right]
+\end{align}
+
+\paragraph{Case 4: $\fps b_{j}(O_{t}^{l}), \lambda_{1}=\sigma, 
+\lambda_{2}=\sigma$}
+
+\begin{align} 
+        \fps b_{j_{k}}(O_{t}^{l})=b_{j}(O_{t}^{l}) \left[ \left[ 
+\frac{(O_{t}^{l}-\mu)^{2}}{\sigma^{3}} -
+	\frac{1}{\sigma}\right]^{2} + \left[  \frac{1}{\sigma^{2}} - 
+\frac{3(O_{t}^{l}-\mu)^{2}}{\sigma^{4}}  \right]  \right]
+\end{align}
+
+		
+\bibliography{psy,ingmar,hmm}
+
+% \section*{Author note}
+
+\end{document}
+
+
+
+
+

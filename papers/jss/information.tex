@@ -1,0 +1,68 @@
+\subsection{Observed information}
+
+\newcommand{\fpt}{\frac{\partial} {\partial \lambda_{2}}}
+
+\newcommand{\fps}{\frac{\partial^{2}}{\partial\lambda_{1}\partial\lambda_{2}}}
+
+
+To compute the observed information, again the formulae by \citet{Lys2002} are applied and generalized to the m-variate mixture case. Define the information recursion as follows:
+\begin{equation}
+%\begin{split}
+	\omega_{1}(j_{k};\lambda_{1},\lambda_{2}) = & \, \fps Pr(\vc{O}_{1}, S_{1}=j_{k}) 
+	= \fps p_{k} \pi_{j_{k}} b_{j_{k}}(\vc{O}_{1}) 
+	\\ =& \fpp \left[ \fpt p_{k} \pi_{j_{k}} b_{j_{k}}(\vc{O}_{1}) \right] 
+	\\ =&  \fpp  \bigg\{  \left[ \fpt p_{k} \right]  \pi_{j_{k}} b_{j_{k}}(\vc{O}_{1}) +
+		p_{k} \left[ \fpt \pi_{j_{k}} \right]  b_{j_{k}}(\vc{O}_{1}) + 
+	\\  &  \, p_{k} \pi_{j_{k}} \left[ \fpt  b_{j_{k}}(\vc{O}_{1}) \right] \bigg\}
+	\\  = &  \left[ \fps p_{k} \right] \pi_{j_{k}} b_{j_{k}}(\vc{O}_{1}) + 
+	\left[\fpt p_{k} \right] \cdot \left[\fpp \pi_{j_{k}} \right] b_{j_{k}}(\vc{O}_{1}) +
+	\\  &    \left[ \fpt p_{k} \right] \pi_{k} \left[ \fpp b_{j_{k}}(\vc{O}_{1}) \right] +
+	\left[ \fpp \p_{k} \right] \pi_{j_{k}} b_{j_{k}}(\vc{O}_{1}) + 
+	\\ &   \, p_{k} \left[ \fps \pi_{j_{k}} \right] b_{j_{k}}(\vc{O}_{1}) +
+	p_{k} \left[ \fpt \pi_{j_{k}} \right] \cdot \left[ \fpp b_{j_{k}}(\vc{O}_{1}) \right] +
+	\\ &   \left[ \fpp p_{k} \right] \pi_{j_{k}} \left[ \fpt b_{j_{k}}(\vc{O}_{1}) \right] +
+	p_{k} \left[ \fpp \pi_{j_{k}} \right] \cdot \left[ \fpt b_{j_{k}}(\vc{O}_{1}) \right] +
+	\\ &   \, p_{k} \pi_{j_{k}} \left[ \fps b_{j_{k}}(\vc{O}_{1}) \right].
+%\end{split}
+\end{equation}
+
+Similarly, for $t>1$, the information recursion is defined as:
+\begin{equation}
+%\begin{split}
+	\omega_{t}(j_{k};\lambda_{1},\lambda_{2}) =  
+	&\frac{\fps Pr(\vc{O}_{1}, \ldots, \vc{O}_{t},S_{t}=j_{k})}{Pr(\vc{O}_{1}, \ldots, \vc{O}_{t-1})}
+	\\ = &\sum_{k=1}^{K} \sum_{i=1}^{n_{k}} \Bigg\{ 
+	\omega_{t-1}(i;\lambda_{1},\lambda_{2}) a_{ij_{k}} b_{j_{k}}(\vc{O}_{t}) +
+	\psi_{t-1}(i;\lambda_{1}) \left[ \fpt a_{ij_{k}} \right] b_{j_{k}}(\vc{O}_{t}) +
+	\\  &\psi_{t-1}(i;\lambda_{1})  a_{ij_{k}}  \left[ \fpt b_{j_{k}}(\vc{O}_{t}) \right] +
+	\psi_{t-1}(i;\lambda_{2}) \left[ \fpp a_{ij_{k}} \right] b_{j_{k}}(\vc{O}_{t}) + 
+	\\ & \psi_{t-1}(i;\lambda_{2}) a_{ij_{k}} \left[ \fpp b_{j_{k}}(\vc{O}_{t})\right]  + 
+	\phi_{t-1}(i) \left[ \fps a_{ij_{k}} \right]  b_{j_{k}}(\vc{O}_{t}) +
+	\\ & \phi_{t-1}(i) a_{ij_{k}} \left[ \fps b_{j_{k}}(\vc{O}_{t}) \right]  +
+	\phi_{t-1}(i) \left[ \fpp a_{ij_{k}} \right] \left[ \fpt b_{j_{k}}(\vc{O}_{t}) \right]  +
+	\\ & \phi_{t-1}(i) \left[ \fpt a_{ij_{k}}\right] \left[ \fpp b_{j_{k}}(\vc{O}_{t}) \right]  \Bigg\} 
+	\times \frac{1}{\Phi_{t-1}}
+%\end{split}
+\end{equation}
+
+It is important here to provide the second order partial derivatives of the terms that are involved in the multi-variate case. These are the $b_{j_{k}}(\cdot)$ terms. Remember that these terms can be factored and hence the derivatives can be derived from repeatedly applying the chain rule for products and using equation \ref{partialProd} from above for the first order derivatives: 
+\begin{equation}
+%\begin{split}
+	\fps b_{j_{k}} (\vc{O}_{t}) & = \fps \prod_{i=1}^{m} b_{j_{k}}^{i} (O_{t}^{i}) \\
+	& = \fpp \left[ \fpt \prod_{i=1}^{m} b_{j_{k}}^{i} (O_{t}^{i})  \right] \\
+	& = \fpp \Bigg\{ \sum_{l=1}^{m} \left[ \prod_{i=1, \ldots, \hat{l}, \ldots, m} b_{j}(O_{t}^{i}) 
+	\right] \times \fpt  [b_{j}(O_{t}^{l})] \Bigg\}  \\
+	& = \sum_{l=1}^{m} \left[ \fpp \prod_{i=1, \ldots, \hat{l}, \ldots, m} b_{j}(O_{t}^{i}) 
+	\right] \times \fpt  \left[b_{j}(O_{t}^{l})]\;+ \\
+	&\phantom{=}\;\, \sum_{l=1}^{m}  \left[ \prod_{i=1, \ldots, \hat{l}, \ldots, m} b_{j}(O_{t}^{i}) 
+	\right] \times \fpp \fpt  \left[ b_{j}(O_{t}^{l})\right]  \\
+	& = \sum_{k=1,k\neq	l}^{m} \sum_{l=1}^{m}  \left[ \prod_{i=1, \ldots, \hat{l}, \hat{k}, \ldots, 
+	m} b_{j}(O_{t}^{i}) \right] \fpt  \left[ b_{j}(O_{t}^{k})\right]  \fpt  \left[ b_{j}(O_{t}^{l})\right] \;+ \\
+	&\phantom{=}\;\, \sum_{l=1}^{m}  \left[ \prod_{i=1, \ldots, \hat{l}, \ldots, m} b_{j}(O_{t}^{i}) 
+	\right] \times \fps  \left[b_{j}(O_{t}^{l}) \right] 
+%\end{split}
+\end{equation}
+
+
+
+ 
