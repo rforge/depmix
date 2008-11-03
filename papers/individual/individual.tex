@@ -527,27 +527,57 @@ response to each cue pattern). Meeter et al. allowed for probabilistic
 responding (a small probability of giving the non-optimal response). 
 
 Alternative non-strategy based analyses of the WPT (Lagnado et al, Speekenbrink et al) 
-have estimated response strategies by variations of logistic regression. 
+have estimated response strategies by logistic regression, allowing the regression
+coefficients to change over time.  
 
 %associative, rule-based.  
 Here, we analyze the behavior of a single individual performing the
-WPT for 200 trials. We let each state be characterized by a Generalized
-Linear Model with a Bernoulli response and logistic link function. We are
-interested in whether a DMM can recover a strategy model in line with Gluck et al. 
-As we fit the data to a single subject, we must place some constraints.
-Specifically, we constrain the state transitions to be in a ``left-right'' format
-(states can only proceed to the immediately adjacent state and never back) and 
-the initial state 
+WPT for 200 trials. We chose to analyse the ``average'' participant (the
+participant with performance closest to the group average) in a large
+unpublished dataset. We let each state be characterized by a GLM with a 
+Binomial distributed response and logistic link function (i.e., a logistic
+regression model). We are particularly interested in evidence for 
+strategy switching and whether a DMM can recover a strategy model 
+in line with Gluck et al. (2002). 
 
-A single state model (usual GLM) 
-We started with a 3-state model, 
+As we fit the data to a single subject, 
+we must place some constraints. Specifically, we constrain the state 
+transitions to be in a ``left-right'' format (states can only proceed 
+to the immediately adjacent state and never back, and must start in 
+the initial state). We fitted a single, two and three state model to 
+the data. This showed that a two state model was better than a single
+and three state model.
 
-\begin{itemize}
-	\item N=200
-	\item 4 choice data, displayed in blocks of 20 trials
-	\item optimal strategy is choosing C or D
-\end{itemize}
+\begin{table}
+\caption{Estimates for the weather prediction task}
+\label{tab:WPT}
+\begin{tabular}{lcccccccc} \hline
+ & & \multicolumn{1}{c}{1 state} & & \multicolumn{2}{c}{2 state} && \multicolumn{2}{c}{2 state (constr.)} \\ \cline{3-3} \cline{5-6} \cline{8-9}
+parameter & & $S_1$ & & $S_1$ & $S_2$ & & $S_1$ & $S_2$ \\ \hline
+(intercept) & & -0.69 & & -2.73 & 0.88 & & -1.24 & 0 \\
+cue 1 && 1.69 && 2.12 & 1.60 && 1.65 & 1.97 \\
+cue 2 && 1.12 && 0.97 & 1.63 && 0 & 1.92 \\
+cue 3 && -0.49 && 0.91 & -2.03 && 0 & -1.58 \\
+cue 4 && -1.32 && 0.69 & -3.16 && 0 & -2.67 \\ \hline
+ & & \multicolumn{1}{c}{AIC=204.47} & & \multicolumn{2}{c}{AIC=187.50} && \multicolumn{2}{c}{AIC=185.24}
+\end{tabular}
+\end{table}
 
+Investigation of the parameter estimates (see Table~\ref{tab:WPT}) indicated that the first state might be
+a single cue strategy (the regression coefficient for the first cue was of much 
+larger magnitude than that of the other cues). The second state was a multi-cue
+strategy (all cues had regression coefficients of reasonable magnitude). 
+To reduce the degrees of freedom, and improve parameter estimates, we implemented 
+constraints to force state 1 into a single cue strategy (fixing the coefficients
+of the remaining three cues to 0) and state 2 in a multi-cue strategy (forcing
+the intercept to 0). These restrictions resulted in a better AIC value of AIC=185.24 
+(df=7). Interestingly, the single cue strategy was somewhat different than 
+described by Gluck et al. Parameter estimates indicated relatively more consistent 
+predictions of ``rain'' in the absence of cue 1 ($Pr(\text{sun}) = 0.22$) and more
+inconsistent predictions of ``sun'' in the presence of cue 1 ($Pr(\text{sun}) = 0.60$). 
+The cue weights of the multi-cue strategy were in the direction of the optimal weights. 
+The Viterbi state sequence indicated that the participant used the single
+cue strategy for the first 60 trials, and then switched to the multi-cue strategy.
 
 \section{Discussion}
 	
