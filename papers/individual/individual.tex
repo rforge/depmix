@@ -2,16 +2,16 @@
 
 \documentclass[a4paper,12pt,man]{apa} % nobf, doc, apa
 
-\usepackage[]{amsmath, amsfonts, amstext, amsthm} 
+\usepackage[]{amsmath, amsfonts, amstext, amsthm}
 \usepackage{amssymb}
-\usepackage[]{graphics} 
-\usepackage{graphicx} 
+\usepackage[]{graphics}
+\usepackage{graphicx}
 \usepackage{epsfig}
 \usepackage{epstopdf}
 
-\newcommand{\citep}{\cite} 
+\newcommand{\citep}{\cite}
 \newcommand{\citet}{\citeA}
-\newcommand{\mat}{\mathbf} 
+\newcommand{\mat}{\mathbf}
 \newcommand{\vc}{\mathbf}
 
 \newcommand{\pkg}{\texttt}
@@ -35,10 +35,10 @@
  phone: +31 (20) 5256723 \\
  fax: +31 (20) 6390279 \\
  email: i.visser@uva.nl}
- 
- 
+
+
 \shorttitle{Modelling Discrete Change}
- 
+
 \abstract{A class of models is developed for measuring and detecting
 discrete change in learning and development.  The basic model for
 detecting such change is the latent or hidden Markov model.
@@ -54,8 +54,8 @@ be made to depend on covariates as well, such that the switching
 regime between states depends on characteristics of the individual or
 the experimental situation.  The model is illustrated with an example
 of participants' learning in the weather prediction task.}
-    
-  
+
+
 \begin{document}
 \maketitle
 
@@ -205,7 +205,7 @@ The dependent mixture model consists of the following elements:
 \begin{enumerate}
 	\item $S$ is a collection of discrete states
 	\item $S_{t} = \mat{A}S_{t-1}+\xi_{t}, \mat{A}$, a transition matrix
-	\item $O_{t} = \mat{B}(S_{t}) + \zeta_{t}, \mat{B}$,  an observation density 
+	\item $O_{t} = \mat{B}(S_{t}) + \zeta_{t}, \mat{B}$,  an observation density
 \end{enumerate}
 
 % state space
@@ -231,14 +231,14 @@ represents learning or development.  The transition model contains the
 Markov assumption:
 $$Pr(S_{t}|S_{t-1}, \ldots, S_{1}) = Pr(S_{t}|S_{t-1}),$$
 which means that the current state (at time $t$) only depends on the
-previous state $S_{t-1}$, and not on earlier states. 
+previous state $S_{t-1}$, and not on earlier states.
 
 % observation densities
-The observation densities $\mat{B}$ form the measurement part of the 
-model; these describe the distributions of the observations 
-conditional on the current state. Hence, these distributions 
-characterize the state, and in our examples, these characterize the 
-strategy that a participant is using at a given measurement occasion. 
+The observation densities $\mat{B}$ form the measurement part of the
+model; these describe the distributions of the observations
+conditional on the current state. Hence, these distributions
+characterize the state, and in our examples, these characterize the
+strategy that a participant is using at a given measurement occasion.
 
 % log-likelihood
 The log-likelihood of DMMs is usually computed by the
@@ -249,38 +249,38 @@ gradients of the log-likelihood at the same time.  They start by
 rewriting the likelihood as follows (for ease of exposition the
 dependence on the model parameters is dropped here):
 \begin{equation}
-	L_{T} = Pr(\vc{O}_{1}, \ldots, \vc{O}_{T}) = \prod_{t=1}^{T} 
-Pr(\vc{O}_{t}|\vc{O}_{1}, 
-	\ldots, \vc{O}_{t-1}), 
+	L_{T} = Pr(\vc{O}_{1}, \ldots, \vc{O}_{T}) = \prod_{t=1}^{T}
+Pr(\vc{O}_{t}|\vc{O}_{1},
+	\ldots, \vc{O}_{t-1}),
 	\label{condLike}
 \end{equation}
-where $Pr(\vc{O}_{1}|\vc{O}_{0}):=Pr(\vc{O}_{1})$. Note that for a 
-simple, i.e.\ observed, Markov chain these probabilities reduce to 
-$Pr(\vc{O}_{t}|\vc{O}_{1},\ldots, 
+where $Pr(\vc{O}_{1}|\vc{O}_{0}):=Pr(\vc{O}_{1})$. Note that for a
+simple, i.e.\ observed, Markov chain these probabilities reduce to
+$Pr(\vc{O}_{t}|\vc{O}_{1},\ldots,
 \vc{O}_{t-1})=Pr(\vc{O}_{t}|\vc{O}_{t-1})$.
 The log-likelihood can now be expressed as:
 \begin{equation}
-	l_{T} = \sum_{t=1}^{T} \log[Pr(\vc{O}_{t}|\vc{O}_{1}, \ldots, 
+	l_{T} = \sum_{t=1}^{T} \log[Pr(\vc{O}_{t}|\vc{O}_{1}, \ldots,
 \vc{O}_{t-1})].
 	\label{eq:condLogl}
 \end{equation}
 
-To compute the log-likelihood, \cite{Lystig2002} define the following 
+To compute the log-likelihood, \cite{Lystig2002} define the following
 (forward) recursion:
 \begin{align}
-	\phi_{1}(j) &:= Pr(\vc{O}_{1}, S_{1}=j) = \pi_{j} b_{j}(\vc{O}_{1}) 
+	\phi_{1}(j) &:= Pr(\vc{O}_{1}, S_{1}=j) = \pi_{j} b_{j}(\vc{O}_{1})
 	\label{eq:fwd1} \\
 \begin{split}
-	\phi_{t}(j) &:= Pr(\vc{O}_{t}, S_{t}=j|\vc{O}_{1}, \ldots, 
+	\phi_{t}(j) &:= Pr(\vc{O}_{t}, S_{t}=j|\vc{O}_{1}, \ldots,
 \vc{O}_{t-1}) \\
-	&= \sum_{i=1}^{N} [\phi_{t-1}(i)a_{ij}b_{j}(\vc{O}_{t})] \times 
+	&= \sum_{i=1}^{N} [\phi_{t-1}(i)a_{ij}b_{j}(\vc{O}_{t})] \times
 (\Phi_{t-1})^{-1},
-	\label{eq:fwdt} 
-\end{split} 
+	\label{eq:fwdt}
+\end{split}
 \end{align}
-where $\Phi_{t}=\sum_{i=1}^{N} \phi_{t}(i)$. Combining 
-$\Phi_{t}=Pr(\vc{O}_{t}|\vc{O}_{1}, \ldots, \vc{O}_{t-1})$, and 
-equation~(\ref{eq:condLogl}) gives the following expression for the 
+where $\Phi_{t}=\sum_{i=1}^{N} \phi_{t}(i)$. Combining
+$\Phi_{t}=Pr(\vc{O}_{t}|\vc{O}_{1}, \ldots, \vc{O}_{t-1})$, and
+equation~(\ref{eq:condLogl}) gives the following expression for the
 log-likelihood:
 \begin{equation}
 	l_{T} = \sum_{t=1}^{T} \log \Phi_{t}.
@@ -289,7 +289,7 @@ log-likelihood:
 
 Note that so far no assumptions have been made about the response
 distributions $b_{j}$, hence these can be arbitrary univariate or
-multivariate distributions. 
+multivariate distributions.
 
 
 \section{DepmixS4}
@@ -318,19 +318,19 @@ that handle hidden Markov models but they lack a number of features
 that we needed in our research.  In particular, \pkg{depmixS4} was
 designed to meet the following goals:
 \begin{enumerate}
-		
+
 	\item to be able to fit transition models with covariates, i.e.,
 	to have time-dependent transition matrices
-	
+
 	\item to be able to include covariates in the prior or initial
 	state probabilities of models
-	
+
 	\item to allow for easy extensibility, in particular, to be able
 	to add new response distributions, both univariate and
 	multivariate, and similarly to be able to allow for the addition
 	of other transition models, e.g., continuous time observation
 	models
-	
+
 \end{enumerate}
 
 Although \pkg{depmixS4} is designed to deal with longitudinal or time
@@ -341,15 +341,15 @@ finite mixture model, or a latent class model.  Although there are
 other specialized (R) packages to deal with mixture data, one specific
 feature that we needed which is not available in other packages is the
 possibility to include covariates on the prior probabilities of class
-membership. 
+membership.
 
 
 \subsection{Response distributions and parameters}
 
 % this needs some more on the design, interface to glm and similar
-% other models etc. 
+% other models etc.
 The package is built using S4 classes (object oriented classes in R)
-to allow easy extensibility (Chambers, 1998). 
+to allow easy extensibility (Chambers, 1998).
 
 Each row of the transition matrix and the initial state probabilities:
 \begin{itemize}
@@ -373,7 +373,7 @@ generalized linear modeling framework:
 \end{itemize}
 
 All response models have the option of including covariates
-Other link functions may be used; eg the probit for binary data. 
+Other link functions may be used; eg the probit for binary data.
 
 % possibility of multivariate responses: local independence or true
 % multivariate distributions, eg multivariate normal
@@ -403,12 +403,12 @@ models, but otherwise, direct optimization is done using \pkg{Rdonlp2}
 Two illustrations are provided below of models that analyze single
 participant time series data from two common experimental paradigms.
 In both of these, participants learn different strategies through
-trial and error. 
+trial and error.
 
 
 \subsection{Iowa gambling task}
 
-% what is the IGT? 
+% what is the IGT?
 The Iowa gambling task (IGT) is an experimental paradigm designed to
 mimic real-life decision-making situations (Bechara, Damasio, Damasio
 \& Anderson, 1994), in the way that it factors uncertainty, reward and
@@ -460,12 +460,12 @@ advantageous in the long run.
 % problematic aspects of this analysis
 Typical analyses of these data use the last 60 trials in a series of
 200 trials. A silent assumption that is made in these analyses is that
-behavior has stabilized after 140 trials of learning; this could very 
+behavior has stabilized after 140 trials of learning; this could very
 well be wrong and it is highly likely that there are individual
-differences in this learning process. 
+differences in this learning process.
 
 % proposed analysis here
-Single participant choices analyzed. 
+Single participant choices analyzed.
 
 
 \includegraphics[width=7cm]{graphs/igtdata4.pdf}
@@ -477,115 +477,128 @@ Single participant choices analyzed.
 \end{itemize}
 
 
-Results are the 4-state model (best by AIC/BIC), model predicted 
-probabilities are in the figure ???. States are characterized by 
-different types of behavior, shifting from B/D strategy to C/D 
-(optimal) strategy. 
+Results are the 4-state model (best by AIC/BIC), model predicted
+probabilities are in the figure ???. States are characterized by
+different types of behavior, shifting from B/D strategy to C/D
+(optimal) strategy.
 
 \includegraphics[width=7cm]{graphs/igtmodels4.pdf}
-	
-	
+
+
 
 \subsection{Weather prediction task}
 
-%Still to add models and data. 
+%Still to add models and data.
 
-The Weather Prediction Task (WPT, Knowlton, Squire \& Gluck, 1994) 
-is a probabilistic categorization task, in which participants learn to 
-predict the state of the weather (sunny, or rainy) on the basis 
-of four ``tarot'' cards (cards with abstract geometrical patterns). 
-Each cue pattern is associated with a particular probability distribution 
-over the states of the weather. In order to perform in the task, 
-participants must predict the weather in accordance with these
-conditional probabilities.
+The Weather Prediction Task (WPT, Knowlton, Squire \& Gluck, 1994)
+is a probabilistic categorization task in which participants learn to
+predict (or categorize) the state of the weather (sun or rain) on the basis
+of four ``tarot'' cards (cards with abstract geometrical patterns). On a
+given trial, one, two, or three cues are present. There are a total of
+14 possible cue patterns, and each one is associated with a particular
+probability distribution over the states of the weather. In order to
+perform in the task, participants must predict the weather in accordance
+with these conditional probabilities.
 
-%The WPT has been popular in neuropsychological research, 
+%The WPT has been popular in neuropsychological research,
 %particularly because amnesic patients perform this task rather
 %well, despite not being able to remember actually many aspects
 %of the task (or in some cases, even performing the task at all).
 %This has led to the conclusion that probabilistic category learning
 %depends on implicit memory, which is separate from explicit
-%memory. While this conclusion is debatable (Speekenbrink, Channon 
+%memory. While this conclusion is debatable (Speekenbrink, Channon
 %\& Shanks, 2008), the finding of relatively unimpaired performance
 %by amnesic individuals remains striking.
 
-There are different accounts of probabilistic category learning. 
+There are different accounts of probabilistic category learning.
 According to instance or exemplar learning theories, participants
 learn by storing each encountered cue-outcome pairing. When presented
-with a cue pattern, these exemplars are retrieved from memory, and weighted
-according to their similarity to the probe cue pattern, to form a 
-classification. According to associative theories, participants gradually 
-learn by gradually associating the individual cues (or cue patterns in 
-configural learning) to the outcomes. In rule-learning, participants are 
-taken to extract rules by which to categorize the different cue patterns. 
-Gluck, Shohamy and Myers (2002) proposed a number of such rules (or strategies). A main
-difference between these is whether responses are based on the 
-presence/absence of a single cue, or whether responses are based on 
+with a cue pattern, these exemplars are retrieved from memory, and
+weighted according to their similarity to the probe cue pattern, to
+form a classification. According to associative theories,
+participants gradually learn by gradually associating the individual
+cues (or cue patterns in configural learning) to the outcomes. In
+rule-learning, participants are taken to extract rules by which to
+categorize the different cue patterns. Gluck, Shohamy and Myers (2002)
+proposed a number of such rules (or strategies). A main
+difference between these is whether responses are based on the
+presence/absence of a single cue, or whether responses are based on
 cue patterns. Gluck et al. formulated all strategies in a deterministic and
 optimal manner (e.g., the multi-cue strategy corresponded to giving the optimal
-response to each cue pattern). Meeter et al. allowed for probabilistic 
-responding (a small probability of giving the non-optimal response). 
+response to each cue pattern). Meeter et al. allowed for probabilistic
+responding (a small probability of giving the non-optimal response).
 
-Alternative non-strategy based analyses of the WPT (Lagnado et al, Speekenbrink et al) 
-have estimated response strategies by logistic regression, allowing the regression
-coefficients to change over time.  
+Alternative non-strategy based analyses of the WPT (Lagnado et al, Speekenbrink
+et al) have estimated response strategies by logistic regression, allowing the
+regression coefficients to change over time.
 
-%associative, rule-based.  
+%associative, rule-based.
 Here, we analyze the behavior of a single individual performing the
 WPT for 200 trials. We chose to analyse the ``average'' participant (the
 participant with performance closest to the group average) in a large
-unpublished dataset. We let each state be characterized by a GLM with a 
+unpublished dataset. We let each state be characterized by a GLM with a
 Binomial distributed response and logistic link function (i.e., a logistic
-regression model). We are particularly interested in evidence for 
-strategy switching and whether a DMM can recover a strategy model 
-in line with Gluck et al. (2002). 
+regression model). We are particularly interested in evidence for
+strategy switching and whether a DMM can recover a strategy model
+in line with Gluck et al. (2002).
 
-As we fit the data to a single subject, 
-we must place some constraints. Specifically, we constrain the state 
-transitions to be in a ``left-right'' format (states can only proceed 
-to the immediately adjacent state and never back, and must start in 
-the initial state). We fitted a single, two and three state model to 
+As we fitted a DMM to the data of a single subject, it was necessary
+to place some constraints on the model. Specifically, we constrain the state
+transitions to be in a ``left-right'' format (states can only proceed
+to the immediately adjacent state and never back, and must start in
+the initial state). We fitted a single, two and three state model to
 the data. This showed that a two state model was better than a single
-and three state model.
+or three state model.
 
 \begin{table}
 \caption{Estimates for the weather prediction task}
 \label{tab:WPT}
 \begin{tabular}{lcccccccc} \hline
- & & \multicolumn{1}{c}{1 state} & & \multicolumn{2}{c}{2 state} && \multicolumn{2}{c}{2 state (constr.)} \\ \cline{3-3} \cline{5-6} \cline{8-9}
+ & & \multicolumn{1}{c}{1 state} & & \multicolumn{2}{c}{2 state} &&
+ \multicolumn{2}{c}{2 state (constr.)} \\ \cline{3-3} \cline{5-6} \cline{8-9}
 parameter & & $S_1$ & & $S_1$ & $S_2$ & & $S_1$ & $S_2$ \\ \hline
 (intercept) & & -0.69 & & -2.73 & 0.88 & & -1.24 & 0 \\
 cue 1 && 1.69 && 2.12 & 1.60 && 1.65 & 1.97 \\
 cue 2 && 1.12 && 0.97 & 1.63 && 0 & 1.92 \\
 cue 3 && -0.49 && 0.91 & -2.03 && 0 & -1.58 \\
 cue 4 && -1.32 && 0.69 & -3.16 && 0 & -2.67 \\ \hline
- & & \multicolumn{1}{c}{AIC=204.47} & & \multicolumn{2}{c}{AIC=187.50} && \multicolumn{2}{c}{AIC=185.24}
+ & & \multicolumn{1}{c}{AIC=204.47} & & \multicolumn{2}{c}{AIC=187.50} &&
+ \multicolumn{2}{c}{AIC=185.24}
 \end{tabular}
 \end{table}
 
-Investigation of the parameter estimates (see Table~\ref{tab:WPT}) indicated that the first state might be
-a single cue strategy (the regression coefficient for the first cue was of much 
-larger magnitude than that of the other cues). The second state was a multi-cue
-strategy (all cues had regression coefficients of reasonable magnitude). 
-To reduce the degrees of freedom, and improve parameter estimates, we implemented 
-constraints to force state 1 into a single cue strategy (fixing the coefficients
-of the remaining three cues to 0) and state 2 in a multi-cue strategy (forcing
-the intercept to 0). These restrictions resulted in a better AIC value of AIC=185.24 
-(df=7). Interestingly, the single cue strategy was somewhat different than 
-described by Gluck et al. Parameter estimates indicated relatively more consistent 
-predictions of ``rain'' in the absence of cue 1 ($Pr(\text{sun}) = 0.22$) and more
-inconsistent predictions of ``sun'' in the presence of cue 1 ($Pr(\text{sun}) = 0.60$). 
-The cue weights of the multi-cue strategy were in the direction of the optimal weights. 
-The Viterbi state sequence indicated that the participant used the single
-cue strategy for the first 60 trials, and then switched to the multi-cue strategy.
+Investigation of the parameter estimates (see Table~\ref{tab:WPT}) showed that
+the regression coefficient for the first cue was of much
+larger magnitude than that of the other cues. As such, the first
+state seems representative of single cue strategy. Alternatively,
+as all regression coefficients are positive, it could indicate a ``counting''
+heuristic, where the propensity of ``sun'' responses increases when
+more cues are present (regardless of which cues they are). However, in that
+case, we would expect the regression coefficients to be of roughly identical
+magnitude. The second state seemed to represent a multi-cue strategy, as all
+cues had regression coefficients of reasonable magnitude, with differing
+directions in line with the objective cue validities.
+
+To reduce the degrees of freedom, and improve parameter estimates, we
+implemented constraints to force state 1 into a single cue strategy (fixing the
+coefficients of the remaining three cues to 0) and state 2 in a multi-cue
+strategy (forcing the intercept to 0). These restrictions resulted in a better
+AIC value of AIC=185.24 (df=7). Interestingly, the single cue strategy was
+somewhat different than described by Gluck et al. Parameter estimates indicated
+relatively more consistent predictions of ``rain'' in the absence of cue 1
+($Pr(\text{sun}) = 0.22$) and more inconsistent predictions of ``sun'' in the
+presence of cue 1 ($Pr(\text{sun}) = 0.60$). The cue weights of the multi-cue
+strategy were in the direction of the optimal weights. The Viterbi state
+sequence indicated that the participant used the single cue strategy for the
+first 60 trials, and then switched to the multi-cue strategy.
 
 \section{Discussion}
-	
+
 \begin{itemize}
 	\item depmixS4 can be downloaded from: http://r-forge.r-project.org/depmix/
 	\item It is feasible to fit hidden Markov models in moderate length time series
 	\item Many applications in experimental psychology
-	\item Future developments: 
+	\item Future developments:
 	\begin{enumerate}
 		\item richer measurement models, eg factor models, AR models etc
 		\item richer transition models, eg continuous time measurement occasions
@@ -616,8 +629,8 @@ Dunn, B. D., Dalgleish, T.,  \& Lawrence, A. D. (2006).  The somatic
 marker hypothesis: A critical evaluation.  Neuroscience and
 Biobehavioral Reviews, 30(2), 239-271.
 
-Gluck, M. A., Shohamy, D., \& Myers, C. (2002). How do people solve the 
-weather prediction task?: Individual variability in strategies for 
+Gluck, M. A., Shohamy, D., \& Myers, C. (2002). How do people solve the
+weather prediction task?: Individual variability in strategies for
 probabilistic category learning. Learning \& Memory, 9, 408-418.
 
 Huizenga, H. M., Crone, E. A., \& Jansen, B. R. J. (2007).
@@ -625,15 +638,15 @@ Decision-making in healthy children, adolescents and adults explained
 by the use of increasingly complex proportional reasoning rules.
 Developmental Science, 10(6), 814-825.
 
-Knowlton, B. J., Squire, L. R., \& Gluck, M. A. (1994). 
-Probabilistic classification learning in amnesia. 
+Knowlton, B. J., Squire, L. R., \& Gluck, M. A. (1994).
+Probabilistic classification learning in amnesia.
 Learning \& Memory, 1 , 106-120.
 
 Siegler, R. S. (1981).  Developmental sequences within and between
 concepts.  Monographs of the Society for Research in Child
 Development, 46(2, Serial No.  189).
 
-Visser, Raijmakers, \& Van der Maas (2008). Dynamics book chapter. 
+Visser, Raijmakers, \& Van der Maas (2008). Dynamics book chapter.
 
 \section*{Author note}
 
