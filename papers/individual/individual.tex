@@ -73,40 +73,40 @@ in which discrete change is found.
 % phenomena of discrete change in development/learning
 Piagetian developmental theory (REFERENCE??)  assumes step-wise
 changes in the strategies that children apply in all kinds of tasks
-such as the conservation learning and the balance scale task.  Van der
-Maas et al.  (1992) developed a catastrophe model to describe phase
+such as the conservation learning and the balance scale task.
+\citet{Maas1992} developed a catastrophe model to describe phase
 transitions in learning and developmental processes.  They applied the
 catastrophe model to learning in the conservation of liquid task
 (REFERENCE??)  in which children have to judge relative volumes of
 liquid in glasses of different heights and widths.  Young children
 tend to ignore the width dimension and hence always choose the glass
-with the highest level of liquid (REFERENCE??).  Van der Maas et al.
-(1992) showed that there is a sudden transition to a new strategy in
-which the children also take the width of the glasses into account
-when judging the volume of liquids.
+with the highest level of liquid (REFERENCE??).  \citet{Maas1992}
+showed that there is a sudden transition to a new strategy in which
+the children also take the width of the glasses into account when
+judging the volume of liquids.
 
 % balance scale rules
-Jansen and Van der Maas (2001) applied the catastrophe model to
+\citet{Jansen2001} applied the catastrophe model to
 development of strategies on the balance scale task (Siegler, 1981).
 In the balance scale task participants have to judge which side of a
 balance goes down when the number of weights and their distances to
 the fulcrum are varied over trials.  Younger children tend to ignore
 the distance dimension in this task, and instead focus solely on the
 number of weights on each side of the fulcrum.  This strategy for
-solving balance scale items is called Rule 1 (Siegler, 1981).  Older
+solving balance scale items is called Rule 1 \cite{Siegler1981}.  Older
 children include the distance dimension in determining their response
 to balance scale problems; however, they only do so when the weight
 dimension does not differ between the sides of the balance, i.e., when
 the number of weights is equal on both sides of the balance scale.
-This strategy is called Rule 2 (Siegler, 1981).
+This strategy is called Rule 2 \cite{Siegler1981}.
 
 % hysteresis on the balance scale
-Jansen and Van der Maas (2001) found clear evidence for stage-wise
+\citet{Jansen2001} found clear evidence for stage-wise
 transitions between Rule 1 and Rule 2 by testing criteria that were
 derived from the catastrophe model.  In particular, they found bimodal
 test scores and inaccessibility.  The latter means that there are no
 in-between strategies: children apply either Rule 1 or Rule 2 and
-there is no in-between option.  Jansen and Van der Maas also found
+there is no in-between option.  \citet{Jansen2001} also found
 evidence for hysteresis: the phenomenon that switching between
 strategies is assymetric.  Children can switch from Rule 1 to Rule 2
 and back, but this occurs at different trials.  In particular, if the
@@ -120,7 +120,7 @@ this case the distance difference.
 
 % conditioning and addiction research
 Also in animal learning and conditioning, evidence is found for sudden
-changes in response behavior (Gallistel et al 2004).  In particular,
+changes in response behavior \citet{Gallistel2004}.  In particular,
 in their study, evidence was found for sudden onset of learning: at
 the start of the learning experiment, the pigeons did not learn
 anything and performance was stable; after a number of trials,
@@ -136,9 +136,9 @@ Sudden transitions in learning are also observed in simple
 discrimination learning paradigms in which participants learn to
 discriminate a number of stimuli based on a single dimension such as
 form or color.  This kind of learning is referred to as all-or-none
-learning or concept identification learning.  Raijmakers et al (2001)
+learning or concept identification learning.  \citet{Raijmakers2001}
 found evidence for different strategies applied by children when faced
-with such a learning task.  Schmittmann et al (2006) reanalyzed their
+with such a learning task.  \citet{Schmittmann2006} reanalyzed their
 data using hidden Markov models to show that both strategies are
 characterized by sudden transitions in the learning process.
 
@@ -147,20 +147,19 @@ In above mentioned applications, the data consist mostly of a few
 repeated measurements administered to large groups of participants.
 The focus in the current chapter is rather on data that consist of
 many repeated measurements, or time series, observed in only a few
-participants or even just a single participant.  For example, Visser,
-Raijmakers, \& Van der Maas (2008) analyzed data from a single
-participant in an experimental task that manipulates the trade-off
-between speed and accuracy.  The data consisted of three time series
-with each around 150 repeated measurements of both reaction time and
-accuracy.  Below we provide examples of analyzing time series from
-single participants from two experiments; one from the Iowa Gambling
-Task and one from the weather prediction task.  The interest in these
-tasks is to show that participants develop different strategies over
-time in responding to the stimuli and that the transition from one
-strategy to the next is a discrete event.  Before providing these
-illustrations, below we give a formalization of dependent mixture
-models and a brief overview of the DepmixS4 package that was developed
-to specify and fit such models.
+participants or even just a single participant.  For example,
+\citet{Visser2009} analyzed data from a single participant in an
+experimental task that manipulates the trade-off between speed and
+accuracy.  The data consisted of three time series with each around
+150 repeated measurements of both reaction time and accuracy.  Below
+we provide examples of analyzing time series from single participants
+from two experiments; one from the Iowa Gambling Task and one from the
+weather prediction task.  The interest in these tasks is to show that
+participants develop different strategies over time in responding to
+the stimuli and that the transition from one strategy to the next is a
+discrete event.  Before providing these illustrations, below we give a
+formalization of dependent mixture models and a brief overview of the
+DepmixS4 package that was developed to specify and fit such models.
 
 
 \section{Dependent Mixture Models}
@@ -410,52 +409,50 @@ trial and error.
 
 % what is the IGT?
 The Iowa gambling task (IGT) is an experimental paradigm designed to
-mimic real-life decision-making situations (Bechara, Damasio, Damasio
-\& Anderson, 1994), in the way that it factors uncertainty, reward and
-punishment (Dunn, Dalgleish, \& Lawrence, 2006).  The task requires
-the selection of cards from four decks.  Each deck is characterized by
-a certain amount of gain (delivered on each draw), frequency of loss,
-and amount of loss.  Two decks (A and B) yield consistently high
-rewards, but also high, probabilistic penalties and are both (equally)
-disadvantageous in the long run.  The other two decks (C and D) yield
-consistently smaller rewards, but also low, probabilistic penalties
-and are both (equally) advantageous in the long run.  It is assumed
-that the ventromedial prefrontal cortex (VMPFC) is active in the IGT
-as VMPC patients show impaired task performance.  Their preference for
-the decks with immediate high rewards indicates ``myopia for the
-future''.
+mimic real-life decision-making situations \cite{Bechara1994}, in the
+way that it factors uncertainty, reward and punishment
+\cite{Dunn2006}.  The task requires the selection of cards from four
+decks.  Each deck is characterized by a certain amount of gain
+(delivered on each draw), frequency of loss, and amount of loss.  Two
+decks (A and B) yield consistently high rewards, but also high,
+probabilistic penalties and are both (equally) disadvantageous in the
+long run.  The other two decks (C and D) yield consistently smaller
+rewards, but also low, probabilistic penalties and are both (equally)
+advantageous in the long run.  It is assumed that the ventromedial
+prefrontal cortex (VMPFC) is active in the IGT as VMPC patients show
+impaired task performance.  Their preference for the decks with
+immediate high rewards indicates ``myopia for the future''.
 
 % what is the HDT? developmental trends and relevance?
-Crone \& van der Molen (2004) designed a developmentally appropriate
-analogue of the IGT, the Hungry Donkey Task (HDT), with a similar win
-and loss schedule although the abolute amounts were redcuced by a
-factor of 25.  The HDT is a pro-social game inviting the player to
-assist a hungry donkey to collect as many apples as possible, by
-opening one of four doors.  Again, doors A and B are characterized by
-a high constant gain (10 apples), whereas doors C and D deliver a low
-constant gain (2 apples).  At doors A and C, a loss of 50 apples (A)
-or 10 apples (C) is delivered in 50\% of the trials.  For doors B and
-D, frequency of loss is only 10\%.  The median loss of doors B and D
-is 10 and 2, respectively.  Crone and van der Molen administered the
-HDT to children from four age groups (6-9, 10-12, 13-15, and 18-25
-year-olds) and concluded that children also fail to consider future
-consequences.
+\cite{Crone2004} designed a developmentally appropriate analogue of
+the IGT, the Hungry Donkey Task (HDT), with a similar win and loss
+schedule although the abolute amounts were redcuced by a factor of 25.
+The HDT is a pro-social game inviting the player to assist a hungry
+donkey to collect as many apples as possible, by opening one of four
+doors.  Again, doors A and B are characterized by a high constant gain
+(10 apples), whereas doors C and D deliver a low constant gain (2
+apples).  At doors A and C, a loss of 50 apples (A) or 10 apples (C)
+is delivered in 50\% of the trials.  For doors B and D, frequency of
+loss is only 10\%.  The median loss of doors B and D is 10 and 2,
+respectively.  \cite{Crone2004} administered the HDT to children from
+four age groups (6-9, 10-12, 13-15, and 18-25 year-olds) and concluded
+that children also fail to consider future consequences.
 
 % strategic reanalysis of the HDT: different strategies found by
 % finite mixture analysis
-A reanalysis of this dataset (Huizenga, Crone, \& Jansen, 2007)
-indicated that participants might solve the task by sequentially
-considering the three dimensions (constant gain, frequency of loss,
-and amount of loss) in order to choose a door.  Most youngest children
-in the dataset seem to focus on the dominant dimension in the task,
-frequency of loss, resulting in equal preference for doors B and D.
-Older participants seem to use a two-dimensional rule where
-participants first focus on the frequency of loss and then consider
-amount of loss, resulting in a preference for door D. A third very
-small subgroup seems to use an integrative rule where participants
-combine all three dimensions in the appropriate way.  Participants
-using the integrative rule pick cards from doors C and D, which are
-advantageous in the long run.
+A reanalysis of this dataset \cite{Huizenga2007} indicated that
+participants might solve the task by sequentially considering the
+three dimensions (constant gain, frequency of loss, and amount of
+loss) in order to choose a door.  Most youngest children in the
+dataset seem to focus on the dominant dimension in the task, frequency
+of loss, resulting in equal preference for doors B and D. Older
+participants seem to use a two-dimensional rule where participants
+first focus on the frequency of loss and then consider amount of loss,
+resulting in a preference for door D. A third very small subgroup
+seems to use an integrative rule where participants combine all three
+dimensions in the appropriate way.  Participants using the integrative
+rule pick cards from doors C and D, which are advantageous in the long
+run.
 
 % problematic aspects of standard analysis
 Typical analyses of these data use the last 60 trials in a series of
@@ -487,9 +484,9 @@ Criterion (AIC; Akaike, 1973).
 \nocite{Akaike1973} % check the year!!
 
 We chose to analyze two participants that used different strategies at
-the end of the task as analyzed in the manner proposed by Huizenga et
-al\.  (2007).  The first participants' data were best described by a
-4-state model.  This model's transition matrix is: 
+the end of the task as analyzed in the manner proposed by
+\citet{Huizenga2007}.  The first participants' data were best
+described by a 4-state model.  This model's transition matrix is:
 $$
 \mat{A} = \begin{pmatrix} 
 				0.64 & 0.33 & 0.00 & 0.03 \\
@@ -527,7 +524,7 @@ Figure~\ref{fig:post4}.
 
 \begin{figure}
 \begin{center}
-	\scalebox{0.9}{\includegraphics*{graphs/post4.pdf}}
+	\includegraphics[width=\textwidth]{graphs/post4.pdf}
 	\label{fig:post4}
 	\caption{Posterior state sequence for the 4 state model.}
 \end{center}
@@ -548,7 +545,7 @@ Figure~\ref{fig:igt4}.
 
 \begin{figure}
 \begin{center}
-	\scalebox{1}{\includegraphics*{graphs/igt4.pdf}}
+	\includegraphics[width=\textwidth]{graphs/igt4.pdf}
 	\label{fig:igt4}
 	\caption{Data and model predicted proportions of door choices in
 	the IGT.}
@@ -556,7 +553,7 @@ Figure~\ref{fig:igt4}.
 \end{figure}
 
 The initial preference for B and D choices confirms the theory
-expressed in Huizenga et al. (2007) that frequency of loss is the
+expressed in \citet{Huizenga2007} that frequency of loss is the
 dominant dimension in the IGT. The final states with mostly C 
 choices reprensents one of the optimal strategies, which consists of
 both C and D responses. Note that both C and D reponses generate equal
@@ -578,6 +575,8 @@ of the weather.  In order to perform in the task, participants must
 predict the weather in accordance with these conditional
 probabilities.
 
+\nocite{Knowlton1994}
+
 %The WPT has been popular in neuropsychological research,
 %particularly because amnesic patients perform this task rather
 %well, despite not being able to remember actually many aspects
@@ -597,19 +596,19 @@ form a classification.  According to associative theories,
 participants gradually learn by gradually associating the individual
 cues (or cue patterns in configural learning) to the outcomes.  In
 rule-learning, participants are taken to extract rules by which to
-categorize the different cue patterns.  Gluck, Shohamy and Myers
-(2002) proposed a number of such rules (or strategies).  A main
-difference between these is whether responses are based on the
-presence/absence of a single cue, or whether responses are based on
-cue patterns.  Gluck et al.  formulated all strategies in a
-deterministic and optimal manner (e.g., the multi-cue strategy
-corresponded to giving the optimal response to each cue pattern).
-Meeter et al.  allowed for probabilistic responding (a small
-probability of giving the non-optimal response).
+categorize the different cue patterns.  \cite{Gluck2002} proposed a
+number of such rules (or strategies).  A main difference between these
+is whether responses are based on the presence/absence of a single
+cue, or whether responses are based on cue patterns.  Gluck et al.
+formulated all strategies in a deterministic and optimal manner (e.g.,
+the multi-cue strategy corresponded to giving the optimal response to
+each cue pattern).  Meeter et al.  allowed for probabilistic
+responding (a small probability of giving the non-optimal response).
 
-Alternative non-strategy based analyses of the WPT (Lagnado et al,
-Speekenbrink et al) have estimated response strategies by logistic
-regression, allowing the regression coefficients to change over time.
+Alternative non-strategy based analyses of the WPT
+\cite{Lagnado??,Speekenbrink??} have estimated response strategies by
+logistic regression, allowing the regression coefficients to change
+over time.
 
 %associative, rule-based.
 Here, we analyze the behavior of a single individual performing the
@@ -619,7 +618,7 @@ large unpublished dataset.  We let each state be characterized by a
 GLM with a Binomial distributed response and logistic link function
 (i.e., a logistic regression model).  We are particularly interested
 in evidence for strategy switching and whether a DMM can recover a
-strategy model in line with Gluck et al.  (2002).
+strategy model in line with \cite{Gluck2002}.
 
 As we fitted a DMM to the data of a single subject, it was necessary
 to place some constraints on the model.  Specifically, we constrain
@@ -665,7 +664,7 @@ implemented constraints to force state 1 into a single cue strategy
 in a multi-cue strategy (forcing the intercept to 0).  These
 restrictions resulted in a better AIC value of AIC=185.24 (df=7).
 Interestingly, the single cue strategy was somewhat different than
-described by Gluck et al.  Parameter estimates indicated relatively
+described by \citet{Gluck2002}  Parameter estimates indicated relatively
 more consistent predictions of ``rain'' in the absence of cue 1
 ($Pr(\text{sun}) = 0.22$) and more inconsistent predictions of ``sun''
 in the presence of cue 1 ($Pr(\text{sun}) = 0.60$).  The cue weights
@@ -691,45 +690,6 @@ switched to the multi-cue strategy.
 	\item standard errors of parameters
 \end{itemize}
 
-
-
-References
-
-Bechara, A., Damasio, A. R., Damasio, H., \& Anderson, S. W.(1994).
-Insensitivity to future consequences following damage to human
-prefrontal cortex.  Cognition, 50(1Ð3), 7Ð15.
-
-Chambers, J. M. (1998). Programming with Data: A Guide to the S Lan-
-guage. New York: Springer-Verlag.
-
-Crone, E. A.,  \& van der Molen, M. W. (2004).  Developmental changes in
-real life decision making: Performance on a gambling task previously
-shown to depend on the ventromedial prefrontal cortex.  Developmental
-Neuropsychology, 25(3), 251-279.
-
-Dunn, B. D., Dalgleish, T.,  \& Lawrence, A. D. (2006).  The somatic
-marker hypothesis: A critical evaluation.  Neuroscience and
-Biobehavioral Reviews, 30(2), 239-271.
-
-Gluck, M. A., Shohamy, D., \& Myers, C. (2002). How do people solve the
-weather prediction task?: Individual variability in strategies for
-probabilistic category learning. Learning \& Memory, 9, 408-418.
-
-Huizenga, H. M., Crone, E. A., \& Jansen, B. R. J. (2007).
-Decision-making in healthy children, adolescents and adults explained
-by the use of increasingly complex proportional reasoning rules.
-Developmental Science, 10(6), 814-825.
-
-Knowlton, B. J., Squire, L. R., \& Gluck, M. A. (1994).
-Probabilistic classification learning in amnesia.
-Learning \& Memory, 1 , 106-120.
-
-Siegler, R. S. (1981).  Developmental sequences within and between
-concepts.  Monographs of the Society for Research in Child
-Development, 46(2, Serial No.  189).
-
-Visser, Raijmakers, \& Van der Maas (2008). Dynamics book chapter.
-
 \section*{Author note}
 
 Ingmar Visser was supported by an EC Framework 6 grant, project 516542
@@ -740,7 +700,8 @@ Gambling task data and David Lagnado for the Weather Prediction Task
 data.
 
 
-\bibliography{all,ingmar}
+
+\bibliography{all,ingmar,individual}
 
 
 \end{document}
