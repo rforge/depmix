@@ -15,6 +15,10 @@ parameter vectors)
 
 5) bugs in transInit met covariaat met 3 level factor?
 
+6) bug in nlin: see lincon versus linconFull in depmixfit.R
+
+7) help voor fixed, equal constraints opgeven
+
 
 
 TODO Medium term

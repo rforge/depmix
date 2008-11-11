@@ -53,7 +53,8 @@ to model the change process.  In addition, transition parameters can
 be made to depend on covariates as well, such that the switching
 regime between states depends on characteristics of the individual or
 the experimental situation.  The model is illustrated with an example
-of participants' learning in the weather prediction task.}
+of participants' learning in the Weather Prediction Task and in the 
+Iowa Gambling Task.}
 
 
 \begin{document}
@@ -71,19 +72,19 @@ terms and providing some illustrations, we first review some examples
 in which discrete change is found.
 
 % phenomena of discrete change in development/learning
-Piagetian developmental theory (REFERENCE??)  assumes step-wise
-changes in the strategies that children apply in all kinds of tasks
-such as the conservation learning and the balance scale task.
-\citet{Maas1992} developed a catastrophe model to describe phase
-transitions in learning and developmental processes.  They applied the
-catastrophe model to learning in the conservation of liquid task
-(REFERENCE??)  in which children have to judge relative volumes of
-liquid in glasses of different heights and widths.  Young children
-tend to ignore the width dimension and hence always choose the glass
-with the highest level of liquid (REFERENCE??).  \citet{Maas1992}
-showed that there is a sudden transition to a new strategy in which
-the children also take the width of the glasses into account when
-judging the volume of liquids.
+Piagetian developmental theory assumes step-wise changes in the
+strategies that children apply in all kinds of tasks such as the
+conservation learning and the balance scale task (REFERENCE??).
+\citet{Maas1992} developed a catastrophe model to describe step-wise
+changes or phase transitions in learning and developmental processes.
+They applied the catastrophe model to learning in the conservation of
+liquid task (REFERENCE??)  in which children have to judge relative
+volumes of liquid in glasses of different heights and widths.  Young
+children tend to ignore the width dimension and hence always choose
+the glass with the highest level of liquid (REFERENCE??).
+\citet{Maas1992} showed that there is a sudden transition to a new
+strategy in which the children also take the width of the glasses into
+account when judging the volume of liquids.
 
 % balance scale rules
 \citet{Jansen2001} applied the catastrophe model to
@@ -120,16 +121,16 @@ this case the distance difference.
 
 % conditioning and addiction research
 Also in animal learning and conditioning, evidence is found for sudden
-changes in response behavior \citet{Gallistel2004}.  In particular,
-in their study, evidence was found for sudden onset of learning: at
-the start of the learning experiment, the pigeons did not learn
-anything and performance was stable; after a number of trials,
-learning kicks in and there are large increases in performance.  The
-interest here is in modeling the distribution of onset times: that is,
-the trials at which learning suddenly takes off.  A similar interest
-in process onset times is found in addiction research.  For example,
-(REFERENCE) study the age at which children start using alcohol and
-how this related to eventual outcomes in terms of addiction.
+changes in response behavior \citet{Gallistel2004}.  In particular, in
+their study, evidence was found for sudden onset of learning: at the
+start of the learning experiment, the pigeons did not learn anything
+and performance was stable; after a number of trials, learning kicks
+in and there are large increases in performance.  The interest here is
+in modeling the distribution of onset times: that is, the trials at
+which learning suddenly takes off.  A similar interest in process
+onset times is found in addiction research.  For example,
+\cite{Sher2004} study the age at which children start using alcohol
+and how this related to eventual outcomes in terms of addiction.
 
 % discrimination and categorization learning
 Sudden transitions in learning are also observed in simple
@@ -154,7 +155,7 @@ accuracy.  The data consisted of three time series with each around
 150 repeated measurements of both reaction time and accuracy.  Below
 we provide examples of analyzing time series from single participants
 from two experiments; one from the Iowa Gambling Task and one from the
-weather prediction task.  The interest in these tasks is to show that
+Weather Prediction Task.  The interest in these tasks is to show that
 participants develop different strategies over time in responding to
 the stimuli and that the transition from one strategy to the next is a
 discrete event.  Before providing these illustrations, below we give a
@@ -168,7 +169,7 @@ DepmixS4 package that was developed to specify and fit such models.
 In this section we describe a class of models which are especially
 suitable for describing and testing discrete change in (individual)
 time series data.  The dependent mixture model is similar to, but
-slightly different from two other types of models that are in use for
+slightly different from, two other types of models that are in use for
 modelling discrete change: the hidden and the latent Markov models.
 
 % history of Markov models/LMM applications
@@ -176,24 +177,23 @@ Markov models have been used extensively in the social sciences; for
 example, in analyzing language learning \cite{Miller1952,Miller1963},
 in the analysis of paired associate learning \cite{Wickens1982}.  In
 these models, the focus is on survey type data: a few repeated
-measurements taken in a large sample.  \citeA{Langeheine1990}
-discusses latent Markov models and their use in sociology ands
-political science (see also McCutcheon, 1987).  Latent transition
-models, for example, been used in studying development of math skills
-\citep{Collins1992} and in medical applications \citep{Reboussin1998};
-\citet{Kaplan2008} provides an overview of such models, that are
-called stage-sequential models in the developmental psychology
-literature.
+measurements taken in a large sample.  \citeA{Langeheine1990} discuss
+latent Markov models and their use in sociology and political science
+(see also McCutcheon, 1987).  Latent transition models have been used
+in studying development of math skills \citep{Collins1992} and in
+medical applications \citep{Reboussin1998}; \citet{Kaplan2008}
+provides an overview of such models, that are called stage-sequential
+models in the developmental psychology literature.
 
 \nocite{McCutcheon1987}
 
 % hidden Markov models
 Hidden Markov models (HMM) tend to be used in the analysis of long
-univariate and individual timeseries.  For example, HMMs are the model
+univariate (individual) timeseries.  For example, HMMs are the model
 of choice in speech recognition applications \cite{Rabiner1989}.  In
-biology, HMMs are used to analyze DNA sequences and in econometric
-science, to analyze changes in stock market prices and commodities
-\cite{Kim1994}.
+biology, HMMs are used to analyze DNA sequences \cite{Krogh1998} and
+in econometric science, to analyze changes in stock market prices and
+commodities \cite{Kim1994}.
 
 % depmix model
 The dependent mixture model that we propose here spans the range from
@@ -206,6 +206,8 @@ The dependent mixture model consists of the following elements:
 	\item $S_{t} = \mat{A}S_{t-1}+\xi_{t}, \mat{A}$, a transition matrix
 	\item $O_{t} = \mat{B}(S_{t}) + \zeta_{t}, \mat{B}$,  an observation density
 \end{enumerate}
+Here $\xi_{t}$ and $\zeta_{t}$ are independent error processes 
+\cite{Elliott1995}. 
 
 % state space
 The state space, which is a set of discrete states, captures the
@@ -221,6 +223,9 @@ analyzing categorization learning data, in which participants learn to
 categorize a set of objects, a typical initial state is that
 participants are guessing because at the start of the task they have
 no knowledge of which features are important in categorization.
+Hence, the states in the state space represent knowledge states of the
+participants, such that different knowledge states lead to different
+observed behavior or responses.
 
 % transitions/matrix
 The transition matrix $\mat{A}$ describes the transitions between
@@ -242,7 +247,7 @@ strategy that a participant is using at a given measurement occasion.
 % log-likelihood
 The log-likelihood of DMMs is usually computed by the
 so-called forward-backward algorithm \citep{Baum1966,Rabiner1989}, or
-rather by the forward part of this algorithm.  \cite{Lystig2002}
+rather by the forward part of this algorithm.  \citet{Lystig2002}
 changed the forward algorithm in such a way as to allow computing the
 gradients of the log-likelihood at the same time.  They start by
 rewriting the likelihood as follows (for ease of exposition the
@@ -264,7 +269,7 @@ The log-likelihood can now be expressed as:
 	\label{eq:condLogl}
 \end{equation}
 
-To compute the log-likelihood, \cite{Lystig2002} define the following
+To compute the log-likelihood, \citet{Lystig2002} define the following
 (forward) recursion:
 \begin{align}
 	\phi_{1}(j) &:= Pr(\vc{O}_{1}, S_{1}=j) = \pi_{j} b_{j}(\vc{O}_{1})
@@ -300,35 +305,29 @@ dependent mixture models in the R programming language \citep{R2008}.
 This includes standard Markov models, latent/hidden Markov models, and
 latent class and finite mixture distribution models.  The models can
 be fitted on mixed multivariate data with multinomial and/or gaussian
-distributions.  Parameters can be estimated subject to general linear
-constraints.  Parameter estimation is done through an EM algorithm or
-by a direct optimization approach with gradients using the
-\code{Rdonlp2} optimization routine when contraints are imposed on the
-parameters.
+distributions.  
 
 % design goals
 The \pkg{depmixS4} package was motivated by the fact that Markovian
 models are used commonly in the social sciences, but no comprehensive
-package was available for fitting such models.  Common programs for
-Markovian models include Panmark \citep{Pol1996}, and for latent class
-models Latent Gold \citep{Vermunt2003}.  Those programs are lacking a
-number of important features.  There are currently some packages in R
-that handle hidden Markov models but they lack a number of features
-that we needed in our research.  In particular, \pkg{depmixS4} was
-designed to meet the following goals:
+package was available for fitting such models in R. Common programs
+for Markovian models include Panmark \citep{Pol1996}, and for latent
+class models Latent Gold \citep{Vermunt2003}.  Those programs are
+lacking a number of features that were needed in our own research.  In
+particular, \pkg{depmixS4} was designed to meet the following goals:
 \begin{enumerate}
 
 	\item to be able to fit transition models with covariates, i.e.,
-	to have time-dependent transition matrices
+	to have time-dependent transition matrices.
 
 	\item to be able to include covariates in the prior or initial
-	state probabilities of models
+	state probabilities of models.
 
-	\item to allow for easy extensibility, in particular, to be able
+	\item to allow for easy extensibility; in particular, to be able
 	to add new response distributions, both univariate and
 	multivariate, and similarly to be able to allow for the addition
-	of other transition models, e.g., continuous time observation
-	models
+	of other transition models, e.g., models for observations in 
+	continuous time. 
 
 \end{enumerate}
 
@@ -336,63 +335,82 @@ Although \pkg{depmixS4} is designed to deal with longitudinal or time
 series data, for say $T>100$, it can also handle the limit case with
 $T=1$ in analyzing cross-sectional data.  In those cases, there are no
 time dependencies between observed data, and the model reduces to a
-finite mixture model, or a latent class model.  Although there are
-other specialized (R) packages to deal with mixture data, one specific
-feature that we needed which is not available in other packages is the
-possibility to include covariates on the prior probabilities of class
-membership.
+finite mixture model \cite{McLachlan2000}, or a latent class model
+\cite{McCutcheon1987}.  Although there are other specialized (R-)
+packages to deal with mixture data, one specific feature that we
+needed which is not available in other packages is the possibility to
+include covariates on the prior probabilities of class membership.
 
-
-\subsection{Response distributions and parameters}
-
-% this needs some more on the design, interface to glm and similar
-% other models etc.
 The package is built using S4 classes (object oriented classes in R)
-to allow easy extensibility (Chambers, 1998).
+to allow easy extensibility (Chambers, 1998). A depmix model consists 
+of the following: 
+\begin{enumerate} 
+	\item A model for the initial probabilities or prior 
+	\item A list of transition models; one model for each row of the 
+	transition matrix
+	\item A list of response models for each of the states of the model; 
+	this is a list of lists in the case of multivariate responses. 
+\end{enumerate} 
+Each of these are adressed briefly below. 
 
-Each row of the transition matrix and the initial state probabilities:
-\begin{itemize}
-	\item is modeled as a multinomial distribution
-	\item uses the logistic link function to include covariates
-	\item can have time-dependent covariates
-\end{itemize}
 
-% response distributions include the possibility to have direct
-% effects of covariates or predictors as well as indirect effects
-% through the use of covariates on the transition matrix and the
-% initial state probabilities
-Current options for the response models are models from the
-generalized linear modeling framework:
+\subsection{Transition and prior probabilities models}
 
-\begin{itemize}
-	\item normal distribution; continuous, gaussian data
-	\item binomial logistic; binary data
-	\item Poisson distribution; count data
-	\item multinomial logistic; multiple choice data
-\end{itemize}
+% transition and initial state probs
+Each row of the transition matrix and the vector of initial state 
+probabilities is modelled as a baseline-category multinomial logistic 
+model \cite<see>[chapter 7]{Agresti2002}. This means that covariates 
+can be used as predictors in these models. In particular, the model 
+for each multinomial is:
+\begin{equation} 
+	\pi_{i} = \frac{\exp(\alpha_{i}+\mathbf{\beta}^{`}_{i}\vc{x})}
+				{1+\sum_{j=1}^{J-1}\exp(\alpha_{j}+\mathbf{\beta}^{`}_{j}\vc{x})},
+\end{equation}
+where $\pi_{i}$ is the probability (e.g.\ the probability of the
+$i$-th initial state); the $\alpha_{i}$ are the category intercepts;
+the $\mathbf{\beta}_{i}$ are the category regression coefficients;
+$\vc{x}$ is a vector of covariates or predictors; $J$ is the number
+of states; in this example, $J$ serves as the baseline-category,
+meaning that $\alpha_{J}$ and $\mathbf{\beta}_{J}$ are zero. 
 
-All response models have the option of including covariates
-Other link functions may be used; eg the probit for binary data.
 
-% possibility of multivariate responses: local independence or true
-% multivariate distributions, eg multivariate normal
+\subsection{Response models}
 
+% response models
+Response models in \pkg{depmixS4} interface with the \code{glm} 
+functions available in R and with the \pkg{nnet}-package for the 
+multinomial logistic models. Normally distributed data can hence be 
+modelled with direct effects included as well. For example, normal 
+data are modelled as:
+\begin{equation}
+	O_{t}|S_{t} = \mu + \mathbf{\beta}^{`}\vc{x} + \epsilon_{t},
+\end{equation}
+where $\mu$ the (state-dependent) mean; $\vc{x}$ is a vector of
+covariates or predictors; $\mathbf{\beta}$ is the vector of
+(state-dependent) regression coefficients; $\epsilon_{t}$ is a
+normally distributed error with (state-dependent) standard deviation
+$\sigma$.
+
+Multinomial responses are modeled by the same multinomial 
+baseline-category logistic model as is used for the transition 
+probabilities and the initial state probabilities. Other response 
+functions from the generalized linear model family that can be used 
+include: binomial logistic regression, poisson regression, gamma and 
+inverse gaussian. There is also support for the multivariate normal 
+distribution. 
+
+% MAARTEN: de multinomial logistic models maken weer gebruik van andere
+% packages toch, kun je daar de referentie van geven?
 
 
 \subsection{Parameter Estimation}
 
 Parameters are estimated in \pkg{depmixS4} using the EM algorithm or
-through the use of a general Newton-Raphson optimizer.  The EM
-algorithm however has some drawbacks.  First, it can be slow to
-converge towards the end of optimization (although it is usually
-faster than direct optimization at the start, so possibly a
-combination of EM and direct optimization is fastest).  Second,
-applying constraints to parameters can be problematic; in particular,
-EM can lead to wrong parameter estimates when applying constraints.
-Hence, in \pkg{depmixS4}, EM is used by default in unconstrained
-models, but otherwise, direct optimization is done using \pkg{Rdonlp2}
-\cite{Tamura2007,Spellucci2002}, because it handles general linear
-(in)equality constraints, and optionally also non-linear constraints.
+through the use of a general Newton-Raphson optimizer.  EM is used by
+default in unconstrained models, but otherwise, direct optimization is
+done using \pkg{Rdonlp2} \cite{Tamura2007,Spellucci2002}, because it
+handles general linear (in)equality constraints, and optionally also
+non-linear constraints.
 
 
 \section{Illustrations}
@@ -673,22 +691,31 @@ weights.  The Viterbi state sequence indicated that the participant
 used the single cue strategy for the first 60 trials, and then
 switched to the multi-cue strategy.
 
+
 \section{Discussion}
 
+General issues
 \begin{itemize}
-	\item depmixS4 can be downloaded from: http://r-forge.r-project.org/depmix/
-	\item It is feasible to fit hidden Markov models in moderate length time series
-	\item Many applications in experimental psychology
-	\item Future developments:
-	\begin{enumerate}
-		\item richer measurement models, eg factor models, AR models etc
-		\item richer transition models, eg continuous time measurement occasions
-		\item explicit state durations
-		\item identifiability of models
-		\item model selection
-	\end{enumerate}
-	\item standard errors of parameters
+	\item It is feasible to fit hidden Markov models in moderate length individual time series
+	\item illustrations show results that are consistent with usual group based analyses AND 
+	provide extra information on switching between strategies over the course of learning
+	\item Many applications in experimental psychology: examples????
 \end{itemize}
+
+Specific insights from the illustrations: suggestions welcome
+
+Possible future extensions in depmixS4
+\begin{enumerate}
+	\item richer measurement models, eg factor models, AR models etc
+	\item richer transition models, eg continuous time measurement occasions
+	\item explicit state durations
+	\item identifiability of models
+	\item model selection
+\end{enumerate}
+
+
+
+
 
 \section*{Author note}
 
@@ -699,10 +726,7 @@ Huizenga, Brenda Jansen and Anna van Duijvenvoorde for the Iowa
 Gambling task data and David Lagnado for the Weather Prediction Task
 data.
 
-
-
 \bibliography{all,ingmar,individual}
-
 
 \end{document}
 
