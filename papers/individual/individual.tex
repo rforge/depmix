@@ -1,6 +1,8 @@
 %&LaTeX
 
-\documentclass[a4paper,12pt,man]{apa} % nobf, doc, apa
+\documentclass[a4paper,12pt,man,english]{apa} % nobf, doc, apa
+
+\usepackage[english]{babel} % ik krijg anders foute citaties...in Zweeds formaat???
 
 \usepackage[]{amsmath, amsfonts, amstext, amsthm}
 \usepackage{amssymb}
@@ -582,7 +584,8 @@ profits in the long run.
 
 %Still to add models and data.
 
-The Weather Prediction Task (WPT, Knowlton, Squire \& Gluck, 1994) is
+The Weather Prediction Task \cite<WPT>{Knowlton1994} %(WPT, Knowlton, Squire \& Gluck, 1994) 
+is
 a probabilistic categorization task in which participants learn to
 predict (or categorize) the state of the weather (sun or rain) on the
 basis of four ``tarot'' cards (cards with abstract geometrical
@@ -624,7 +627,7 @@ each cue pattern).  Meeter et al.  allowed for probabilistic
 responding (a small probability of giving the non-optimal response).
 
 Alternative non-strategy based analyses of the WPT
-\cite{Lagnado??,Speekenbrink??} have estimated response strategies by
+\cite{Lagnado2006,Speekenbrink2008} have estimated response strategies by
 logistic regression, allowing the regression coefficients to change
 over time.
 
@@ -636,7 +639,7 @@ large unpublished dataset.  We let each state be characterized by a
 GLM with a Binomial distributed response and logistic link function
 (i.e., a logistic regression model).  We are particularly interested
 in evidence for strategy switching and whether a DMM can recover a
-strategy model in line with \cite{Gluck2002}.
+strategy model in line with \citeA{Gluck2002}.
 
 As we fitted a DMM to the data of a single subject, it was necessary
 to place some constraints on the model.  Specifically, we constrain
