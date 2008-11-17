@@ -1,5 +1,4 @@
 %&LaTeX
-
 \documentclass[a4paper,12pt,man,english]{apa} % nobf, doc, apa
 
 \usepackage[english]{babel} % ik krijg anders foute citaties...in Zweeds formaat???
@@ -23,12 +22,13 @@
 
 \title{A Framework for Discrete Change}
 
-\author{Ingmar Visser, Brenda R. J. Jansen, \& Maarten Speekenbrink}
+\twoauthors{Ingmar Visser \& Brenda R. J. Jansen}{Maarten Speekenbrink}
 
 \date{\today}
 
-\affiliation{Department of Psychology, University of Amsterdam\\
- Correspondence concerning this article should be addressed to:
+\twoaffiliations{Department of Psychology, University of Amsterdam}{Department of Cognitive, Perceptual and Brain Sciences, University College London}
+
+\note{Correspondence concerning this article should be addressed to:
  \\
  Ingmar Visser \\
  Department of Psychology, University of Amsterdam \\
@@ -50,13 +50,13 @@ measurement models.  In this paper, the basic model is extended to
 include arbitrary distributions for the observed variables, including
 multi-variate distributions.  Moreover, there is optional support to
 include time-varying predictors.  In effect, this model consists of
-mixtures of general linear models with Markovian depencies over time
+mixtures of generalized linear models with Markovian dependencies over time
 to model the change process.  In addition, transition parameters can
 be made to depend on covariates as well, such that the switching
 regime between states depends on characteristics of the individual or
 the experimental situation.  The model is illustrated with an example
-of participants' learning in the Weather Prediction Task and in the 
-Iowa Gambling Task.}
+of participants' learning in the Iowa Gambling Task and in the Weather 
+Prediction Task.}
 
 
 \begin{document}
@@ -66,7 +66,7 @@ Iowa Gambling Task.}
 Discrete change frequently occurs in learning and development: in
 learning concepts, in performance on Piagetian tasks, in
 discrimination learning and in conditioning.  This chapter is
-concerned with detecting the time points of change in (individual)
+concerned with detecting the nature and time points of change in (individual)
 time series.  We present a framework of dependent mixture models that can
 be used to differentiate between gradual and discrete learning events
 in individual time series data.  Before presenting the model in formal
@@ -106,12 +106,12 @@ This strategy is called Rule 2 \cite{Siegler1981}.
 % hysteresis on the balance scale
 \citet{Jansen2001} found clear evidence for stage-wise
 transitions between Rule 1 and Rule 2 by testing criteria that were
-derived from the catastrophe model.  In particular, they found bimodal
+derived from the catastrophe model.  In particular, she found bimodal
 test scores and inaccessibility.  The latter means that there are no
 in-between strategies: children apply either Rule 1 or Rule 2 and
 there is no in-between option.  \citet{Jansen2001} also found
 evidence for hysteresis: the phenomenon that switching between
-strategies is assymetric.  Children can switch from Rule 1 to Rule 2
+strategies is asymmetric.  Children can switch from Rule 1 to Rule 2
 and back, but this occurs at different trials.  In particular, if the
 distance dimension in the balance scale problems is made more salient
 by increasing the distance difference between weights on either side
@@ -123,15 +123,15 @@ this case the distance difference.
 
 % conditioning and addiction research
 Also in animal learning and conditioning, evidence is found for sudden
-changes in response behavior \citet{Gallistel2004}.  In particular, in
+changes in response behavior \cite{Gallistel2004}.  In particular, in
 their study, evidence was found for sudden onset of learning: at the
-start of the learning experiment, the pigeons did not learn anything
-and performance was stable; after a number of trials, learning kicks
-in and there are large increases in performance.  The interest here is
-in modeling the distribution of onset times: that is, the trials at
+start of the learning experiment, pigeons did not learn anything
+and performance was stable; after a number of trials, learning kicked
+in and there were large increases in performance.  \citeauthor{Gallistel2004} 
+focused on modeling the distribution of onset times: that is, the trials at
 which learning suddenly takes off.  A similar interest in process
 onset times is found in addiction research.  For example,
-\cite{Sher2004} study the age at which children start using alcohol
+\citet{Sher2004} study the age at which children start using alcohol
 and how this related to eventual outcomes in terms of addiction.
 
 % discrimination and categorization learning
@@ -162,7 +162,7 @@ participants develop different strategies over time in responding to
 the stimuli and that the transition from one strategy to the next is a
 discrete event.  Before providing these illustrations, below we give a
 formalization of dependent mixture models and a brief overview of the
-DepmixS4 package that was developed to specify and fit such models.
+\pkg{depmixS4} package that was developed to specify and fit such models.
 
 
 \section{Dependent Mixture Models}
@@ -176,7 +176,7 @@ modelling discrete change: the hidden and the latent Markov models.
 
 % history of Markov models/LMM applications
 Markov models have been used extensively in the social sciences; for
-example, in analyzing language learning \cite{Miller1952,Miller1963},
+example, in analyzing language learning \cite{Miller1952,Miller1963} and
 in the analysis of paired associate learning \cite{Wickens1982}.  In
 these models, the focus is on survey type data: a few repeated
 measurements taken in a large sample.  \citeA{Langeheine1990} discuss
@@ -315,7 +315,7 @@ models are used commonly in the social sciences, but no comprehensive
 package was available for fitting such models in R. Common programs
 for Markovian models include Panmark \citep{Pol1996}, and for latent
 class models Latent Gold \citep{Vermunt2003}.  Those programs are
-lacking a number of features that were needed in our own research.  In
+lacking a number of features that were needed in our research.  In
 particular, \pkg{depmixS4} was designed to meet the following goals:
 \begin{enumerate}
 
@@ -338,16 +338,15 @@ series data, for say $T>100$, it can also handle the limit case with
 $T=1$ in analyzing cross-sectional data.  In those cases, there are no
 time dependencies between observed data, and the model reduces to a
 finite mixture model \cite{McLachlan2000}, or a latent class model
-\cite{McCutcheon1987}.  Although there are other specialized (R-)
-packages to deal with mixture data, one specific feature that we
-needed which is not available in other packages is the possibility to
-include covariates on the prior probabilities of class membership.
+\cite{McCutcheon1987}.  Although there are other specialized (R)
+packages to deal with mixture data, these don't allow the inclusion of 
+covariates on the prior probabilities of class membership.
 
-The package is built using S4 classes (object oriented classes in R)
+\pkg{depmixS4} is built using S4 classes (object oriented classes in R)
 to allow easy extensibility (Chambers, 1998). A depmix model consists 
 of the following: 
 \begin{enumerate} 
-	\item A model for the initial probabilities or prior 
+	\item A model for the initial or prior probabilities 
 	\item A list of transition models; one model for each row of the 
 	transition matrix
 	\item A list of response models for each of the states of the model; 
@@ -359,7 +358,7 @@ Each of these are adressed briefly below.
 \subsection{Transition and prior probabilities models}
 
 % transition and initial state probs
-Each row of the transition matrix and the vector of initial state 
+By default, each row of the transition matrix and the vector of initial state 
 probabilities is modelled as a baseline-category multinomial logistic 
 model \cite<see>[chapter 7]{Agresti2002}. This means that covariates 
 can be used as predictors in these models. In particular, the model 
@@ -409,7 +408,7 @@ distribution.
 
 Parameters are estimated in \pkg{depmixS4} using the EM algorithm or
 through the use of a general Newton-Raphson optimizer.  EM is used by
-default in unconstrained models, but otherwise, direct optimization is
+default in unconstrained models, but otherwise direct optimization is
 done using \pkg{Rdonlp2} \cite{Tamura2007,Spellucci2002}, because it
 handles general linear (in)equality constraints, and optionally also
 non-linear constraints.
@@ -444,9 +443,9 @@ impaired task performance.  Their preference for the decks with
 immediate high rewards indicates ``myopia for the future''.
 
 % what is the HDT? developmental trends and relevance?
-\cite{Crone2004} designed a developmentally appropriate analogue of
+\citet{Crone2004} designed a developmentally appropriate analogue of
 the IGT, the Hungry Donkey Task (HDT), with a similar win and loss
-schedule although the abolute amounts were redcuced by a factor of 25.
+schedule although the absolute amounts were reduced by a factor of 25.
 The HDT is a pro-social game inviting the player to assist a hungry
 donkey to collect as many apples as possible, by opening one of four
 doors.  Again, doors A and B are characterized by a high constant gain
@@ -454,7 +453,7 @@ doors.  Again, doors A and B are characterized by a high constant gain
 apples).  At doors A and C, a loss of 50 apples (A) or 10 apples (C)
 is delivered in 50\% of the trials.  For doors B and D, frequency of
 loss is only 10\%.  The median loss of doors B and D is 10 and 2,
-respectively.  \cite{Crone2004} administered the HDT to children from
+respectively.  \citet{Crone2004} administered the HDT to children from
 four age groups (6-9, 10-12, 13-15, and 18-25 year-olds) and concluded
 that children also fail to consider future consequences.
 
@@ -463,8 +462,8 @@ that children also fail to consider future consequences.
 A reanalysis of this dataset \cite{Huizenga2007} indicated that
 participants might solve the task by sequentially considering the
 three dimensions (constant gain, frequency of loss, and amount of
-loss) in order to choose a door.  Most youngest children in the
-dataset seem to focus on the dominant dimension in the task, frequency
+loss) in order to choose a door.  The youngest children in the
+dataset mostly seem to focus on the dominant dimension in the task, frequency
 of loss, resulting in equal preference for doors B and D. Older
 participants seem to use a two-dimensional rule where participants
 first focus on the frequency of loss and then consider amount of loss,
@@ -476,24 +475,24 @@ run.
 
 % problematic aspects of standard analysis
 Typical analyses of these data use the last 60 trials in a series of
-200 trials.  A silent assumption that is made in these analyses is
-that behavior has stabilized after 140 trials of learning; this could
+200 trials.  A silent assumption made in these analyses is
+that behavior has stabilized after 140 learning trials; this could
 very well be wrong and it is highly likely that there are individual
 differences in this learning process.
 
 % proposed analysis here
-Single participant IGT learning data are analyzed with the aim to
-establish 1) at which trial no more learning occurs, i.e., at which
+Here, we analyze IGT learning data from a single participant with the aim to
+establish 1) at which trial learning stops, i.e., at which
 trial behavior has stabilized, and 2) what strategies participants use
 during and at the end of learning.  Models with an increasing number
 (from 2 through 5) of latent states were fitted to the time series of
 various participants.  The responses were fitted with multinomial
 logistic models for the 4 possible choices that participants make in
 this task.  There were no covariates on any of the parameters.  The
-only constaint that was imposed on the models' parameters was that
+only constraint imposed on the models' parameters was that
 there were designated begin and end states.  This means that the
 initial state probabilities were fixed to one for the first state and
-to zero for the remaning states.  For the transition matrix this means
+to zero for the remaining states.  For the transition matrix this means
 that the final state was an absorbing state: the probability of
 transitioning out of that state is zero.  This was done to ensure that
 there would be a final state in which participants end which provides
@@ -503,9 +502,10 @@ Criterion (AIC; Akaike, 1973).
 
 \nocite{Akaike1973} % check the year!!
 
-We chose to analyze two participants that used different strategies at
-the end of the task as analyzed in the manner proposed by
-\citet{Huizenga2007}.  The first participants' data were best
+%We chose to analyze two participants that used different strategies at
+%the end of the task as analyzed in the manner proposed by
+%\citet{Huizenga2007}.  The first participants' data 
+The data were best 
 described by a 4-state model.  This model's transition matrix is:
 $$
 \mat{A} = \begin{pmatrix} 
@@ -516,9 +516,9 @@ $$
 		  \end{pmatrix}
 $$
 As can be seen from the transition matrix the final state is
-absorbind.  States 2 and 3 are also fairly stable with high diagonal
+absorbing.  States 2 and 3 are also fairly stable with high diagonal
 probabilities of 0.89 and 0.95 respectively.  The response parameters
-are presented in Table~ref{tab:igt4} below.
+are presented in Table~\ref{tab:igt4} below.
 
 \begin{table}
 	\caption{Estimates for the Iowa Gambling Task model}
@@ -535,9 +535,9 @@ are presented in Table~ref{tab:igt4} below.
 The states have clear interpretations. States 3 and 4 are both
 dominated by C responses, and state 4 has a low probability of B
 responses. States 1 and 2 are dominated C and D and A and B responses 
-respectively. To get a clearer intpretation of these states it is
+respectively. To get a clearer interpretation of these states it is
 necessary to consider when they are visited during the learning
-process. The viterbi algorithm (REFERENCE) provides us with the
+process. The Viterbi algorithm (REFERENCE) provides us with the
 posterior state sequence, i.e., the sequence of states that the
 participant is in at each trial. This sequence is depicted in
 Figure~\ref{fig:post4}. 
@@ -558,7 +558,7 @@ associated with each of the doors as B and D have low frequency of
 loss. After this, there is a period of stable state 2 behavior
 associated with responses A and B. After that there is stable state 3 
 behavior, consisting only of C responses, a short transitional period 
-and then state 4 behavior consting of 94 \% C choices and some B
+and then state 4 behavior consisting of 94 \% C choices and some B
 choices, i.e., almost optimal behavior. The choice proportions and the
 model predicted choice proportions are depicted in
 Figure~\ref{fig:igt4}. 
@@ -575,8 +575,8 @@ Figure~\ref{fig:igt4}.
 The initial preference for B and D choices confirms the theory
 expressed in \citet{Huizenga2007} that frequency of loss is the
 dominant dimension in the IGT. The final states with mostly C 
-choices reprensents one of the optimal strategies, which consists of
-both C and D responses. Note that both C and D reponses generate equal
+choices represents one of the optimal strategies, which consists of
+both C and D responses. Note that both C and D responses generate equal
 profits in the long run. 
 
 
@@ -608,41 +608,49 @@ probabilities.
 %\& Shanks, 2008), the finding of relatively unimpaired performance
 %by amnesic individuals remains striking.
 
-There are different accounts of probabilistic category learning.
+There are different accounts of probabilistic category learning 
+\cite<see e.g.>[for an overview]{Ashby2005}.
 According to instance or exemplar learning theories, participants
-learn by storing each encountered cue-outcome pairing.  When presented
-with a cue pattern, these exemplars are retrieved from memory, and
-weighted according to their similarity to the probe cue pattern, to
-form a classification.  According to associative theories,
-participants gradually learn by gradually associating the individual
-cues (or cue patterns in configural learning) to the outcomes.  In
+learn by storing each encountered cue-outcome pair.  When presented
+with a probe cue pattern, a response is made by retrieving these 
+exemplars are retrieved from memory and weighting them according 
+to their similarity to the probe cue pattern. According to associative theories,
+participants learn by gradually associating the individual
+cues (or cue patterns in configural learning) to the outcomes. Finally, in
 rule-learning, participants are taken to extract rules by which to
 categorize the different cue patterns.  \cite{Gluck2002} proposed a
-number of such rules (or strategies).  A main difference between these
-is whether responses are based on the presence/absence of a single
-cue, or whether responses are based on cue patterns.  Gluck et al.
-formulated all strategies in a deterministic and optimal manner (e.g.,
+number of such rules (or strategies). The rules differ in the way
+the cues are combined into a response. A main difference is whether responses are
+based on the presence/absence of a single cue, or whether information 
+from multiple cues is integrated. \citeauthor{Gluck2002}
+formulated all strategies in a deterministic and optimal manner (e.g., 
 the multi-cue strategy corresponded to giving the optimal response to
-each cue pattern).  Meeter et al.  allowed for probabilistic
-responding (a small probability of giving the non-optimal response).
-
-Alternative non-strategy based analyses of the WPT
-\cite{Lagnado2006,Speekenbrink2008} have estimated response strategies by
-logistic regression, allowing the regression coefficients to change
-over time.
+each cue pattern). \citet{Meeter2006}  allowed for probabilistic
+responding (a small probability of responding non-optimally) as well
+as switches between strategies during learning. However, both strategies 
+and response probabilities remained predefined. Alternative non-strategy based 
+analyses of the WPT \cite{Lagnado2006,Speekenbrink2008} have estimated 
+response strategies through logistic regression, allowing the regression 
+coefficients to change smoothly over time.
 
 %associative, rule-based.
-Here, we analyze the behavior of a single individual performing the
-WPT for 200 trials.  We chose to analyse the ``average'' participant
-(the participant with performance closest to the group average) in a
-large unpublished dataset.  We let each state be characterized by a
-GLM with a Binomial distributed response and logistic link function
-(i.e., a logistic regression model).  We are particularly interested
-in evidence for strategy switching and whether a DMM can recover a
-strategy model in line with \citeA{Gluck2002}.
+Here, we combine the regression and strategy-based approaches, and analyse 
+the behavior of a single individual performing the
+WPT for 200 trials.  We are particularly interested
+in evidence for strategy switching and whether a DMM can recover
+strategies in accordance with \citeA{Gluck2002}. We chose to analyse the 
+``average'' participant (the participant with performance closest to 
+the group average) in a large unpublished dataset. We let each state 
+be characterized by a GLM with a Binomial distributed response and 
+logistic link function (i.e., a logistic regression model). The regression
+coefficients of a model relating the cues to the state of the weather are 
+given in column ```validity'' of Table~\ref{tab:WPT}. Note that indentical
+coefficients for the model relating the cues to responses would indicate 
+probability matching. A maximizing strategy is indicated by more
+extreme regression coefficients.
 
 As we fitted a DMM to the data of a single subject, it was necessary
-to place some constraints on the model.  Specifically, we constrain
+to place some constraints on the model.  Specifically, we constrained
 the state transitions to be in a ``left-right'' format (states can
 only proceed to the immediately adjacent state and never back, and
 must start in the initial state).  We fitted a single, two and three
@@ -652,40 +660,40 @@ better than a single or three state model.
 \begin{table}
 \caption{Estimates for the weather prediction task}
 \label{tab:WPT}
-\begin{tabular}{lcccccccc} \hline
- & & \multicolumn{1}{c}{1 state} & & \multicolumn{2}{c}{2 state} &&
- \multicolumn{2}{c}{2 state (constr.)} \\ \cline{3-3} \cline{5-6} \cline{8-9}
-parameter & & $S_1$ & & $S_1$ & $S_2$ & & $S_1$ & $S_2$ \\ \hline
-(intercept) & & -0.69 & & -2.73 & 0.88 & & -1.24 & 0 \\
-cue 1 && 1.69 && 2.12 & 1.60 && 1.65 & 1.97 \\
-cue 2 && 1.12 && 0.97 & 1.63 && 0 & 1.92 \\
-cue 3 && -0.49 && 0.91 & -2.03 && 0 & -1.58 \\
-cue 4 && -1.32 && 0.69 & -3.16 && 0 & -2.67 \\ \hline
- & & \multicolumn{1}{c}{AIC=204.47} & & \multicolumn{2}{c}{AIC=187.50} &&
+\begin{tabular}{lcccccccccc} \hline
+ & & \multicolumn{1}{c}{} && \multicolumn{1}{c}{1 state} & & \multicolumn{2}{c}{2 state} &&
+ \multicolumn{2}{c}{2 state (constr.)} \\ \cline{5-5} \cline{7-8} \cline{10-11}
+parameter && validity && $S_1$ & & $S_1$ & $S_2$ & & $S_1$ & $S_2$ \\ \hline
+(intercept) && 0 && -0.69 & & -2.73 & 0.88 & & -1.24 & 0 \\
+cue 1 && 2.10 && 1.69 && 2.12 & 1.60 && 1.65 & 1.97 \\
+cue 2 && 0.58 && 1.12 && 0.97 & 1.63 && 0 & 1.92 \\
+cue 3 && -0.58 && -0.49 && 0.91 & -2.03 && 0 & -1.58 \\
+cue 4 && -2.10 && -1.32 && 0.69 & -3.16 && 0 & -2.67 \\ \hline
+ & & & & \multicolumn{1}{c}{AIC=204.47} & & \multicolumn{2}{c}{AIC=187.50} &&
  \multicolumn{2}{c}{AIC=185.24}
 \end{tabular}
 \end{table}
 
 Investigation of the parameter estimates (see Table~\ref{tab:WPT})
-showed that the regression coefficient for the first cue was of much
-larger magnitude than that of the other cues.  As such, the first
+showed that the regresion coefficient for the first cue was of much
+larger magnitude than that of the other cues. As such, the first
 state seems representative of single cue strategy.  Alternatively, as
 all regression coefficients are positive, it could indicate a
 ``counting'' heuristic, where the propensity of ``sun'' responses
 increases when more cues are present (regardless of which cues they
 are).  However, in that case, we would expect the regression
-coefficients to be of roughly identical magnitude.  The second state
+coefficients to be of roughly identical magnitude. The second state
 seemed to represent a multi-cue strategy, as all cues had regression
-coefficients of reasonable magnitude, with differing directions in
-line with the objective cue validities.
+coefficients of reasonable magnitude in the direction of the objective
+cue validities.
 
-To reduce the degrees of freedom, and improve parameter estimates, we
+To reduce the degrees of freedom and improve parameter estimates, we
 implemented constraints to force state 1 into a single cue strategy
 (fixing the coefficients of the remaining three cues to 0) and state 2
 in a multi-cue strategy (forcing the intercept to 0).  These
 restrictions resulted in a better AIC value of AIC=185.24 (df=7).
 Interestingly, the single cue strategy was somewhat different than
-described by \citet{Gluck2002}  Parameter estimates indicated relatively
+described by \citet{Gluck2002}.  Parameter estimates indicated relatively
 more consistent predictions of ``rain'' in the absence of cue 1
 ($Pr(\text{sun}) = 0.22$) and more inconsistent predictions of ``sun''
 in the presence of cue 1 ($Pr(\text{sun}) = 0.60$).  The cue weights
