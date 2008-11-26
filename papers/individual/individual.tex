@@ -47,16 +47,16 @@ detecting such change is the latent or hidden Markov model.
 Traditionally, these models were restricted to categorical, mostly
 binary, observed variables, placing severe restrictions on possible
 measurement models.  In this paper, the basic model is extended to
-include arbitrary distributions for the observed variables, including
-multi-variate distributions.  Moreover, there is optional support to
-include time-varying predictors.  In effect, this model consists of
-mixtures of generalized linear models with Markovian dependencies over time
-to model the change process.  In addition, transition parameters can
-be made to depend on covariates as well, such that the switching
-regime between states depends on characteristics of the individual or
-the experimental situation.  The model is illustrated with an example
-of participants' learning in the Iowa Gambling Task and in the Weather 
-Prediction Task.}
+include various distributions for the observed variables, including
+mixed multi-variate distributions.  Moreover, there is an option to
+include time-varying predictors on the observed distributions.  In
+effect, this model consists of mixtures of generalized linear models
+with Markovian dependencies over time to model the change process.  In
+addition, the transition parameters can be estimated with covariates,
+such that the switching regime between states depends on
+characteristics of the individual or the experimental situation.  The
+model is illustrated with examples of participants' learning in the
+Iowa Gambling Task and in the Weather Prediction Task.}
 
 
 \begin{document}
@@ -64,33 +64,42 @@ Prediction Task.}
 
 % intro
 Discrete change frequently occurs in learning and development: in
-learning concepts, in performance on Piagetian tasks, in
-discrimination learning and in conditioning.  This chapter is
-concerned with detecting the nature and time points of change in (individual)
-time series.  We present a framework of dependent mixture models that can
-be used to differentiate between gradual and discrete learning events
-in individual time series data.  Before presenting the model in formal
-terms and providing some illustrations, we first review some examples
-in which discrete change is found.
+learning concepts and discrimination learning, in performance on
+Piagetian tasks such as the conservation of liquid task and the
+balance scale task, and in conditioning.  This chapter is concerned
+with detecting and characterizing such discrete changes in
+(individual) time series data.  We present a framework of dependent
+mixture models that can be used to test whether discrete learning
+events are present and, if so, to test at which point in time those
+changes are taking place.  Before presenting the model in formal terms
+and providing some illustrations, we first review some examples from
+the developmental psychology literature in which discrete change is
+typically found.
 
 % phenomena of discrete change in development/learning
-Piagetian developmental theory assumes step-wise changes in the
-strategies that children apply in all kinds of tasks such as the
-conservation learning and the balance scale task (REFERENCE??).
+Piagetian developmental theory assumes step-wise changes in the rules
+that children apply in all kinds of tasks such as in conservation
+learning and in the balance scale task (SieglerAlibali19??).
 \citet{Maas1992} developed a catastrophe model to describe step-wise
-changes or phase transitions in learning and developmental processes.
-They applied the catastrophe model to learning in the conservation of
-liquid task (REFERENCE??)  in which children have to judge relative
-volumes of liquid in glasses of different heights and widths.  Young
-children tend to ignore the width dimension and hence always choose
-the glass with the highest level of liquid (REFERENCE??).
-\citet{Maas1992} showed that there is a sudden transition to a new
-strategy in which the children also take the width of the glasses into
-account when judging the volume of liquids.
+changes predicted to occur by Piagetian theory; importantly, they
+derived precise statistical criteria for testing whether two
+discretely different stages exist.  They applied the catastrophe model
+to development on the conservation of liquid task (InhelderPiaget19??)
+in which children have to judge relative volumes of liquid in glasses
+of different heights and widths.  Young children tend to ignore the
+width dimension and hence always choose the glass with the highest
+level of liquid (InhelderPiaget19??).  It is assumed that there is a
+sudden transition to a new rule, for example, a rule in which the
+children also take the width of the glasses into account when judging
+the volume of liquids.
+
+% \citet{Maas1992} 
+% opzoeken: Siegler & Alibali 19??, intro textbook
+% opzoeken: Inhelder & Piaget, 19??
 
 % balance scale rules
 \citet{Jansen2001} applied the catastrophe model to
-development of strategies on the balance scale task (Siegler, 1981).
+development of reasoning on the balance scale task (Siegler, 1981).
 In the balance scale task participants have to judge which side of a
 balance goes down when the number of weights and their distances to
 the fulcrum are varied over trials.  Younger children tend to ignore
@@ -103,36 +112,40 @@ dimension does not differ between the sides of the balance, i.e., when
 the number of weights is equal on both sides of the balance scale.
 This strategy is called Rule 2 \cite{Siegler1981}.
 
+% Jansen 2001: aanpassen in de paper ref ipv het proefschrift
+
 % hysteresis on the balance scale
-\citet{Jansen2001} found clear evidence for stage-wise
-transitions between Rule 1 and Rule 2 by testing criteria that were
-derived from the catastrophe model.  In particular, she found bimodal
-test scores and inaccessibility.  The latter means that there are no
-in-between strategies: children apply either Rule 1 or Rule 2 and
-there is no in-between option.  \citet{Jansen2001} also found
-evidence for hysteresis: the phenomenon that switching between
+\citet{Jansen2001} found evidence for stage-wise transitions, or
+discrete change in our model, between Rule 1 and Rule 2 by testing
+criteria that were derived from the catastrophe model.  In particular,
+she found bimodal test scores and inaccessibility.  The latter means
+that there are no in-between strategies: children apply either Rule 1
+or Rule 2 and there is no in-between option.  \citet{Jansen2001} also
+found evidence for hysteresis: the phenomenon that switching between
 strategies is asymmetric.  Children can switch from Rule 1 to Rule 2
-and back, but this occurs at different trials.  In particular, if the
-distance dimension in the balance scale problems is made more salient
-by increasing the distance difference between weights on either side
-of the balance scale, children may switch from Rule 1 to Rule 2.  If
-subsequently the distance difference is decreased again, children may
-switch back to using Rule 1.  Hysteresis is the phenomenon that this
-switch back occurs at a different value of the control variable, in
-this case the distance difference.
+and back, but this occurs at different values of a continuously
+changing independent variable.  In particular, if the distance
+dimension in the balance scale problems is made increasingly more
+salient by increasing the distance difference between weights on
+either side of the balance scale, children may switch from Rule 1 to
+Rule 2.  If subsequently the distance difference is decreased again,
+children may switch back to using Rule 1.  Hysteresis is the
+phenomenon that this switch back occurs at a different value of the
+control variable, in this case the distance difference.
 
 % conditioning and addiction research
 Also in animal learning and conditioning, evidence is found for sudden
 changes in response behavior \cite{Gallistel2004}.  In particular, in
 their study, evidence was found for sudden onset of learning: at the
-start of the learning experiment, pigeons did not learn anything
-and performance was stable; after a number of trials, learning kicked
-in and there were large increases in performance.  \citeauthor{Gallistel2004} 
-focused on modeling the distribution of onset times: that is, the trials at
-which learning suddenly takes off.  A similar interest in process
-onset times is found in addiction research.  For example,
-\citet{Sher2004} study the age at which children start using alcohol
-and how this related to eventual outcomes in terms of addiction.
+start of the learning experiment, pigeons did not learn anything and
+performance was stable; after a number of trials, learning kicked in
+and there were large increases in performance.
+\citeauthor{Gallistel2004} focused on modeling the distribution of
+onset times: that is, the trials at which learning suddenly takes off.
+A similar interest in process onset times is found in addiction
+research.  For example, \citet{Sher2004} study the age at which
+children start using alcohol and how this related to eventual outcomes
+in terms of addiction.
 
 % discrimination and categorization learning
 Sudden transitions in learning are also observed in simple
