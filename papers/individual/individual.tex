@@ -30,17 +30,17 @@
 {Department of Cognitive, Perceptual and Brain Sciences, University College London}
 
 \note{Correspondence concerning this article should be addressed to:
- \\
- Ingmar Visser \\
- Department of Psychology, University of Amsterdam \\
- Roetersstraat 15 \\
- 1018 WB Amsterdam \\
- phone: +31 (20) 5256723 \\
- fax: +31 (20) 6390279 \\
- email: i.visser@uva.nl}
+\\
+Ingmar Visser \\
+Department of Psychology, University of Amsterdam \\
+Roetersstraat 15 \\
+1018 WB Amsterdam \\
+phone: +31 (20) 5256723 \\
+fax: +31 (20) 6390279 \\
+email: i.visser@uva.nl}
 
 
-\shorttitle{Modelling Discrete Change}
+\shorttitle{Modeling Discrete Change}
 
 \abstract{A class of models is developed for measuring and detecting
 discrete change in learning and development.  The basic model for
@@ -72,10 +72,9 @@ with detecting and characterizing such discrete changes in
 (individual) time series data.  We present a framework of dependent
 mixture models that can be used to test whether discrete learning
 events are present and, if so, to test at which point in time those
-changes are taking place.  Before presenting the model in formal terms
-and providing some illustrations, we first review some examples from
-the developmental psychology literature in which discrete change is
-typically found.
+changes are taking place.  We first review some examples from the
+developmental psychology literature in which discrete change is
+typically found, and then turn to describing the model more formally.
 
 % phenomena of discrete change in development/learning
 Piagetian developmental theory assumes step-wise changes in the rules
@@ -114,12 +113,12 @@ scale.  This strategy is called Rule 2 \cite{Siegler1981}.
 discrete change in our model, between Rule 1 and Rule 2 by testing
 criteria that were derived from the catastrophe model.  In particular,
 they found bimodal test scores and inaccessibility.  The latter means
-that there are no in-between strategies: children apply {\em either}
-Rule 1 {\em or} Rule 2 and there is no in-between option.
+that there are no in-between rules: children apply {\em either} Rule 1
+{\em or} Rule 2 and there is no in-between option.
 \citet{Jansen2001b} also found evidence for hysteresis: the phenomenon
-that switching between strategies is asymmetric.  Children can switch
-from Rule 1 to Rule 2 and back, but this occurs at different values of
-a continuously changing independent variable.  In particular, if the
+that switching between rules is asymmetric.  Children can switch from
+Rule 1 to Rule 2 and back, but this occurs at different values of a
+continuously changing independent variable.  In particular, if the
 distance dimension in the balance scale problems is made increasingly
 more salient by increasing the distance difference between weights on
 either side of the balance scale, children may switch from Rule 1 to
@@ -147,10 +146,10 @@ Sudden transitions in learning are also observed in simple
 discrimination learning paradigms in which participants learn to
 discriminate a number of stimuli based on a single dimension such as
 form or color.  \citet{Raijmakers2001} found evidence for two
-different strategies applied by children when faced with such a
+different rules applied by children when faced with such a
 learning task.  \citet{Schmittmann2006} reanalyzed their data using
-hidden Markov models to show that both strategies are characterized by
-discrete changes in the learning process.
+hidden Markov models to show that both rules are characterized by
+discrete changes during the learning process.
 
 % latent Markov versus time series analyses/outline
 In above mentioned applications, the data consist mostly of a few
@@ -165,11 +164,11 @@ accuracy.  The data consisted of three time series with each around
 we provide examples of analyzing time series from single participants
 from two experiments; one from the Iowa Gambling Task and one from the
 Weather Prediction Task.  The interest in these tasks is to show that
-participants develop different strategies over time in responding to
-the stimuli and that the transition from one strategy to the next is a
-discrete event.  Before providing these illustrations, we give a
-formalization of dependent mixture models and a brief overview of the
-\pkg{depmixS4} package that was developed to specify and fit such
+participants develop different rules over time in responding to the
+stimuli and that the transition from one rule to the next is a
+discrete event.  Before presenting these illustrations, we provide a
+brief formal definition of dependent mixture models and an overview of
+the \pkg{depmixS4} package that was developed to specify and fit such
 models.
 
 
@@ -177,28 +176,26 @@ models.
 
 % outline
 In this section we describe a class of models which are especially
-suitable for describing and testing discrete changes in (individual)
+suitable for describing and testing discrete change in (individual)
 time series data.  The dependent mixture model is similar to, but
 slightly different from, two other types of models that are in use for
-modelling discrete change: the hidden and the latent Markov models.
+modeling discrete change: the hidden and the latent Markov models.
 
 % history of Markov models/LMM applications
 Markov models have been used for a long time in the social sciences;
 for example, in analyzing language learning
 \cite{Miller1952,Miller1963} and in the analysis of paired associate
-learning \cite{Wickens1982}.  In these models, the focus is on survey
-type data: a few repeated measurements taken in a large sample.
-\citeA{Langeheine1990} discuss latent Markov models and their use in
-sociology and political science \citep<see also>{McCutcheon1987}.  Latent
-Markov models have been used in studying development of math skills
-\citep{Collins1992}, and in medical applications
-\citep{Reboussin1998}.  \citet{Kaplan2008} provides an overview of
-such models, also called stage-sequential models, and their
-application in developmental psychology.
+learning \cite{Wickens1982}.  \citeA{Langeheine1990} discuss latent
+Markov models and their use in sociology and political science
+\citep<see also>{McCutcheon1987}.  Latent Markov models have been used
+in studying development of math skills \citep{Collins1992}, and in
+medical applications \citep{Reboussin1998}.  \citet{Kaplan2008}
+provides an overview of such models, also called stage-sequential
+models, and their application in developmental psychology.
 
 % hidden Markov models
 Hidden Markov models (HMMs) tend to be used in the analysis of long
-univariate (individual) timeseries.  For example, HMMs are the model
+(univariate, individual) time series.  For example, HMMs are the model
 of choice in speech recognition applications \cite{Rabiner1989}.  In
 biology, HMMs are used to analyze DNA sequences \cite{Krogh1998} and
 in econometric science, to analyze changes in stock market prices and
@@ -213,8 +210,8 @@ and covariates.  The dependent mixture model for a time series $O_{t}$
 consists of the following elements:
 \begin{enumerate}
 	\item $S$ is a collection of discrete states, forming the state space.
-	\item $S_{t} = \mat{A}S_{t-1}+\xi_{t}, \mat{A}$, a transition matrix.
-	\item $O_{t} = \mat{B}(S_{t}) + \zeta_{t}, \mat{B}$,  an observation density.
+	\item $S_{t} = \mat{A}S_{t-1}+\xi_{t}, with \mat{A}$ a transition matrix.
+	\item $O_{t} = \mat{B}(S_{t}) + \zeta_{t}, with \mat{B}$  an observation density.
 \end{enumerate}
 Here $\xi_{t}$ and $\zeta_{t}$ are independent error processes 
 \cite{Elliott1995}. 
@@ -249,7 +246,7 @@ $S_{t-1}$, and not on earlier states.
 % observation densities
 The observation densities $\mat{B}$ form the measurement part of the
 model; these describe the distributions of the observations
-conditional on the current state. Hence, these distributions
+conditional on the current state $S_{t}$. Hence, these distributions
 characterize the state, and in our examples, these characterize the
 rule that a participant is using at a given measurement occasion.
 
@@ -311,14 +308,15 @@ rule that a participant is using at a given measurement occasion.
 
 % outline/abstract: this has redundant information, mostly discussed
 % in detail below
-\pkg{depmixS4} \citep{Visser2008a} implements a general framework for
-defining and fitting dependent mixture models in the R programming
-language \citep{R2008}.  This includes standard Markov models,
-latent/hidden Markov models, and latent class and finite mixture
-distribution models.  The models can be fitted on mixed multivariate
-data with error distriutions from the generalized linear model
-framework, such as the gaussian, binomial, multinomial logistic et
-cetera.
+The \pkg{depmixS4} package \citep{Visser2008a}, which is used to
+analyze data in the illustrations below, implements a general
+framework for defining and fitting dependent mixture models in the R
+programming language \citep{R2008}.  This includes standard Markov
+models, latent/hidden Markov models, and latent class and finite
+mixture distribution models.  The models can be fitted on mixed
+multivariate data with error distributions from the generalized linear
+model framework, such as the gaussian, binomial, multinomial logistic
+et cetera.
 
 % design goals
 The \pkg{depmixS4} package was motivated by the fact that Markovian
@@ -342,6 +340,9 @@ particular, \pkg{depmixS4} was designed to meet the following goals:
 	multivariate, and similarly to be able to allow for the addition
 	of other transition models, e.g., models for observations in 
 	continuous time. 
+	
+	\item to be able to fit models on arbitrary length individual time 
+	series. 
 
 \end{enumerate}
 
@@ -354,32 +355,34 @@ finite mixture model \cite{McLachlan2000}, or a latent class model
 packages to deal with mixture data, these don't allow the inclusion of 
 covariates on the prior probabilities of class membership.
 
-\pkg{depmixS4} is built using S4 classes (object oriented classes in R)
-to allow easy extensibility (Chambers, 1998). A depmix model consists 
-of the following: 
+\pkg{depmixS4} is built using S4 classes \citep<object oriented
+classes in R>{Chambers1998} to allow easy extensibility.  A depmix
+model consists of the following:
 \begin{enumerate} 
-	\item A model for the initial or prior probabilities.
+	\item A model for the initial or prior probabilities, possibly 
+	depending on covariates.
 	\item A list of transition models; one model for each row of the 
-	transition matrix.
+	transition matrix, possibly depending on covariates. 
 	\item A list of response models for each of the states of the model; 
-	this is a list of lists in the case of multivariate responses. 
+	this is a list of lists in the case of multivariate responses (see 
+	details below).
 \end{enumerate} 
-Each of these are adressed briefly below. 
+Each of these are addressed briefly below. 
 
 
 \subsection{Transition and prior probabilities models}
 
 % transition and initial state probs
 By default, each row of the transition matrix and the vector of
-initial state probabilities is modelled as a baseline-category
+initial state probabilities is modeled as a baseline-category
 multinomial logistic model \cite<see>[chapter 7]{Agresti2002}.  This
 means that covariates can be used as predictors in these models.  In
 particular, the model for each multinomial is:
 \begin{equation} 
-	\pi_{i} = \frac{\exp(\alpha_{i}+\mathbf{\beta}^{`}_{i}\vc{x})}
+	p_{i} = \frac{\exp(\alpha_{i}+\mathbf{\beta}^{`}_{i}\vc{x})}
 				{1+\sum_{j=1}^{J-1}\exp(\alpha_{j}+\mathbf{\beta}^{`}_{j}\vc{x})},
 \end{equation}
-where $\pi_{i}$ is the probability (e.g.\ the probability of the
+where $p_{i}$ is the probability (e.g.\ the probability of the
 $i$-th initial state); the $\alpha_{i}$ are the category intercepts;
 the $\mathbf{\beta}_{i}$ are the category regression coefficients;
 $\vc{x}$ is a vector of covariates or predictors; $J$ is the number of
@@ -393,8 +396,8 @@ that $\alpha_{J}$ and $\mathbf{\beta}_{J}$ are zero.
 Response models in \pkg{depmixS4} interface with the \code{glm}
 functions \citep{R2008} available in R and with the \pkg{nnet}-package
 \citep{Venables2002} for the multinomial logistic models.  Normally
-distributed data can hence be modelled with direct effects included as
-well.  For example, normal data are modelled as:
+distributed data can hence be modeled with direct effects included as
+well.  For example, normal data are modeled as:
 \begin{equation}
 	O_{t}|S_{t} = \mu + \mathbf{\beta}^{`}\vc{x} + \epsilon_{t},
 \end{equation}
@@ -430,11 +433,11 @@ the parameters.
 
 \section{Illustrations}
 
-Two illustrations are provided below of models that analyze single
+Two illustrations are provided below of models used to analyze single
 participant time series data from two common experimental paradigms.
-In both of these, participants learn different strategies through
-trial and error.  The main goal of these illustrations is to establish
-the possibility of analyzing single participant data using the
+In both of these, participants learn different rules through trial and
+error.  The main goal of these illustrations is to establish the
+possibility of analyzing single participant data using the
 \pkg{depmixS4}-framework.
 
 \subsection{Iowa gambling task}
@@ -474,7 +477,7 @@ consequences into account.
 
 % strategic reanalysis of the HDT: different strategies found by
 % finite mixture analysis
-A reanalysis of this dataset \cite{Huizenga2007b} indicated that
+A reanalysis of this data set \cite{Huizenga2007b} indicated that
 participants might solve the task by sequentially considering the
 three dimensions (constant gain, frequency of loss, and amount of
 loss) in order to choose a door.  Most of the youngest children seem
@@ -499,7 +502,7 @@ learning; this may not be the case, and it is highly likely that there
 are individual differences in this learning process.  Hence, here we
 analyze IGT learning data from a single participant with the aim to
 establish 1) at which trial learning stops, i.e., at which trial
-behavior has stabilized, and 2) what strategies participants use
+behavior has stabilized, and 2) what rules participants use
 during and at the end of learning.  Models with an increasing number
 (from 2 through 5) of latent states were fitted to the time series of
 a single participant.  The responses were fitted with multinomial
@@ -529,7 +532,7 @@ $$
 As can be seen from the transition matrix, the final state is
 absorbing.  States 2 and 3 are also fairly stable with high diagonal
 probabilities of 0.89 and 0.95 respectively.  The response parameters
-are presented in Table~\ref{tab:igt4} below.
+are presented in Table~\ref{tab:igt4}.
 
 % Table refs checken
 
@@ -590,7 +593,7 @@ the model predicted choice proportions are depicted in Figure~2.
 The initial preference for B and D choices confirms the theory
 expressed in \citet{Huizenga2007b} that frequency of loss is the
 dominant dimension in the IGT. The final states with mostly C 
-choices represents one of the optimal strategies, which consists of
+choices represents one of the optimal rules, which consists of
 both C and D responses. Note that C and D responses generate equal
 profits in the long run. 
 
@@ -631,27 +634,27 @@ participants learn by gradually associating the individual cues (or
 cue patterns in configural learning) to the outcomes.  Finally, in
 rule-learning, participants are taken to extract rules by which to
 categorize the different cue patterns.  \citet{Gluck2002} proposed a
-number of such rules (or strategies).  The rules differ in the way the
+number of such rules.  The rules differ in the way the
 cues are combined into a response.  The main difference concerns
 whether responses are based on the presence/absence of a single cue,
 or whether information from multiple cues is integrated.
-\citet{Gluck2002} formulated all strategies in a deterministic and
-optimal manner (e.g., the multi-cue strategy corresponded to giving
+\citet{Gluck2002} formulated all rules in a deterministic and
+optimal manner (e.g., the multi-cue rule corresponded to giving
 the optimal response to each cue pattern).  \citet{Meeter2006} allowed
 for probabilistic responding (a small probability of responding
-non-optimally) as well as switches between strategies during learning.
-However, both strategies and response probabilities remained
-predefined.  Alternative non-strategy based analyses of the WPT
+non-optimally) as well as switches between rules during learning.
+However, both rules and response probabilities remained
+predefined.  Alternative non-rule based analyses of the WPT
 \cite{Lagnado2006,Speekenbrink2008} have estimated response
 distributions through logistic regression, allowing the regression
 coefficients to change smoothly over time.
 
 %associative, rule-based.
-Here, we combine the regression and strategy-based approaches, and
-analyse the behavior of a single individual performing the WPT for 200
-trials.  We are particularly interested in evidence for strategy
-switching and whether a DMM can recover strategies in accordance with
-\citet{Gluck2002}.  We chose to analyse the ``average'' participant
+Here, we combine the regression and rule-based approaches, and
+analyze the behavior of a single individual performing the WPT for 200
+trials.  We are particularly interested in evidence for rule
+switching and whether a DMM can recover rules in accordance with
+\citet{Gluck2002}.  We chose to analyze the ``average'' participant
 (the participant with performance closest to the group average) in a
 large unpublished dataset.  We let each state be characterized by a
 GLM with a Binomial distributed response and logistic link function
@@ -689,32 +692,32 @@ cue 4 && -2.10 && -1.32 && 0.69 & -3.16 && 0 & -2.67 \\ \hline
 \end{table}
 
 Investigation of the parameter estimates (see Table~\ref{tab:WPT})
-showed that the regresion coefficient for the first cue was of much
+showed that the regression coefficient for the first cue was of much
 larger magnitude than that of the other cues.  Because of this, the
-first state seems representative of single cue strategy.
+first state seems representative of single cue rule.
 Alternatively, as all regression coefficients are positive, it could
 indicate a ``counting'' heuristic, where the propensity of ``sun''
 responses increases when more cues are present (regardless of which
 cues they are).  However, in that case, we would expect the regression
 coefficients to be of roughly identical magnitude.  The second state
-represents a multi-cue strategy, as all cues had regression
+represents a multi-cue rule, as all cues had regression
 coefficients of reasonable magnitude in the direction of the objective
 cue validities.
 
 To reduce the degrees of freedom and improve parameter estimates, we
-implemented constraints to force state 1 into a single cue strategy
+implemented constraints to force state 1 into a single cue rule
 (fixing the coefficients of the remaining three cues to 0) and state 2
-in a multi-cue strategy (forcing the intercept to 0).  These
+in a multi-cue rule (forcing the intercept to 0).  These
 restrictions resulted in a better AIC value of AIC=185.24 (df=7).
-Interestingly, the single cue strategy was somewhat different than
+Interestingly, the single cue rule was somewhat different than
 described by \citet{Gluck2002}.  Parameter estimates indicated relatively
 more consistent predictions of ``rain'' in the absence of cue 1
 ($Pr(\text{sun}) = 0.22$) and more inconsistent predictions of ``sun''
 in the presence of cue 1 ($Pr(\text{sun}) = 0.60$).  The cue weights
-of the multi-cue strategy were in the direction of the optimal
+of the multi-cue rule were in the direction of the optimal
 weights.  The Viterbi state sequence indicated that the participant
-used the single cue strategy for the first 60 trials, and then
-switched to the multi-cue strategy.
+used the single cue rule for the first 60 trials, and then
+switched to the multi-cue rule.
 
 
 \section{Discussion}
@@ -726,29 +729,30 @@ occur in a number of developmental tasks \citep{Inhelder1958}.  There
 is a growing body of evidence showing that indeed discrete change
 occurs during development and learning
 \citep{Jansen2001b,Maas1992,Raijmakers2001,Schmittmann2006}.  Discrete
-strategies or rules have recently been hypothesized to play an
-important role in learning tasks such as the Iowa Gambling Task and
-the Weather Prediction Task.  Until now, such data were always
-analyzed on a group basis, i.e., pooling data of many participants
-together.  Given that it is extremely likely that there are individual
-differences between participants, such pooling of data may not be
-warranted and may lead to sub optimal results \citep{Molenaar2005}. 
+rules have recently been hypothesized to play an important role in
+learning tasks such as the Iowa Gambling Task \citep{Huizenga2007b}
+and the Weather Prediction Task \citep{Gluck2002}.  Until now, such
+data were always analyzed on a group basis, i.e., pooling data of many
+participants together.  Given that it is extremely likely that there
+are individual differences between participants, such pooling of data
+may not be warranted and may lead to sub optimal results
+\citep{Gallistel2004,Molenaar2005}.
 
 In the current study we have shown the feasibility of analyzing single
 participant data in two common experimental tasks, thereby avoiding
 the pitfalls of pooling data from individuals that may differ in
 important respects.  The illustrations show that single participant
 data only comprising 200 trials can be analyzed and lead to
-non-trivial models with multiple states.  This opens up possiblities
+non-trivial models with multiple states.  This opens up possibilities
 for analyzing data from other experimental tasks on an individual
 basis.
 
 In addition to analyzing single participant data, the \pkg{depmixS4}
 package \citep{Visser2008b} that we have presented here offers the
 possibility of further combining models of single participant data
-into larger models and testing whether for example some strategies or
-rules are identical between (groups of) participants.  Performing such
-analyses and aggregating models afterwards based on commonalities and
+into larger models and testing whether, for example, some rules are
+identical between (groups of) participants.  Performing such analyses
+and aggregating models afterwards based on commonalities and
 differences between participants avoids making unwarranted assumptions
 about homogeneity between participants.  A similar approach using
 continuous latent variable models, i.e. factor models, was used by
@@ -758,50 +762,47 @@ in the domain of personality research.
 % IGT
 The illustration with the IGT data lead to a four state model.  The
 states of the model corresponded very well with earlier analyses by
-\citet{Huizenga2007b}, showing a number of discrete strategies.  Even
-within a single participant, a number of different strategies were
+\citet{Huizenga2007b}, showing a number of discrete rules.  Even
+within a single participant, a number of different rules were
 observed during the acquisition process; learning started with
-behavior close to guessing, which could be interpreted as exploring
+behavior close to guessing, which is best interpreted as exploring
 behavior, and was followed by two states with close to optimal
 performance.  In addition to confirming the existence of discrete
-strategies, the use of DMM analyses provides us with information of
+rules, the use of DMM analyses provides us with information of
 the dynamics of knowledge acquisition in this task. 
 
 % WPT
 Analyzing the WPT data on an individual level allowed us to precisely
-estimate idiographic strategies and their progression during learning.
+estimate idiographic rules and their progression during learning.
 Moreover, using DMMs, we can combine an individual and group level
 analysis, increasing reliability of the individual analyses whilst
 allowing for substantial individual differences.  Previous analyses
-\cite<e.g.,>{Meeter2006} pre-defined individual strategies, based on
+\cite<e.g.,>{Meeter2006} used pre-defined individual rules, based on
 participants' self-reports in \citet{Gluck2002}.  Interestingly,
 \citet{Gluck2002} noted that these self-reports often did not
-correspond to the strategies evident in participants' responses.  It
-is well known that people may find it difficult to verbalize the way
-in which they integrate multiple sources of information.  As such,
-estimating strategies directly from participants' responses will
-result in more valid assessment of their response strategies, and
-provides a direct test of the validity of the strategy set identified
-by \citet{Gluck2002}.
+correspond to the rules evident in participants' responses.  It is
+well known that people may find it difficult to verbalize the way in
+which they integrate multiple sources of information.  This problem is
+even more severe in studying young children.  Because of this,
+estimating rules directly from participants' responses results in a
+more valid assessment of their response rules, and provides a direct
+test of the validity of the rule set identified by \citet{Gluck2002}.
 
-
-
-Possible future extensions in depmixS4
-\begin{enumerate}
-	\item richer measurement models, eg factor models, AR models etc
-	\item richer transition models, eg continuous time measurement occasions
-	\item explicit state durations
-	\item identifiability of models
-	\item model selection
-\end{enumerate}
-
-General issues
-\begin{itemize}
-	\item illustrations show results that are consistent with usual group based analyses AND 
-	provide extra information on switching between strategies over the course of learning
-	\item Many applications in experimental psychology: examples????
-\end{itemize}
-
+% DMM: their great future, conclusion
+In sum, DMMs have been shown to be feasible models of individual time
+series.  Moreover, \pkg{depmixS4} can be used to build models of
+groups of participants combined and allows for testing whether pooling
+individual participants' data is warranted.  Due to the use of S4
+classes, the \pkg{depmixS4} package is highly flexible and easily
+extensible.  Future options are to include other measurement models
+such as the factor model or models with autoregressive coefficients.
+Also, extensions of the transition model are easily implemented; for
+example, the addition of support for continuous time measurement in
+contrast to equally space measurement occasions as were used in the
+presented illustrations.  Dependent mixture models hence have great
+potential in enlarging our insights into important issues in learning
+and development, in particular in modeling and testing the occurrence
+of discrete change.
 
 \newpage
 
