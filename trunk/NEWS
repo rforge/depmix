@@ -5,6 +5,11 @@ Changes in depmixS4 version 0.2-1
   
   o Restructured test files somewhat
 
+  o Fixed a bug in the use of the conrows argument in the fit function (a missing
+    drop=FALSE statement)
+
+  o Updated help files for mix classes
+
   o 
 
 
