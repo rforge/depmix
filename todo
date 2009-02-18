@@ -1,9 +1,13 @@
 
 TODO list for paper
 
-1) do extensive testing
+1) do extensive testing:
+	- generate data for response models and parameter recovery (mostly
+	done in the test files)
+	- similarly for actual markov models and mixture models
 
-2) add example of adding new response model
+2) add example of adding new response model to JSS paper (still looking
+for a good candidate model ...)
 
 3) check models with boundary values in the transition and initial
 state probabilities (possibly work on identity link for multinomial
@@ -13,47 +17,29 @@ parameter vectors)
 
 4) write the paper
 
-5) bugs in transInit met covariaat met 3 level factor?
-
-6) bug in nlin: see lincon versus linconFull in depmixfit.R
-
-7) help voor fixed, equal constraints opgeven
-
-8) check bug in posterior versus viterbi bij de modellen van Maartje
-
-9) AIC/BIC help files: refs toevoegen
-
-10) balance data set refs toevoegen en toestemming vragen aan Brenda, data set 
+5) balance data set refs toevoegen en toestemming vragen aan Brenda, data set 
 reduceren dmv random subset
 
+6) Tests: 
+	- make output files for test files
 
 
 TODO Medium term
 
-1) look at initial value generation?
+1) Discrimination learning example, need covariates with these data!
 
-2) Discrimination learning example, need covariates with these data!
+2) Factor depmix model as example of user specified model
 
-3) Factor depmix model as example of user specified model
-
-4) make C versions of fb and lystig to speed things up a little bit 
-(have a look at the profile code in depmixNew-test4.R to see where 
-the speed problems are)
-
-5) Change stop criterion in EM: make it relative to the magnitude of the 
-likelihood to avoid overly long iterations with large likelihoods, ie for 
-thousands of cases
+3) Discrimination learning example: find data set with interesting covariates
 
 
 TODO long term 
 
 Design issues
 
-1) Analytical gradients in lystig + standard errors of parameters
+1) Multi group possibilities: use group factor in call to depmix??
 
-2) Multi group possibilities: use group factor in call to depmix??
-
-3) Missing data options?
+2) Missing data options?
 
 
 Other capabilities
@@ -67,10 +53,12 @@ Other capabilities
 
 4) Check flexclust package for an example of extending models
 
-5) Check glmc pack for constrained glm models!!!!!
+5) Check glmc pack for constrained glm models
 
 6) stochmod pack for stochastic models
 
-7) use relevel function to recode factors into different base
+7) use relevel function to recode factors into different base categories
 
 8) Standard errors (Hessian) for EM (computed by e.g. Louis' method)
+
+

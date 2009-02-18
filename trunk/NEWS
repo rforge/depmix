@@ -14,6 +14,10 @@ Changes in depmixS4 version 0.2-1
     prior and transInit models with covariates (thanks to Verena Schmittmann 
     for reporting this)
 
+  o Added newx argument to predict function of transInit objects, to be used
+    for predicting probabilities depending on covariates (useful in eg plotting
+    transition probabilities as function of a covariate)
+
   o 
 
 Changes in depmixS4 version 0.2-0
