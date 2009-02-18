@@ -136,13 +136,13 @@ data(speed)
 set.seed(1)
 tr=runif(6)
 trst=c(tr[1:2],0,tr[3:5],0,tr[6])
-mod <- depmix(list(rt~1,corr~1),data=speed,transition=~Pacc,nstates=2,family=list(gaussian(),multinomial()),
+mod1 <- depmix(list(rt~1,corr~1),data=speed,transition=~Pacc,nstates=2,family=list(gaussian(),multinomial()),
 	trstart=trst)
 # fit the model
-mod1 <- fit(mod)
-mod1 # to see the logLik and optimization information
+fmod1 <- fit(mod1)
+fmod1 # to see the logLik and optimization information
 # to see the parameters
-summary(mod1)
+summary(fmod1)
 
 \dontrun{
 # NOTE: this requires Rdonlp2 package to be installed
@@ -152,7 +152,7 @@ summary(mod1)
 # get the starting values of this model to the optimized 
 # values of the previously fitted model to speed optimization
 
-pars <- c(unlist(getpars(mod1)))
+pars <- c(unlist(getpars(fmod1)))
 
 # constrain the initial state probs to be 0 and 1 
 # also constrain the guessing probs to be 0.5 and 0.5 
@@ -160,23 +160,23 @@ pars <- c(unlist(getpars(mod1)))
 # change the ones that we want to constrain
 pars[2]=+Inf # this means the process will always start in state 2
 pars[14]=0 # the corr parameters in state 1 are now both 0, corresponding the 0.5 prob
-mod <- setpars(mod,pars)
+mod2 <- setpars(mod1,pars)
 
 # fix the parameters by setting: 
 free <- c(0,0,rep(c(0,1),4),1,1,0,0,1,1,0,1)
 # fit the model
-mod2 <- fit(mod,fixed=!free)
+fmod2 <- fit(mod2,fixed=!free)
 
-# likelihood ratio insignificant, hence mod2 better than mod1
-llratio(mod1,mod2)
+# likelihood ratio insignificant, hence fmod2 better than fmod1
+llratio(fmod1,fmod2)
 
 # NOW ADD SOME GENERAL LINEAR CONSTRAINTS
 
 # set the starting values of this model to the optimized 
 # values of the previously fitted model to speed optimization
 
-pars <- c(unlist(getpars(mod2)))
-mod <- setpars(mod,pars)
+pars <- c(unlist(getpars(fmod2)))
+mod3 <- setpars(mod2,pars)
 
 # start with fixed and free parameters
 conpat <- c(0,0,rep(c(0,1),4),1,1,0,0,1,1,0,1)
@@ -184,9 +184,9 @@ conpat <- c(0,0,rep(c(0,1),4),1,1,0,0,1,1,0,1)
 conpat[4] <- conpat[8] <- 2
 conpat[6] <- conpat[10] <- 3
 
-mod3 <- fit(mod,equal=conpat)
+fmod3 <- fit(mod3,equal=conpat)
 
-llratio(mod2,mod3)
+llratio(fmod2,fmod3)
 
 }
 
@@ -197,24 +197,24 @@ instart=c(0.5,0.5)
 set.seed(1)
 respstart=runif(16)
 # note that ntimes argument is used to make this a mixture model
-mod <- mix(list(d1~1,d2~1,d3~1,d4~1), data=balance, nstates=2,
+mod4 <- mix(list(d1~1,d2~1,d3~1,d4~1), data=balance, nstates=2,
 	family=list(multinomial(),multinomial(),multinomial(),multinomial()),
 	respstart=respstart,instart=instart)
 
-mod1 <- fit(mod)
+fmod4 <- fit(mod4)
 
 # add age as covariate on class membership by using the prior argument
 instart=c(0.5,0.5,0,0) # we need the initial probs and the coefficients of age 
 set.seed(2)
 respstart=runif(16)
-mod2 <- mix(list(d1~1,d2~1,d3~1,d4~1), data=balance, nstates=2,
+mod5 <- mix(list(d1~1,d2~1,d3~1,d4~1), data=balance, nstates=2,
 	family=list(multinomial(),multinomial(),multinomial(),multinomial()),
 	instart=instart, respstart=respstart, prior=~age, initdata=balance)
 
-mod3 <- fit(mod2)
+fmod5 <- fit(mod5)
 
 # check the likelihood ratio; adding age significantly improves the goodness-of-fit
-llratio(mod3,mod1)
+llratio(fmod5,fmod4)
 
 }
 
