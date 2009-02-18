@@ -70,7 +70,7 @@
 	equality, and general linear (in-)equality constraints.  Constraint
 	vectors should be of length npar(object).  See help on
 	\code{\link{getpars}} and \code{\link{setpars}} about the ordering of
-	parameters.
+	parameters. 
 	
 	The \code{equal} argument is used to specify equality constraints:
 	parameters that get the same integer number in this vector are
@@ -89,7 +89,8 @@
 	the conrows.lower and conrows.upper arguments to specify the bounds on
 	the constraints.  \code{conrows} is a matrix of npar(object) columns
 	and one row for each constraint (a vector in the case of a single
-	constraint).
+	constraint). Examples of these three ways of constraining parameters
+	are provided below. 
 	
 	\code{\link{llratio}} performs a log-likelihood ratio test on two
 	\code{fit}'ted models; the first object should have the largest degrees
@@ -117,6 +118,9 @@
 	Posterior densities and the viterbi state sequence can be accessed
 	through \code{\link{posterior}}.
 	
+	As fitted models are depmixS4 models, they can be used as starting
+	values for new fits, for example with constraints added. 
+
 }
 
 \references{
@@ -187,6 +191,18 @@ conpat[6] <- conpat[10] <- 3
 fmod3 <- fit(mod3,equal=conpat)
 
 llratio(fmod2,fmod3)
+
+# above constraints can also be specified using the conrows argument as follows
+conr <- matrix(0,2,18)
+# pars 4 and 8 have to be equal, otherwise stated, their diffence should be zero
+conr[1,4] <- 1
+conr[1,8] <- -1
+conr[2,6] <- 1
+conr[2,10] <- -1
+
+# note here that we use the fitted model fmod2 as that has appropriate 
+# starting values
+fmod3b <- fit(fmod2,conrows=conr,fixed=!free) # using free defined above
 
 }
 
