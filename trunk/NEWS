@@ -21,8 +21,6 @@ Changes in depmixS4 version 0.2-1
   o added example of the use of conrows argument in fitting functions and other 
     minor updates in documentation
   
-  o 
-
 Changes in depmixS4 version 0.2-0
 
   o restructured R and Rd (help) files; added depmixS4 help with a short

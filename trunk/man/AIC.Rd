@@ -35,6 +35,7 @@
 }
 
 \references{
+	
 	H. Akaike.  Information theory and an extension of the maximum
 	likelihood principle.  In B. N. Petrov and F. Csaki, editors, Second
 	international symposium on information theory, pages 267Ð281.
