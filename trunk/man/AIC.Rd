@@ -1,4 +1,5 @@
 \name{AIC}
+
 \alias{AIC}
 \alias{AIC,depmix-method}
 \alias{AIC,mix-method}
@@ -28,7 +29,20 @@
 	The value of the AIC or BIC respectively.
 }
 
-\references{}
+\details{
+	The \code{n} that is used in the BIC is \code{sum(ntimes(object))}, where
+	object is the model under consideration. 
+}
+
+\references{
+	H. Akaike.  Information theory and an extension of the maximum
+	likelihood principle.  In B. N. Petrov and F. Csaki, editors, Second
+	international symposium on information theory, pages 267Ð281.
+	Budapest: Academiai Kiado, 1973.
+	
+	G. Schwarz.  Estimating the dimension of a model.  Annals of
+	Statistics, 6:461Ð464, 1978.
+}
 
 \author{Ingmar Visser}
 
