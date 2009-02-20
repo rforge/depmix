@@ -35,14 +35,12 @@
 }
 
 \references{
-	
-	H. Akaike.  Information theory and an extension of the maximum
-	likelihood principle.  In B. N. Petrov and F. Csaki, editors, Second
-	international symposium on information theory, pages 267Ð281.
-	Budapest: Academiai Kiado, 1973.
-	
-	G. Schwarz.  Estimating the dimension of a model.  Annals of
-	Statistics, 6:461Ð464, 1978.
+	H. Akaike. Information theory and an extension of the maximum likelihood 
+	principle. In B. N. Petrov and F. Csaki, editors, Second International
+	Symposium on Information Theory, p. 267-281. Budapest: Academiai Kiado, 1973.
+
+	G. Schwarz. Estimating the dimension of a model. Annals of Statistics, 
+	volume 6, p. 4761-464, 1978. 
 }
 
 \author{Ingmar Visser}
