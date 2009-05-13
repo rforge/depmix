@@ -6,8 +6,8 @@ TODO list for paper
 	done in the test files)
 	- similarly for actual markov models and mixture models
 
-2) add example of adding new response model to JSS paper (still looking
-for a good candidate model ...)
+2) add example of adding new response model to JSS paper: exgaus models
+for speed data
 
 3) check models with boundary values in the transition and initial
 state probabilities (possibly work on identity link for multinomial
@@ -23,14 +23,23 @@ reduceren dmv random subset
 6) Tests: 
 	- make output files for test files
 
+7) Bugs: 
+	- check error sent by Rita Gaio
+	- check error by Maartje
+
 
 TODO Medium term
 
 1) Discrimination learning example, need covariates with these data!
 
-2) Factor depmix model as example of user specified model
+2) BB or other optimization routines??
 
-3) Discrimination learning example: find data set with interesting covariates
+3) Speed issues: 
+	- add gradients
+	- run Rprofile tests to determine speed limits
+	- possibly move lystig and forward/backward to C routines
+
+4) Get Hessian for standard errors (computed by e.g. Louis' method)
 
 
 TODO long term 
@@ -41,24 +50,22 @@ Design issues
 
 2) Missing data options?
 
+3) Mixture of depmix models?
+
 
 Other capabilities
 
 1) Look at log and exp of matrices to have continuous time observations
-(also see mlm)
+(also see mlm, see Bockenholt 2005
 
 2) Look at HMISC for mapply -> multivariate apply for mv densities
 
 3) Look at package ks for mv normal mixture densities
 
-4) Check flexclust package for an example of extending models
+4) Check glmc pack for constrained glm models
 
-5) Check glmc pack for constrained glm models
+5) stochmod pack for stochastic models
 
-6) stochmod pack for stochastic models
-
-7) use relevel function to recode factors into different base categories
-
-8) Standard errors (Hessian) for EM (computed by e.g. Louis' method)
+6) use relevel function to recode factors into different base categories
 
 
