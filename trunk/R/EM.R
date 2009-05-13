@@ -115,7 +115,7 @@ em.depmix <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 	LL.old <- LL + 1
 	
 	while(j <= maxit & !converge) {
-				
+		
 		# maximization
 				
 		# should become object@prior <- fit(object@prior)
