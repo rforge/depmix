@@ -1,12 +1,19 @@
 
+Changes in depmixS4 version 0.2-2
+
+  o fixed a warning produced when specifying conrows.upper and .lower in the
+    the fit function
+
+  o 
+
 Changes in depmixS4 version 0.2-1
 
   o fixed a bug in the Viterbi algorithm used to compute posterior states
   
   o restructured test files somewhat
 
-  o fixed a bug in the use of the conrows argument in the fit function (a missing
-    drop=FALSE statement)
+  o fixed a bug in the use of the conrows argument in the fit function (a 
+    missing drop=FALSE statement)
 
   o updated help files for mix classes
 

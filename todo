@@ -9,23 +9,19 @@ TODO list for paper
 2) add example of adding new response model to JSS paper: exgaus models
 for speed data
 
-3) check models with boundary values in the transition and initial
-state probabilities (possibly work on identity link for multinomial
-models, but this involves also adding parstruct or something like it
-to the response models to incorporate linear constraints within those
-parameter vectors)
+3) write the paper
 
-4) write the paper
-
-5) balance data set refs toevoegen en toestemming vragen aan Brenda, data set 
+4) balance data set refs toevoegen en toestemming vragen aan Brenda, data set 
 reduceren dmv random subset
 
-6) Tests: 
+5) Tests: 
 	- make output files for test files
 
-7) Bugs: 
+6) Bugs: 
 	- check error sent by Rita Gaio
 	- check error by Maartje
+
+
 
 
 TODO Medium term
@@ -40,6 +36,12 @@ TODO Medium term
 	- possibly move lystig and forward/backward to C routines
 
 4) Get Hessian for standard errors (computed by e.g. Louis' method)
+
+5) check models with boundary values in the transition and initial
+state probabilities (possibly work on identity link for multinomial
+models, but this involves also adding parstruct or something like it
+to the response models to incorporate linear constraints within those
+parameter vectors)
 
 
 TODO long term 
