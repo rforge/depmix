@@ -4,7 +4,10 @@ Changes in depmixS4 version 0.2-2
   o fixed a warning produced when specifying conrows.upper and .lower in the
     the fit function
 
-  o 
+  o added error message in case the initial log likelihood is infeasible
+
+  o fixed a bug in the fit function for multinomial response models with 
+    covariates (thanks to Gilles Dutilh for spotting this)
 
 Changes in depmixS4 version 0.2-1
 
