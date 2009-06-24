@@ -34,7 +34,7 @@ depmixS4 provides classes for specifying and fitting hidden Markov models
 		Package: \tab depmixS4\cr
 		Type: \tab Package\cr
 		Version: \tab 0.2-2\cr
-		Date: \tab 2009-13-05\cr
+		Date: \tab 2009-24-06\cr
 		License: \tab GPL\cr
 	}
 
@@ -46,6 +46,9 @@ depmixS4 provides classes for specifying and fitting hidden Markov models
 	\code{\link{fit}} function; imposing constraints is done through the
 	fit function.  Standard output includes the optimized parameters and
 	the posterior densities for the states and the optimal state sequence.
+	
+	For full control and the possibility to add new response distributions,
+	check the \code{\link{makeDepmix}} help page. 
 
 }
 

@@ -143,8 +143,10 @@ following slots:
 
 	\code{\link{fit}}, \code{\link{transInit}}, \code{\link{response}},
 	\code{\link{depmix-methods}} for accessor functions to \code{depmix}
-	objects.
-
+	objects. 	
+	
+	For full control check the \code{\link{makeDepmix}} help page and its
+	example section for the possibility to add new response distributions.
 }
 
 \references{
