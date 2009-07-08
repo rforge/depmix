@@ -86,9 +86,9 @@ fitdmm <- function(dat,dmm,printlevel=1,poster=TRUE,tdcov=0,ses=TRUE,method="opt
 		}
 	}
 	
- 	initLogl=loglike(dat=dat,dmm=xgmod,tdcov=tdcov,print=0,set=FALSE)$logl
- 	if(is.nan(initLogl) || is.infinite(initLogl)) stop("Initial model inadmissible, better starting values needed?!\n")
- 	if(printlevel>0) cat("Initial loglikelihood: ", initLogl, " \n")
+	initLogl=loglike(dat=dat,dmm=xgmod,tdcov=tdcov,print=0,set=FALSE)$logl
+	if(is.nan(initLogl) || is.infinite(initLogl)) stop("Initial model inadmissible, better starting values needed?!\n")
+	if(printlevel>0) cat("Initial loglikelihood: ", initLogl, " \n")
 	
 	timeUsed=0
 	
@@ -196,21 +196,21 @@ fitdmm <- function(dat,dmm,printlevel=1,poster=TRUE,tdcov=0,ses=TRUE,method="opt
 		} # else nothing to do, bl and bu are already defined
 		
 		## npsol optimization options
- 		itlim=paste(c("Iteration Limit = ", iterlim , "   "), collapse=" ")
- 		npopts=c(itlim,
- 			"Print level = 20 ",
- 			"Minor print level = 10",
- 			"Derivative level = 0 ",
- 			"Hessian = No ",
- 			"Verify level = 0 ")
+#  		itlim=paste(c("Iteration Limit = ", iterlim , "   "), collapse=" ")
+#  		npopts=c(itlim,
+#  			"Print level = 20 ",
+#  			"Minor print level = 10",
+#  			"Derivative level = 0 ",
+#  			"Hessian = No ",
+#  			"Verify level = 0 ")
 		
 # 			"Optimality tolerance = 1.0e-12 ")
 		# verify options: 0 is good for standard markovian and latent class models
 		# verify level should be 3 for new types of models, ie with new distributions etc.
 		
- 		optset=lapply(npopts,FUN=optfor <- function(opt) {.Fortran("npoptn",as.character(opt),PACKAGE="depmix") } )
+#  		optset=lapply(npopts,FUN=optfor <- function(opt) {.Fortran("npoptn",as.character(opt),PACKAGE="depmix") } )
 		# optfile can be used to read in an optionsfile called npoptn from the working directory
-		optfile=0 # using this will override above specified default options
+		optfile=1 # using this will override above specified default options
 		derivatives=der # are derivatives to be used or not
 		cj=1 # non linear constraints are not supported yet, hence cj=1
 		maxnpcalls=1 # maxnpcalls is not used at the moment
@@ -314,7 +314,7 @@ fitdmm <- function(dat,dmm,printlevel=1,poster=TRUE,tdcov=0,ses=TRUE,method="opt
 	
 	##  call optim or nlm to optimize the model
 	if(method=="optim" || method=="nlm") {
-		vfactor=15
+# 		vfactor=15
 		# reparametrize for optim and nlm
 		noptpars=length(fitpars)
 		# un-constrained pars
@@ -612,10 +612,10 @@ loglike <- function(dat,dmm,tdcov=0,grad=FALSE,hess=FALSE,set=TRUE,grInd=0,sca=1
 		warning("gradients not available for items other than multinomial and gaussian.")
 	}
 	
- 	if(hess) {
- 		warning("Hessian not implemented (yet).\n")
- 		hess=0
- 	}
+	if(hess) {
+		warning("Hessian not implemented (yet).\n")
+		hess=0
+	}
 	
 	if(tdcov) {
 		pars=xgmod$pars
