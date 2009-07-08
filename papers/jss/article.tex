@@ -5,21 +5,32 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% almost as usual
-\author{Achim Zeileis\\Wirtschaftsuniversit\"at Wien \And 
-        Second Author\\Plus Affiliation}
-\title{A Capitalized Title: Something About a Package \pkg{foo}}
+\author{Ingmar Visser\\University of Amsterdam \And 
+        Maarten Speekenbrink\\University College London }
+\title{\pkg{depmixS4}: An \proglang{R}-package for hidden Markov models}
 
 %% for pretty printing and a nice hypersummary also set:
-\Plainauthor{Achim Zeileis, Second Author} %% comma-separated
-\Plaintitle{A Capitalized Title: Something About a Package foo} %% without formatting
-\Shorttitle{A Capitalized Title} %% a short title (if necessary)
+\Plainauthor{Ingmar Visser, Maarten Speekenbrink} %% comma-separated
+\Plaintitle{depmixS4: An R-package for hidden Markov models} %% without formatting
+\Shorttitle{depmixS4 Hidden Markov Models} %% a short title (if necessary)
 
 %% an abstract and keywords
 \Abstract{
-  The abstract of the article.
+	\pkg{depmixS4} implements a general framework for definining and
+	fitting hidden Markov mixture model in the R programming language
+	\citep{R2009}.  This includes standard Markov models,
+	latent/hidden Markov models, and latent class and finite mixture
+	distribution models.  The models can be fitted on mixed
+	multivariate data with multinomial and/or gaussian distributions.
+	Parameters can be estimated subject to general linear constraints.
+	Parameter estimation is done through an EM algorithm or by a
+	direct optimization approach using the
+	\pkg{Rdonlp2} optimization routine when contraints are imposed on
+	the parameters.  A number of illustrative examples are included.
+	
 }
-\Keywords{keywords, comma-separated, not capitalized, \proglang{Java}}
-\Plainkeywords{keywords, comma-separated, not capitalized, Java} %% without formatting
+\Keywords{hidden Markov model, dependent mixture model, mixture model, \proglang{R}}
+\Plainkeywords{hidden Markov model, dependent mixture model, mixture model,R} %% without formatting
 %% at least one keyword must be supplied
 
 %% publication information
@@ -34,12 +45,14 @@
 %% The address of (at least) one author should be given
 %% in the following format:
 \Address{
-  Achim Zeileis\\
-  Department f\"ur Statistik \& Mathematik\\
-  Wirtschaftsuniversit\"at Wien\\
-  1090 Wien, Austria\\
-  E-mail: \email{Achim.Zeileis@wu-wien.ac.at}\\
-  URL: \url{http://statmath.wu-wien.ac.at/~zeileis/}
+Ingmar Visser\\
+Department of Psychology\\
+University of Amsterdam,
+Roetersstraat 15\\
+1018 WB, Amsterdam\\
+The Netherlands\\
+E-mail: \email{i.visser@uva.nl} \\
+URL: \url{http://www.ingmar.org/}
 }
 %% It is also possible to add a telephone and fax number
 %% before the e-mail in the following format:
@@ -57,7 +70,58 @@
 %% include your article here, just as usual
 %% Note that you should use the \pkg{}, \proglang{} and \code{} commands.
 
-\section[About Java]{About \proglang{Java}}
+\section[]{Introduction}
 %% Note: If there is markup in \(sub)section, then it has to be escape as above.
+
+Why did we develop depmixS4?
+
+\section{The dependent mixture model}
+
+Describe the model formulae
+
+\subsection{Likelihood}
+
+Give some refs to computing the likelihood
+
+\subsection{Parameter estimation}
+
+Give some refs to EM/forward/backbward and possibly others.
+
+
+\section{Using \pkg{depmixS4}}
+
+Explain the three steps involved in fitting a model. 
+
+
+\subsection{Start-up example}
+
+Just the RT data.
+
+
+\subsection{Adding covariates on transition parameters}
+
+
+Give an example on how to do this.
+
+
+\subsection{Add covariates to prior model}
+
+Give an example with the balance data. 
+
+\section{Extending \pkg{depmixS4}}
+
+Introduce the exgaus example. 
+
+Explain the use of makeDepmix for having full control of every aspect of the model. 
+
+
+\section{Conclusion \& future work}
+
+
+What are our next plans?
+
+
+\bibliography{all,ingmar}
+
 
 \end{document}
