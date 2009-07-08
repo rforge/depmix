@@ -1,0 +1,48 @@
+\begin{theindex}
+
+  \item $*$Topic{\relax \fontsize  {12}{14}\selectfont  \ \textbf  {models}}
+    \subitem \texttt  {depmix}, \hyperpage{1}
+
+  \indexspace
+
+  \item \texttt  {bootstrap} \textit  {(\texttt  {depmix})}, 
+		\hyperpage{1}
+
+  \indexspace
+
+  \item \texttt  {depmix}, \hyperpage{1}
+  \item \texttt  {dmm}, \textit{4}
+
+  \indexspace
+
+  \item \texttt  {fitdmm} \textit  {(\texttt  {depmix})}, \hyperpage{1}
+
+  \indexspace
+
+  \item \texttt  {loglike} \textit  {(\texttt  {depmix})}, 
+		\hyperpage{1}
+
+  \indexspace
+
+  \item \texttt  {markovdata}, \textit{4}
+
+  \indexspace
+
+  \item \texttt  {oneliner} \textit  {(\texttt  {depmix})}, 
+		\hyperpage{1}
+
+  \indexspace
+
+  \item \texttt  {posterior} \textit  {(\texttt  {depmix})}, 
+		\hyperpage{1}
+
+  \indexspace
+
+  \item \texttt  {repeated}, \textit{3, 4}
+
+  \indexspace
+
+  \item \texttt  {summary.fit} \textit  {(\texttt  {depmix})}, 
+		\hyperpage{1}
+
+\end{theindex}
