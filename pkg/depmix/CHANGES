@@ -4,3 +4,11 @@ Changes from 0.9.0 to 0.9.11) Added case replicate-weights to save computation
 Changes from 0.9.4 to 0.9.5
 
 1) Minor changes; fixed some documentation and warning issues. 
+
+Changes from 0.9.5 to 0.9.6
+
+1) Minor changes to make depmix compatible with R 2.9.1
+
+2) NPSOL support now works with an options file (see the NPSOL manual
+for details on how to structure that file), which should live in your
+working directory. 
