@@ -6,7 +6,7 @@
 
 \usepackage[]{amsmath, amsfonts, amstext, amsthm}
 
-\batchmode
+%\batchmode
 
 \usepackage{Sweave}
 
@@ -17,10 +17,11 @@
 \title{depmix: An R-package for fitting mixture models on mixed
 multivariate data with Markov dependencies}
 
-\author{Ingmar Visser\thanks{
-Correspondence concerning this manual should be adressed to:
-Ingmar Visser, Department of Psychology, University of Amsterdam,
-Roetersstraat 15, 1018 WB, Amsterdam, The Netherlands}\\
+\author{Version: 0.9.1 \\ Ingmar Visser\thanks{Correspondence concerning this manual
+should be adressed to: Ingmar Visser, Department of Psychology,
+University of Amsterdam, Roetersstraat 15, 1018 WB, Amsterdam, The
+Netherlands}\\
+Developmental Processes Research Group\\
 Department of Psychology, University of Amsterdam\\
 i.visser@uva.nl}
 
@@ -45,19 +46,21 @@ i.visser@uva.nl}
 
 \maketitle
 
-\begin{abstract} 
-	
+\begin{abstract}
 	\pkg{depmix} implements a general class of mixture models with
 	Markovian dependencies between them in the R programming language
-	\citep{R2007}.  This includes standard Markov models, latent/hidden
-	Markov models, and latent class and finite mixture distribution models.
-	The models can be fitted on mixed multivariate data with multinomial
-	and/or gaussian distributions.  Parameters can be estimated subject to
-	general linear constraints, and with optional inclusion of regression
-	on (time-dependent) covariates.  Parameters estimation is done through
-	a direct optimization approach with gradients using the \code{Rdonlp2}
-	optimization routine.  A number of illustrative examples are included.
-
+	\citep{R2006}.  This includes standard Markov models,
+	latent/hidden Markov models, and latent class and finite mixture
+	distribution models.  The models can be fitted on mixed
+	multivariate data from a number of distributions including the
+	binomial, multinomial, gaussian, lognormal and Weibull
+	distributions.  Parameters can be estimated subject to general
+	linear constraints, and with optional inclusion of regression on
+	(time-dependent) covariates.  Parameter estimation is done
+	through a direct optimization approach with gradients using the
+	\code{nlm} optimization routine.  Optional support for using the NPSOL
+	optimization routines is provided as well.  A number of illustrative
+	examples are included.
 \end{abstract}
 
 \tableofcontents
@@ -67,7 +70,7 @@ i.visser@uva.nl}
 Markov and latent Markov models are frequently used in the social
 sciences, in different areas and applications.  In psychology, they
 are used for modelling learning processes, see \citet{Wickens1982}, for an
-overview, and \citet{Schmittmann2006} for a recent application.  In
+overview, and \citet{Schmittmann2005} for a recent application.  In
 economics, latent Markov models are commonly used as regime switching
 models, see e.g.\ \citet{Kim1994} and \citet{Ghysels1994}.  Further
 applications include speech recognition \citep{Rabiner1989}, EEG analysis
@@ -78,9 +81,9 @@ Markov models.
 The \pkg{depmix} package was motivated by the fact that Markov models
 are used commonly in the social sciences, but no comprehensive package
 was available for fitting such models.  Common programs for Markovian
-models include Panmark \citep{Panmark3-96}, and for latent class models
+models include Panmark \citep{Pol1996}, and for latent class models
 Latent Gold 
-\citep{LatentGold3-2003}.  Those programs are lacking a number of
+\citep{Vermunt2003}.  Those programs are lacking a number of
 important features, besides not being freely available.  In
 particular, \pkg{depmix}: 1) handles multiple case, or multiple group,
 analysis; 2) handles arbitrarily long time series; 3) estimates models
@@ -98,6 +101,10 @@ chapters after that a number of examples are presented.
 
 
 \section*{Acknowledgements} 
+
+Development of this pacakge was supported by European Commission grant
+51652 (NEST) and by a VENI grant from the Dutch Organization for Scientific
+Research (NWO) to Ingmar Visser.
 
 I am indebted to many people for providing help in writing this package.
 First and foremost Maartje Raijmakers and Verena Schmittmann tested
@@ -145,7 +152,7 @@ plot(speed,nind=1)
 The latent Markov model is commonly associated with data of this type,
 albeit usually only multinomial variables are considered.  However,
 common estimation procedures, such as those implemented in
-\citet{Panmark3-96} are not suitable for long time series due to
+\citet{Pol1996} are not suitable for long time series due to
 underflow problems.  In contrast, the hidden Markov model is typically
 only used for `long' univariate time series.  In the next section, the
 likelihood and estimation procedure for the hidden Markov model is
@@ -176,8 +183,8 @@ state can change over time.
 \section{Likelihood}
 
 The loglikelihood of hidden Markov models is usually computed by the
-so-called forward-backward algorithm \citep{Bau66,Rab89}, or rather by
-the forward part of this algorithm.  \cite{Lys2002} changed the forward
+so-called forward-backward algorithm \citep{Baum1966,Rabiner1989}, or rather by
+the forward part of this algorithm.  \cite{Lystig2002} changed the forward
 algorithm in such a way as to allow computing the gradients of the
 loglikelihood at the same time.  They start by rewriting the
 likelihood as follows (for ease of exposition the dependence on the
@@ -199,7 +206,7 @@ The log-likelihood can now be expressed as:
 	\label{eq:condLogl}
 \end{equation}
 
-To compute the log-likelihood, \cite{Lys2002} define the following 
+To compute the log-likelihood, \cite{Lystig2002} define the following 
 (forward) recursion:
 \begin{align}
 	\phi_{1}(j) &:= Pr(\vc{O}_{1}, S_{1}=j) = \pi_{j} b_{j}(\vc{O}_{1}) 
@@ -279,7 +286,7 @@ computational cost is almost halved.
 
 \newcommand{\fpp}{\frac{\partial} {\partial \lambda_{1}}}
 
-See equations 10--12  in \cite{Lys2002} for the score recursion 
+See equations 10--12  in \cite{Lystig2002} for the score recursion 
 functions of the hidden Markov model for a univariate time series. 
 Here the corresponding score recursion for the multivariate mixture 
 case are provided. The $t=1$ components of this score recursion are 
@@ -310,7 +317,7 @@ and for $t>1$ the definition is:
 \end{split} \label{eq:psit}
 \end{align}
 
-Using above equations, \cite{Lys2002} derive the following equation 
+Using above equations, \cite{Lystig2002} derive the following equation 
 for the partial derivative of the likelihood:
 \begin{equation}
 	\fpp l_{T}= 	
@@ -594,7 +601,7 @@ hypothesis whether the switching between states is a symmetric process or
 not. Hence, we constrain the transition parameters $a_{11}$ and $a_{22}$.
 
 Constraining and fixing parameters is done in a similar fashion as the
-\code{pa} command that is used in LISREL \citep{Lis99}. The
+\code{pa} command that is used in LISREL \citep{Joreskog1999}. The
 \code{conpat} argument to the \code{fitdmm}-function specifies for
 each parameter in the model whether it's fixed (0) or free (1 or
 higher). Equality constraints can be imposed by having two parameters have 
@@ -867,12 +874,23 @@ discrimination learning experiment which is provided as data set
 \input{discrimination}
 
 
+\section{Known issues and future plans}
+
+\paragraph{Constraint violations} Parameter optimization is done by adding
+a penalty to the log likelihood whenever constraints are not satisfied, ie
+linear inequality and box constraints.  Equality constraints are fitted by
+reparametrization and do not suffer from this problem.  Refer to the
+section on parameter estimation and the \code{fitdmm} help page on how to
+deal with constraint violations. Future plans include using Lagrange
+multipliers to overcome this problem. 
+
 \nocite{Raijmakers2001}
 \nocite{Maas2005b}
-\nocite{Schmittmann2005b}
+\nocite{Schmittmann2006}
 \nocite{McCutcheon1987}
+\nocite{Visser2006b}
 
-\bibliography{all}
+\bibliography{all,ingmar}
 
 \end{document}
 

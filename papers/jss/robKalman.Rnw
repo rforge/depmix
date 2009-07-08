@@ -1,0 +1,153 @@
+\documentclass[article]{jss}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% declarations for jss.cls %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\usepackage{geometry}
+\usepackage{color}
+\definecolor{darkblue}{rgb}{0.0,0.0,0.75}
+\definecolor{distrCol}{rgb}{0.0,0.4,0.4}
+\usepackage{amssymb}%
+% -------------------------------------------------------------------------------
+\RequirePackage{listings}
+%\usepackage{Sweave}
+\RequirePackage{ifthen}
+\newboolean{Sweave@gin}
+\setboolean{Sweave@gin}{true}
+\newboolean{Sweave@ae}
+\setboolean{Sweave@ae}{true}
+% -------------------------------------------------------------------------------
+\SweaveOpts{keep.source=TRUE}
+% -------------------------------------------------------------------------------
+<<SweaveListingsPreparations, results=tex, echo=FALSE>>=
+require(SweaveListingUtils)
+SweaveListingPreparations()
+setToBeDefinedPkgs(pkgs = c("distr","distrEx", "distrMod", "RandVar", "ROptEst"),
+                   keywordstyles = "\\bf\\color{distrCol}")
+@
+% -------------------------------------------------------------------------------
+\newcommand{\ttR}[1]{{\color{Rcolor}\tt #1}}
+\newcommand{\SSs}{\scriptscriptsize}
+\newcommand{\R}{\mathbb R}
+% -------------------------------------------------------------------------------
+%% almost as usual
+\author{Peter Ruckdeschel\\Fraunhofer ITWM Kaiserslautern\And
+        Bernhard Spangl\\BOKU Wien}
+\title{\proglang{R} Package~\pkg{robKalman}: Routines for Robust Kalman Filtering}
+
+%% for pretty printing and a nice hypersummary also set:
+\Plainauthor{Peter Ruckdeschel, Bernhard Spangl} %% comma-separated
+\Plaintitle{R Package robKalman: Routines for Robust Kalman Filtering} %% without formatting
+\Shorttitle{R Package robKalman} %% a short title (if necessary)
+
+
+%% an abstract and keywords
+\Abstract{
+  Package~\pkg{robKalman} provides ...
+}
+\Keywords{Kalman filtering, \proglang{S4} classes, Robustness}
+\Plainkeywords{Kalman filtering, S4 classes, Robustness} %% without formatting
+%% at least one keyword must be supplied
+%------------------------------------------------------------------------------
+
+%% publication information
+%% NOTE: Typically, this can be left commented and will be filled out by the technical editor
+%% \Volume{13}
+%% \Issue{9}
+%% \Month{September}
+%% \Year{2004}
+%% \Submitdate{2004-09-29}
+%% \Acceptdate{2004-09-29}
+
+%% The address of (at least) one author should be given
+%% in the following format:
+\Address{
+  Peter Ruckdeschel\\
+  Fraunhofer-Institut f\"ur\\
+  Techno-und Wirtschaftsmathematik\\
+  Fraunhofer-Platz 1\\
+  67663 Kaiserslautern, Germany\\
+  E-mail: \email{Peter.Ruckdeschel@itwm.fraunhofer.de}\\
+  Bernhard Spangl\\
+  --- bitte eintragen ---
+  \bigskip \\
+}
+%% It is also possible to add a telephone and fax number
+%% before the e-mail in the following format:
+%% Telephone: +43/1/31336-5053
+%% Fax: +43/1/31336-734
+
+%% for those who use Sweave please include the following line (with % symbols):
+%% need no \usepackage{Sweave.sty}
+
+%% end of declarations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%------------------------------------------------------------------------------
+\begin{document}
+% -----------------------------------------------------------------------------
+\section{Introduction}
+% -----------------------------------------------------------------------------
+*welche Verfahren
+*was gibt es schon an (nicht notw. robust) KF in CRAN und 
+ Software Kalman ähnliche Stoffer/Shumway
+*Erläuterung der Gliederung der Arbeit
+http://www.cs.unc.edu/~welch/kalman/
+http://www.cs.ubc.ca/~murphyk/Software/Kalman/kalman.html
+
+\section{Contents}
+
+-classKalman filter (nur Referenzen + correction step)
+-ACM filter (nur Referenzen + correction step)
+-rLS filter (nur Referenzen + correction step)
+[-rLS.IO filter]
+[-rLS.IOAO filter]
+[-rIC filter]
+[-m - *** filter]
+
+* utilty infrastructure
+  -> elementare Simulation (to be enhanced)
+  [-> spezielle plot methoden]
+  [-> spezielle summary, print methoden]
+
+\section{Implementation Concept}
+
+*Interfaces
+ to other packages  
+    sspir robfilter dse dynlm dyn???
+ [to other software -> DEBI]
+
+*User Interface = robKalman + Argumentstruktur
+
+*rekursivitäts-struktur
+
+*time stamp management
+ 
+*Layer konzept
+*Klassen Konzept
+ + SSM
+ + methoden Klassen (inklusive control)
+ + output Klassen
+
+
+\section{Examples}
+ / Orientierung an Demos
+* real world 
+* Simulation
+-> Grafiken : Boxplots + exemplarische Pfade
+-> Tabellen:  empirische MSE
+
+
+\section{Availability}
+
+\section{Planned Extensions}
+*Smoother
+*EM-Algo
+%------------------------------------------------------------------------------
+\section*{Acknowledgments}
+%------------------------------------------------------------------------------
+%------------------------------------------------------------------------------
+\bibliography{distrMod}
+%------------------------------------------------------------------------------
+\end{document}
+%------------------------------------------------------------------------------
