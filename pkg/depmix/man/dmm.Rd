@@ -11,11 +11,11 @@
 
 \description{
 	
-	\item{dmm}{\code{dmm} creates an object of class \code{dmm}, a
-	dependent mixture model.}
+	\code{dmm} creates an object of class \code{dmm}, a
+	dependent mixture model.
 	
-	\item{lca}{\code{lca} creates an object of class \code{dmm,lca}, a
-	latent class model or an independent mixture model. }
+	\code{lca} creates an object of class \code{dmm,lca}, a
+	latent class model or an independent mixture model.
 
 }
 \usage{

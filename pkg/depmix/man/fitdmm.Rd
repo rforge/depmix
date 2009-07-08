@@ -15,14 +15,14 @@
 
 \description{
   	
-	\item{fitdmm}{\code{fitdmm} fits mixtures of hidden/latent Markov
+	\code{fitdmm} fits mixtures of hidden/latent Markov
 	models on arbitrary length time series of mixed categorical and
 	continuous data.  This includes latent class models and finite mixture
 	models (for time series of length 1), which are in effect independent
-	mixture models.}
+	mixture models.
 	
-	\item{\code{posterior}}{\code{posterior} computes the most likely
-	latent state sequence for a given dataset and model.}
+	\code{posterior} computes the most likely
+	latent state sequence for a given dataset and model.
 }
 \usage{
 	fitdmm(dat, dmm, printlevel = 1, poster = TRUE, tdcov = 0,

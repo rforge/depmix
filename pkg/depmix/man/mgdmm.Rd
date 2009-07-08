@@ -8,9 +8,9 @@
 
 \description{
 
-	\item{mgdmm}{\code{mgdmm} creates an object of class \code{mgd}, a
+	\code{mgdmm} creates an object of class \code{mgd}, a
 	multi-group model, from a given model of either class \code{dmm} or
-	class \code{mixdmm} or lists of these.}
+	class \code{mixdmm} or lists of these.
 
 }
 \usage{

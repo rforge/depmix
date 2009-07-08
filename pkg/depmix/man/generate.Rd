@@ -4,10 +4,10 @@
 \alias{generate}
 
 \title{Generate data from a dependent mixture model}
-	\description{
-		\item{generate}{\code{generate} generates a dataset according to a
-		given \code{dmm}.
-	}
+
+\description{
+	\code{generate} generates a dataset according to a
+	given \code{dmm}.
 }
 
 \usage{	
