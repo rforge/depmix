@@ -1,5 +1,6 @@
 %&LaTeX
 \documentclass[article]{jss}
+\usepackage{amsmath}
 
 %\usepackage[]{amsmath, amsfonts, amstext, amsthm} 
 %\usepackage{amssymb}
@@ -7,6 +8,9 @@
 %\usepackage{epsfig}
 %\usepackage{epstopdf}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% declarations for jss.cls %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% almost as usual
 \author{Ingmar Visser\\University of Amsterdam \And 
@@ -16,7 +20,6 @@
 
 %% for pretty printing and a nice hypersummary also set:
 \Plainauthor{Ingmar Visser, Maarten Speekenbrink} %% comma-separated
-
 \Plaintitle{depmixS4: An R-package for hidden Markov models} %% without formatting
 
 \Shorttitle{depmixS4: Hidden Markov Models} %% a short title (if necessary)
@@ -24,7 +27,7 @@
 %% an abstract and keywords
 \Abstract{ 	
 	depmixS4 implements a general framework for definining and
-	fitting hidden Markov mixture model in the R programming language
+	estimating hidden Markov mixture model in the R programming language
 	R2009.  This includes standard Markov models,
 	latent/hidden Markov models, and latent class and finite mixture
 	distribution models.  The models can be fitted on mixed
@@ -165,7 +168,7 @@ Figure~\ref{fig:speed} the first part of this series is plotted).
 \end{figure}
 
 The latent Markov model is commonly associated with data of this type,
-albeit usually only multinomial variables are considered.  However,
+although usually only multinomial variables are considered.  However,
 common estimation procedures, such as those implemented in
 \citet{Pol1996} are not suitable for long time series due to underflow
 problems.  In contrast, the hidden Markov model is typically only used
@@ -268,8 +271,53 @@ log-likelihood:
 \subsection{Parameter estimation}
 
 Parameters are estimated in \pkg{depmixS4} using the EM algorithm or
-through the use of a general Newton-Raphson optimizer.  The EM
-algorithm however has some drawbacks.  First, it can be slow to
+through the use of a general Newton-Raphson optimizer.  
+
+In the EM algorithm, parameters are estimated by iteratively maximising the 
+expected joint likelihood of the parameters given the observations and states. 
+Let $\greekv{\theta} = (\greekv{\theta}_1, \greekv{\theta}_2,\greekv{\theta}_3)$
+be the general parameter vector consisting of three subvectors with parameters 
+for the prior model, transition model, and response model respectively. The 
+joint log likelihood can be written as
+\begin{equation}
+\log Pr(O_{1:T}, S_{1:T}|\greekv{\theta}) = \log Pr(S_1|\greekv{\theta}_1) 
++ \sum_{t=2}^{T} \log Pr(S_t|S_{t-1},\greekv{\theta}_2) 
++ \sum_{t=1}^{T} \log Pr(O_t|S_t,\greekv{\theta}_3)
+\end{equation}
+This likelihood depends on the unobserved states $S_t$. In the Expectation step,
+we replace these with their expected values given a set of (initial) parameters 
+$\greekv{\theta}' = (\greekv{\theta}'_1, \greekv{\theta}'_2,\greekv{\theta}'_3)$
+and observations $O_{1:T}$. The expected log likelihood 
+\begin{equation}
+Q(\greekv{\theta},\greekv{\theta}') = E_{\greekv{\theta}'} 
+(\log Pr(O_{1:T},S_{1:T}|O_{1:T},\greekv{\theta}))
+\end{equation}
+can be written as
+%\begin{equation}
+\begin{multline}
+\label{eq:Q}
+Q(\greekv{\theta},\greekv{\theta}') = 
+\sum_{j=1}^n \gamma_1(j) \log Pr(S_1=j|\greekv{\theta}_1) \\ 
++ \sum_{t=2}^T \sum_{j=1}^M \sum_{k=1}^n \xi_t^i(j,k) \log Pr(S_t = k|S_{t-1} 
+= j,\greekv{\theta}_2) \\ + \sum_{t=1}^T \sum_{j=1}^n \gamma_t^i(j) 
+\ln Pr(O_t|S_t=j,\greekv{\theta}_3),
+\end{multline}
+%\end{equation}
+where the expected values $\xi_t(j,k) =  P(S_t = k, S_{t-1} = j|O_{1:T},\greekv{\theta}')$ and $\gamma_t(j) = P(S_t = j|O_{1:T},\greekv{\theta}')$ can be computed effectively by the Forward-Backward algorithm \citep[see e.g.,][]{Rabiner1989}. The Maximisation step consists of the maximisation of (\ref{eq:Q}) for $\greekv{\theta}$. As the r.h.s. of (\ref{eq:Q}) consists of three separate parts, we can maximise separately for $\greekv{\theta}_1$, $\greekv{\theta}_2$ and $\greekv{\theta}_3$. In common models, maximisation for $\greekv{\theta}_1$ and $\greekv{\theta}_2$ is performed by the \code{nnet.default} routine in \pkg{nnet}, and maximisation for $\greekv{\theta}_3$ by the \code{glm} routine. 
+
+
+
+%The maximising values of $a_{jk}$ are \cite<e.g.,>{Rabiner89}
+%\begin{equation}
+%\label{eq:MLA}
+%\hat{a}_{jk} = \frac{1}{N(T-1)} \sum_{i=1}^N \sum_{t=2}^T  \frac{\xi^i_t(j,k)}{\gamma_{t-1}^i(j)}.
+%\end{equation}
+%Fixing certain elements of $\mat{A}$ to 0, as in the DT version, does not affect the estimation of the other elements. When elements $a_{jk}$ are assumed identical, we simply extend the summation in (\ref{eq:MLA}) to include all those elements, changing the denominator $N(T-1)$ accordingly.
+
+%To estimate $\greekv{\lambda}$, we note that the term containing this parameter has the form of a weighted likelihood, where $\gamma_t^i(j)$ can be interpreted as the number of replications of $r^i_t$. Hence, we can rely on standard ML estimates of the logistic regression coefficients $\lambda_i$, using the values $\gamma_t^i(j)$ as ``case weights'' \cite<e.g.,>{Agresti02,McCullagh83}\footnote{To be more specific, we replicate each observation $r^i_t$ a total of 6 times, once for each of the states besides the random state (which offers no information regarding $\lambda_i$). For the $j$-th replication (corresponding to the $j$-th state), we used $v_j(\vec{x}_t)$ as a predictor variable and $\gamma^i_t(j)$ as a case weight. All these replications were used to obtain the maximum likelihood estimate of $\lambda$ from a single GLM, using the ``glm.fit'' function in R \cite{R}.}. The resulting parameter estimates are then used in a new Expectation step, followed by another Maximisation step, until convergence. Under mild regularity conditions, it can be shown that the EM algorithm converges to a (local) maximum of the likelihood \cite{EM}. 
+
+
+The EM algorithm however has some drawbacks.  First, it can be slow to
 converge towards the end of optimization (although it is usually
 faster than direct optimization at the start, so possibly a
 combination of EM and direct optimization is fastest).  Second,
@@ -280,11 +328,8 @@ models, but otherwise, direct optimization is done using \pkg{Rdonlp2}
 \cite{Tamura2007,Spellucci2002}, because it handles general linear
 (in)equality constraints, and optionally also non-linear constraints.
 
-
-
-
 Need some more on EM and how/why it is justified to do separate weighted
-fits of the response models and transition and prior models. 
+iuuuuuuuuuuucvfits of the response models and transition and prior models. 
 
 Also mention use of glm, nnet and possibly other packages that we use. 
 
