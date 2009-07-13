@@ -1,40 +1,44 @@
+%&LaTeX
 \documentclass[article]{jss}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% declarations for jss.cls %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage[]{amsmath, amsfonts, amstext, amsthm} 
+%\usepackage{amssymb}
+%\usepackage[]{graphics} 
+%\usepackage{epsfig}
+%\usepackage{epstopdf}
+
 
 %% almost as usual
 \author{Ingmar Visser\\University of Amsterdam \And 
-        Maarten Speekenbrink\\University College London }
-\title{\pkg{depmixS4}: An \proglang{R}-package for hidden Markov models}
+        Maarten Speekenbrink\\University College London}
+        
+\title{\pkg{depmixS4} : An \proglang{R}-package for hidden Markov models}
 
 %% for pretty printing and a nice hypersummary also set:
 \Plainauthor{Ingmar Visser, Maarten Speekenbrink} %% comma-separated
+
 \Plaintitle{depmixS4: An R-package for hidden Markov models} %% without formatting
-\Shorttitle{depmixS4 Hidden Markov Models} %% a short title (if necessary)
+
+\Shorttitle{depmixS4: Hidden Markov Models} %% a short title (if necessary)
 
 %% an abstract and keywords
-	\Abstract{ 
-	
-	\pkg{depmixS4} implements a general framework for definining and
+\Abstract{ 	
+	depmixS4 implements a general framework for definining and
 	fitting hidden Markov mixture model in the R programming language
-	\citep{R2009}.  This includes standard Markov models,
+	R2009.  This includes standard Markov models,
 	latent/hidden Markov models, and latent class and finite mixture
 	distribution models.  The models can be fitted on mixed
 	multivariate data with multinomial and/or gaussian distributions.
 	Parameters can be estimated subject to general linear constraints.
 	Parameter estimation is done through an EM algorithm or by a
-	direct optimization approach using the \pkg{Rdonlp2} optimization
+	direct optimization approach using the Rdonlp2 optimization
 	routine when contraints are imposed on the parameters.  A number
 	of illustrative examples are included.
-	
 }
 
-\Keywords{hidden Markov model, dependent mixture model, mixture model, \proglang{R}}
+\Keywords{hidden markov model, dependent mixture model, mixture model}
 
-\Plainkeywords{hidden Markov model, dependent mixture model, mixture model,R} %% without formatting
-
+\Plainkeywords{hidden markov model, dependent mixture model, mixture model} %% without formatting
 %% at least one keyword must be supplied
 
 %% publication information
@@ -51,7 +55,7 @@
 \Address{
 Ingmar Visser\\
 Department of Psychology\\
-University of Amsterdam,
+University of Amsterdam\\
 Roetersstraat 15\\
 1018 WB, Amsterdam\\
 The Netherlands\\
@@ -64,19 +68,27 @@ URL: \url{http://www.ingmar.org/}
 %% Telephone: +43/1/31336-5053
 %% Fax: +43/1/31336-734
 
-%% for those who use Sweave please include the following line (with % symbols):
-%% need no \usepackage{Sweave.sty}
+\newcommand{\vc}{\mathbf}
+\newcommand{\mat}{\mathbf}
+
 
 %% end of declarations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\batchmode
+%\batchmode
+
+
+
+
 
 \begin{document}
 
 %% include your article here, just as usual
 %% Note that you should use the \pkg{}, \proglang{} and \code{} commands.
 
-\section[]{Introduction}
+% Refs to check: Jansen 2002, Dutilh 2009
+
+
+\section{Introduction}
 %% Note: If there is markup in \(sub)section, then it has to be escape as above.
 
 Markov and latent Markov models are frequently used in the social
@@ -129,19 +141,6 @@ which is to the best of our knowledge not available in other packages
 is the possibility to include covariates on the prior probabilities of
 class membership.  In the next section, an outline is provided of the
 model and the likelihood equations.
-
-
-\subsection*{Acknowledgements} 
-
-Ingmar Visser was supported by an EC Framework 6 grant, project 516542
-(NEST).  Maarten Speekenbrink was supported by the ESRC Centre for
-Economic Learning and Social Evolution (ELSE).  Han van der Maas
-provided the speed-accuracy data \cite{Maas2005b} and thereby
-neccessitated implementing models with time-dependent covariates.
-Brenda Jansen provided the balance scale data set \citep{Jansen2001}
-which was the perfect opportunity to test the covariates on the prior
-model parameters.  The examples in the help files use both of these
-data sets.
 
 
 \section{The dependent mixture model}
@@ -213,7 +212,7 @@ function for the response time variable, and a Bernouilli for the
 accuracy data.  In the models we are considering here, both the
 transition probabilities $A$ and the initial state probabilities $\pi$
 may depend on covariates as well as the response distributions $f$. 
-See for example \citet{Fruhwirth-Schnatter2006} for an overview of 
+See for example \citet{Fruhwirth2006} for an overview of 
 hidden Markov models with extensions. 
 
 
@@ -534,8 +533,8 @@ The \pkg{depmixS4} contains another data set which is used to
 illustrate the use of covariates on the prior probabilities of models,
 in this case a latent class model. The \code{balance} data consists 
 of 4 binary items (correct-incorrect) on a balance scale task 
-\citet{Siegler198?}. The data form a subset of the data published in 
-\citet{Jansen199?}. 
+\citet{Siegler1981}. The data form a subset of the data published in 
+\citet{Jansen2002}. 
 
 Similarly to the transition matrix, covariates on the prior 
 probabilities of the latent states (or classes in this case), are 
@@ -660,11 +659,9 @@ and have the following slots:
 In the \code{speed} data example, it may be more appropriate to model
 the response times as an exgaus distribution rather than using the
 gaussian.  We can do so as follows, first we define our own
-exgaus-class extending the response-class and set it to be a generic:
+exgaus-class extending the response-class:
 \begin{verbatim}
 	setClass("exgaus", contains="response")
-	setGeneric("exgaus", function(y, pstart = NULL, fixed = NULL, ...) 
-	standardGeneric("exgaus"))
 \end{verbatim}
 
 The so-defined class now needs a number of methods: 
@@ -686,6 +683,8 @@ computing the \code{dens}ity and for fitting the parameters.
 
 The constructor function is defined as: 
 \begin{verbatim}
+setGeneric("exgaus", function(y, pstart = NULL, fixed = NULL, ...) 
+	standardGeneric("exgaus"))
 setMethod("exgaus", 
 	signature(y="ANY"), 
 	function(y,pstart=NULL,fixed=NULL, ...) {
@@ -776,6 +775,18 @@ What are our next plans?
 
 Adding gradients for speed and computation of the Hessian. 
 
+
+\section*{Acknowledgements} 
+
+Ingmar Visser was supported by an EC Framework 6 grant, project 516542
+(NEST).  Maarten Speekenbrink was supported by the ESRC Centre for
+Economic Learning and Social Evolution (ELSE).  Han van der Maas
+provided the speed-accuracy data \cite{Dutilh2009} and thereby
+neccessitated implementing models with time-dependent covariates.
+Brenda Jansen provided the balance scale data set \citep{Jansen2002}
+which was the perfect opportunity to test the covariates on the prior
+model parameters.  The examples in the help files use both of these
+data sets.
 
 \bibliography{all,ingmar}
 
