@@ -73,7 +73,8 @@ URL: \url{http://www.ingmar.org/}
 
 \newcommand{\vc}{\mathbf}
 \newcommand{\mat}{\mathbf}
-
+\newcommand{\greekv}[1]{\mbox{\boldmath$\mathrm{#1}$}}
+\newcommand{\greekm}[1]{\mbox{\boldmath$#1$}}
 
 %% end of declarations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -328,10 +329,10 @@ models, but otherwise, direct optimization is done using \pkg{Rdonlp2}
 \cite{Tamura2007,Spellucci2002}, because it handles general linear
 (in)equality constraints, and optionally also non-linear constraints.
 
-Need some more on EM and how/why it is justified to do separate weighted
-iuuuuuuuuuuucvfits of the response models and transition and prior models. 
+%Need some more on EM and how/why it is justified to do separate weighted
+%iuuuuuuuuuuucvfits of the response models and transition and prior models. 
 
-Also mention use of glm, nnet and possibly other packages that we use. 
+%Also mention use of glm, nnet and possibly other packages that we use. 
 
 
 \section{Using \pkg{depmixS4}}
