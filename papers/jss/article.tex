@@ -26,20 +26,20 @@
 
 %% an abstract and keywords
 \Abstract{ 	
-	depmixS4 implements a general framework for definining and
+	\pkg{depmixS4} implements a general framework for definining and
 	estimating hidden Markov mixture model in the R programming language
-	R2009.  This includes standard Markov models,
+	\citep{R2009}.  This includes standard Markov models,
 	latent/hidden Markov models, and latent class and finite mixture
 	distribution models.  The models can be fitted on mixed
 	multivariate data with multinomial and/or gaussian distributions.
 	Parameters can be estimated subject to general linear constraints.
 	Parameter estimation is done through an EM algorithm or by a
-	direct optimization approach using the Rdonlp2 optimization
+	direct optimization approach using the \pkg{Rdonlp2} optimization
 	routine when contraints are imposed on the parameters.  A number
 	of illustrative examples are included.
 }
 
-\Keywords{hidden markov model, dependent mixture model, mixture model}
+\Keywords{hidden Markov model, dependent mixture model, mixture model}
 
 \Plainkeywords{hidden markov model, dependent mixture model, mixture model} %% without formatting
 %% at least one keyword must be supplied
@@ -335,7 +335,7 @@ models, but otherwise, direct optimization is done using \pkg{Rdonlp2}
 %Also mention use of glm, nnet and possibly other packages that we use. 
 
 
-\section{Using \pkg{depmixS4}}
+\section[Using depmixS4]{Using \pkg{depmixS4}}
 
 Two steps are involved in using \pkg{depmixS4} which are illustrated
 below with examples:
@@ -364,10 +364,13 @@ A dependent mixture model is defined by the number of states, and by
 the response distribution functions, and can be created with the
 \code{depmix}-function as follows:
 
-\begin{verbatim} 
-set.seed(1)
-mod <- depmix(rt~1, data=speed, nstates=2, trstart=runif(4))
-\end{verbatim}
+\begin{CodeChunk}
+\begin{CodeInput}
+> set.seed(1)
+> mod <- depmix(rt~1, data=speed, nstates=2, trstart=runif(4))
+\end{CodeInput}
+\end{CodeChunk}
+
 The \code{depmix} function returns an object of class \code{depmix}
 which contains the model specification (and not a fitted model!).
 Note also that start values for the transition parameters are provided
@@ -375,9 +378,11 @@ in this call using the \code{trstart} argument. The package does not
 provide automatic starting values. 
 
 The so-defined models needs to be \code{fit}ted with the following: 
-\begin{verbatim}
-fm <- fit(mod)
-\end{verbatim}
+\begin{CodeChunk}
+\begin{CodeInput}
+> fm <- fit(mod)
+\end{CodeInput}
+\end{CodeChunk}
 
 The \code{fit}-function returns an object of class
 \code{depmix.fitted} which extends the \code{depmix} class, adding
@@ -387,27 +392,34 @@ information on convergence, the log likelihood and the AIC and BIC
 values.  These statistics may be extracted using \code{logLik},
 \code{AIC} and \code{BIC}, respectively.
 
-\begin{verbatim}
-> fm 
+\begin{CodeChunk}
+\begin{CodeInput}
+> fm
+\end{CodeInput}
+\begin{CodeOutput}
 Convergence info: Log likelihood converged to within tol. 
 'log Lik.' -84.34175 (df=7)
 AIC:  182.6835 
 BIC:  211.275 
-\end{verbatim}
+\end{CodeOutput}
+\end{CodeChunk}
 
 The \code{summary} method of \code{fit}ted models provides the parameter
 estimates, first for the prior probabilities model, second for the
 transition model, and third for the response models.
 
-\begin{verbatim}
+\begin{CodeChunk}
+\begin{CodeInput}
 > summary(fm)
+\end{CodeInput}
+\begin{CodeOutput}
 Initial state probabilties model 
 Model of type multinomial, formula: ~1
 Coefficients: 
      [,1]      [,2]
 [1,]    0 -11.25688
 Probalities at zero values of the covariates.
-0.999987 1.291797e-05 
+0.999987 1.291798e-05 
 
 Transition model for state (component) 1 
 Model of type multinomial, formula: ~1
@@ -438,7 +450,8 @@ Model of type gaussian, formula: rt ~ 1
 Coefficients: 
 [1] 5.511151
 sd  0.1926063 
-\end{verbatim}
+\end{CodeOutput}
+\end{CodeChunk}
 
 
 \subsection{Transition parameters}
@@ -456,58 +469,57 @@ and the other two are freely estimated.
 
 Covariates on the transition probabilities can be specified using a
 one-sided formula as in the following example:
-\begin{verbatim}
-set.seed(1)
-mod <- depmix(rt~1, data=speed, nstates=2, 
-family=gaussian(), transition=~scale(Pacc), 
-instart=runif(2))
-fm <- fit(mod)
-\end{verbatim}
+\begin{CodeChunk}
+\begin{CodeInput}
+> set.seed(1)
+> mod <- depmix(rt~1, data=speed, nstates=2, family=gaussian(), 
+  transition=~scale(Pacc), instart=runif(2))
+> fm <- fit(mod)
+\end{CodeInput}
+\begin{CodeOutput}
+Initial state probabilties model 
+Model of type multinomial, formula: ~1
+Coefficients: 
+	 [,1]     [,2]
+[1,]    0 10.71779
+Probalities at zero values of the covariates.
+2.214681e-05 0.9999779 
 
-\begin{verbatim}
-	Initial state probabilties model 
-	Model of type multinomial, formula: ~1
-	Coefficients: 
-		 [,1]     [,2]
-	[1,]    0 10.71779
-	Probalities at zero values of the covariates.
-	2.214681e-05 0.9999779 
+Transition model for state (component) 1 
+Model of type multinomial, formula: ~scale(Pacc)
+Coefficients: 
+	 [,1]       [,2]
+[1,]    0 -0.9215182
+[2,]    0  1.8649734
+Probalities at zero values of the covariates.
+0.7153513 0.2846487 
 
-	Transition model for state (component) 1 
-	Model of type multinomial, formula: ~scale(Pacc)
-	Coefficients: 
-		 [,1]       [,2]
-	[1,]    0 -0.9215182
-	[2,]    0  1.8649734
-	Probalities at zero values of the covariates.
-	0.7153513 0.2846487 
+Transition model for state (component) 2 
+Model of type multinomial, formula: ~scale(Pacc)
+Coefficients: 
+	 [,1]     [,2]
+[1,]    0 2.471442
+[2,]    0 3.570856
+Probalities at zero values of the covariates.
+0.07788458 0.9221154 
 
-	Transition model for state (component) 2 
-	Model of type multinomial, formula: ~scale(Pacc)
-	Coefficients: 
-		 [,1]     [,2]
-	[1,]    0 2.471442
-	[2,]    0 3.570856
-	Probalities at zero values of the covariates.
-	0.07788458 0.9221154 
+Response model(s) for state 1 
 
-	Response model(s) for state 1 
+Response model for response 1 
+Model of type gaussian, formula: rt ~ 1
+Coefficients: 
+[1] 5.512179
+sd  0.1921098 
 
-	Response model for response 1 
-	Model of type gaussian, formula: rt ~ 1
-	Coefficients: 
-	[1] 5.512179
-	sd  0.1921098 
+Response model(s) for state 2 
 
-	Response model(s) for state 2 
-
-	Response model for response 1 
-	Model of type gaussian, formula: rt ~ 1
-	Coefficients: 
-	[1] 6.3885
-	sd  0.2402693 
-
-\end{verbatim}
+Response model for response 1 
+Model of type gaussian, formula: rt ~ 1
+Coefficients: 
+[1] 6.3885
+sd  0.2402693 
+\end{CodeOutput}
+\end{CodeChunk}
 
 The summary provides all parameters of the model, also the 
 (redundant) zeroes for the base-line category in the multinomial model. 
@@ -681,7 +693,7 @@ Whether such constraints make sense is hence the responsibility of
 the user. 
 
 
-\section{Extending \pkg{depmixS4}}
+\section[Extending depmixS4]{Extending \pkg{depmixS4}}
 
 The \pkg{depmixS4} package was built with the aim of having the 
 possibility of adding new response distributions (and possibly also 
@@ -767,10 +779,12 @@ setMethod("fit","exgaus",
 		object
 	}
 )
+\end{verbatim}
+
 The \code{fit} function defines a trivial \code{gamlss} model with 
 only an intercept to be estimated and then sets the fitted parameters 
 back into their respective slots in the `exgaus' object. See the help 
-for \pkg{gamlss.distr} for interpretation of these parameters. 
+for \code{gamlss.distr} for interpretation of these parameters. 
 
 After defining all the necessary methods for the new response model, 
 we can  now define the dependent mixture model using this reponse. 
@@ -814,7 +828,7 @@ gaussian in one state and an exgaus distribution in another state.
 
 
 
-\section{Conclusion \& future work}
+\section[Conclusion and future work]{Conclusion \& future work}
 
 
 What are our next plans?
