@@ -35,7 +35,7 @@
 	family, the logistic multinomial, or the multivariate normal distribution. Other 
 	distributions can be added easily, and an example is provided. Parameter 
 	estimation is done through an EM algorithm or by a direct optimization approach using
-	the\pkg{Rdonlp2} optimization routine when contraints are imposed on the parameters. 
+	the \pkg{Rdonlp2} optimization routine when contraints are imposed on the parameters. 
 	Parameters can be estimated subject to general linear constraints.  
 }
 
@@ -173,7 +173,7 @@ common estimation procedures, such as those implemented in
 \citet{Pol1996} are not suitable for long time series due to underflow
 problems.  In contrast, the hidden Markov model is typically only used
 for `long' univariate time series 
-\cite[see e.g.][, chapter~1 for an overview of examples]{Cappe2005}.  
+\citep[][, chapter~1]{Cappe2005}.  
 In the next sections, the
 likelihood and estimation procedures for the dependent mixture model is
 described for data of the above form.  These models are called
@@ -295,7 +295,8 @@ can be written as
 Q(\greekv{\theta},\greekv{\theta}') = 
 \sum_{j=1}^n \gamma_1(j) \log \Prob(S_1=j|\greekv{\theta}_1) \\ 
 + \sum_{t=2}^T \sum_{j=1}^M \sum_{k=1}^n \xi_t^i(j,k) \log \Prob(S_t = k|S_{t-1} 
-= j,\greekv{\theta}_2) \\ + \sum_{t=1}^T \sum_{j=1}^n \gamma_t^i(j) 
+= j,\greekv{\theta}_2)  \\
+ + \sum_{t=1}^T \sum_{j=1}^n \gamma_t^i(j) 
 \ln \Prob(O_t|S_t=j,\greekv{\theta}_3),
 \end{multline}
 %\end{equation}
