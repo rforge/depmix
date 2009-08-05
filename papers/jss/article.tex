@@ -27,17 +27,19 @@
 
 %% an abstract and keywords
 \Abstract{
-	\pkg{depmixS4} implements a general framework for defining and estimating
-	 dependent mixture models in the \proglang{R} programming language
-	\citep{R2009}. This includes standard Markov models, latent/hidden Markov
-	models, and latent class and finite mixture distribution models. The models 
-	can be fitted on mixed multivariate data with distributions from the 
-	\code{glm} family, the logistic multinomial, or the multivariate normal 
-	distribution. Other distributions can be added easily, and an example is 
-	provided. Parameter are estimated by the EM algorithm or, when (linear) 
-	constraints are imposed on the parameters, by direct numerical optimization 
-	with the \pkg{Rdonlp2} routine.
-}
+	
+	\pkg{depmixS4} implements a general framework for defining and
+	estimating dependent mixture models in the \proglang{R}
+	programming language \citep{R2009}.  This includes standard Markov
+	models, latent/hidden Markov models, and latent class and finite
+	mixture distribution models.  The models can be fitted on mixed
+	multivariate data with distributions from the \code{glm} family,
+	the logistic multinomial, or the multivariate normal distribution.
+	Other distributions can be added easily, and an example is
+	provided with the exgaus distribution.  Parameter are estimated by
+	the EM algorithm or, when (linear) constraints are imposed on the
+	parameters, by direct numerical optimization with the
+	\pkg{Rdonlp2} routine.  }
 
 \Keywords{hidden Markov model, dependent mixture model, mixture model}
 
@@ -97,25 +99,26 @@ URL: \url{http://www.ingmar.org/}
 Markov and latent Markov models are frequently used in the social
 sciences, in different areas and applications.  In psychology, they
 are used for modelling learning processes, see \citet{Wickens1982},
-for an overview, and \citet{Schmittmann2006} for a recent application.
-In economics, common latent Markov models are so-called regime
-switching models (see e.g., \citealp{Kim1994} and \citealp{Ghysels1994}).
-Further applications include speech recognition \citep{Rabiner1989},
-EEG analysis \citep{Rainer2000}, and genetics \citep{Krogh1998}.  In
-those latter areas of application, latent Markov models are usually
-referred to as hidden Markov models. For more examples of applications, 
-see e.g.\ \citet[][chapter~1]{Cappe2005}.
+for an overview, and e.g.\ \citet{Schmittmann2006} for a recent
+application.  In economics, latent Markov models are so-called regime
+switching models (see e.g., \citealp{Kim1994} and
+\citealp{Ghysels1994}).  Further applications include speech
+recognition \citep{Rabiner1989}, EEG analysis \citep{Rainer2000}, and
+genetics \citep{Krogh1998}.  In those latter areas of application,
+latent Markov models are usually referred to as hidden Markov models.
+For more examples of applications, see e.g.\
+\citet[][chapter~1]{Cappe2005}.
 
 The \pkg{depmixS4} package was motivated by the fact that while Markov
 models are used commonly in the social sciences, no comprehensive
-package was available for fitting such models.  Common software for 
-estimating Markovian models include Panmark \citep{Pol1996}, and for latent class
-models Latent Gold \citep{Vermunt2003}.  Those programs are lacking a
-number of important features, besides not being freely available.
-There are currently some packages in \proglang{R} that handle hidden Markov
-models but they lack a number of features that we needed in our
-research. In particular, \pkg{depmixS4} was designed to meet the
-following goals:
+package was available for fitting such models.  Common software for
+estimating Markovian models include Panmark \citep{Pol1996}, and for
+latent class models Latent Gold \citep{Vermunt2003}.  Those programs
+are lacking a number of important features, besides not being freely
+available.  There are currently some packages in \proglang{R} that
+handle hidden Markov models but they lack a number of features that we
+needed in our research.  In particular, \pkg{depmixS4} was designed to
+meet the following goals:
 
 \begin{enumerate}
 	
@@ -129,9 +132,9 @@ following goals:
 	state probabilities of models
 	
 	\item to be easily extensible, in particular, to allow users to
-  easily add new uni- or multivariate response distributions, and similarly 
-  add of other transition models, e.g., continuous time observation
-	models.
+	easily add new uni- or multivariate response distributions, and
+	similarly for the addition of other transition models, e.g.,
+	continuous time observation models
 	
 \end{enumerate}
 
@@ -150,7 +153,7 @@ the likelihood equations.
 
 \section{The dependent mixture model}
 
-The data considered here have the general form $O_{1}^{1}, \ldots,
+The data considered here have the general form $\vc{O}_{1:T}=O_{1}^{1}, \ldots,
 O_{1}^{m}$, $O_{2}^{1}, \ldots, O_{2}^{m}$, \ldots, $O_{T}^{1},
 \ldots, O_{T}^{m}$ for an $m$-variate time series of length $T$.  As
 an example, consider a time series of responses generated by a single
@@ -171,63 +174,81 @@ are more fully described in \citet{Dutilh2009}.
 \end{figure}
 
 The latent Markov model is commonly associated with data of this type,
-although usually only multinomial response variables are considered.  However, 
-common estimation procedures, such as those implemented in
-\citet{Pol1996}, are not suitable for long time series due to underflow
-problems.  In contrast, the hidden Markov model is typically only used
-for `long' univariate time series 
-\citep[][, chapter~1]{Cappe2005}.  
-In the next sections, the
-likelihood equation and estimation procedures for the dependent mixture model 
-are described for data of the above form. We use the term
-``dependent mixture model'' because one of the authors (Ingmar Visser)
-thought it was time for a new name for these models\footnote{Only
-later did I find out that \citet{Leroux1992} already coined the term
-dependent mixture models in an application with hidden Markov mixtures
-of Poisson count data.}.
+although usually only multinomial response variables are considered.
+However, common estimation procedures, such as those implemented in
+\citet{Pol1996}, are not suitable for long time series due to
+underflow problems.  In contrast, the hidden Markov model is typically
+only used for `long' univariate time series \citep[][,
+chapter~1]{Cappe2005}.  In the next paragraphs, the likelihood
+equation and estimation procedures for the dependent mixture model are
+described for data of the above form.  We use the term ``dependent
+mixture model'' because one of the authors (Ingmar Visser) thought it
+was time for a new name for these models\footnote{Only later did I
+find out that \citet{Leroux1992} already coined the term dependent
+mixture models in an application with hidden Markov mixtures of
+Poisson count data.}.
 
-The dependent mixture model is defined by the following elements:
+
+The likelihood of the dependent mixture model conditional on the
+unknown (or hidden) state sequence $S_{1:T}$ and the model is given
+by:
+\begin{equation}
+	\Prob( \vc{O}_{1:T} | \vc{S}_{1:T}, \greekv{\theta} ) = 
+	\prod_{t=1}^{T}  \Prob( \vc{O}_{t} | S_{t},  \greekv{\theta}),
+\end{equation}
+where $\greekv{\theta}$ is the parameter vector of the model.  To arrive
+at the likelihood of the data given the parameter vector
+$\greekv{\theta}$, i.e.\ without the state sequence, we need to sum
+above likelihood over all possible state sequences. This likelihood 
+is written as: 
+\begin{equation}
+	\Prob(\vc{O}_{1:T}|\vc{S}_{1:T},\greekv{\theta}) 
+	\sum_{all Ss} \pi_{i}(\vc{z}_1) \vc{b}_{1}(\vc{O}_{1}) 
+	\prod_{t=1}^{T-1} a_{ij}(z_{t}) \vc{b}_{j}(\vc{O}_{t+1}|\vc{z}_{t+1}),
+\end{equation}
+where we have the following elements:
 \begin{enumerate}
 	
-	\item a set $\mathcal{S}$ of latent classes or states $S_{i},\, i=1,
-	\ldots , n$,
+	\item $S_{t}$ is an element of $\mathcal{S}=\{1\ldots n\}$, a set
+	of $n$ latent classes or states; we write for short $S_{i}$ to
+	denote $S_{t}=i$.
 	
-	%\item a set of matrices $\mat{A}_t$ of transition probabilities $a_{ijt} = P_t(S_j|S_i)$ 
-	%for the transition from state $S_{i}$ to state $S_{j}$ at time $t$,
+	\item $\pi_{i}(\vc{z}_1) = \Prob(S_1 = i|\vc{z}_1)$,
+	giving the probability of class/state $i$ at time $t=1$ with
+	covariate $\vc{z}_1$.
 	
-	\item a set $\mathcal{A}$ of transition probability functions $a_{ij}(\vc{x}_t) = 
-	Pr(S_t=j|S_{t-1}=i,\vc{x}_t)$, giving the probability of a transition from state 
-	$i$ to state $j$ with covariate $\vc{x}_t$,
+	\item $a_{ij}(\vc{z}_t) = \Prob(S_{t+1}=j|S_{t}=i,\vc{z}_t)$,
+	provides the probability of a transition from state $i$ to state
+	$j$ with covariate $\vc{z}_t$,
 	
-	\item a set $\mathcal{B}$ of observation density functions $b_j^k(\vc{x}_t) = p(O_{t}^k|S_t = j, \vc{x}_t)$ that
-	provide the conditional densities of observations $O_{t}^k$ 
-	associated with latent class/state $j$ and covariate $\vc{x}_t$,
-	
-	\item a set $\mathcal{P}$ of latent class/state initial probability functions
-	$\pi_{i}(\vc{x}_1) = Pr(S_1 = i|\vc{x}_1)$, giving the probability of class/state
-	$i$ at time $t=1$ with covariate $\vc{x}_1$.
-	
+	\item $\vc{b}_{j}$ is a vector of observation densities
+	$b_j^k(\vc{z}_t) = \Prob(O_{t}^k|S_t = j, \vc{z}_t)$ that provide the
+	conditional densities of observations $O_{t}^k$ associated with
+	latent class/state $j$ and covariate $\vc{z}_t$, $j=1, \ldots, n$,
+	$k=1, \ldots, m$. 
 \end{enumerate}
 
-The dependent mixture model is defined by the following equations: 
-%\begin{align}
-%	S_{t} &= A S_{t-1}, t=2, \ldots, T \\
-%	O_{t} &= b(O_{t}|S_{t}), 
-%\end{align}
-\begin{align}
-	Pr(S_{t} = j) &= \sum_{i=1}^n a_{ij}(\vc{x}_t) Pr(S_{t-1} = i), t=2, \ldots, T \\
-	p(O_{t}^k|S_t &= j, \vc{x}_t) = b_j^k(\vc{x}_t)
-\end{align}
+% The dependent mixture model is defined by the following equations: 
+% %\begin{align}
+% %	S_{t} &= A S_{t-1}, t=2, \ldots, T \\
+% %	O_{t} &= b(O_{t}|S_{t}), 
+% %\end{align}
+% \begin{align}
+% 	Pr(S_{t} = j) &= \sum_{i=1}^n a_{ij}(\vc{x}_t) Pr(S_{t-1} = i), t=2, \ldots, T \\
+% 	p(O_{t}^k|S_t &= j, \vc{x}_t) = b_j^k(\vc{x}_t)
+% \end{align}
 %where $S_{t}$ is a sequence of hidden states, $A$ is a transition
 %matrix, $O_{t}$ is an (possibly multivariate) observation and $b$ is a
 %density function for $O_{t}$ conditional on the hidden state $S_{t}$.
+
 In the example data above, $b_j^k$ could be a Gaussian distribution
 function for the response time variable, and a Bernoulli for the
 accuracy data.  In the models we are considering here, both the
-transition probabilities $\mat{A}$ and the initial state probabilities $\pi$
-may depend on covariates as well as the response distributions $\vc{B}$. 
-See for example \citet{Fruhwirth2006} for an overview of 
-hidden Markov models with extensions. 
+transition probability functions $a_{ij}$and the initial state
+probability functions $\greekv{\pi}$ may depend on covariates as well
+as the response distributions $\vc{b_{j}^{k}}$.  See for example
+\citet{Fruhwirth2006} for an overview of hidden Markov models with
+extensions.
 
 \subsection{Likelihood}
 
@@ -239,9 +260,8 @@ gradients of the log-likelihood at the same time.  They start by
 rewriting the likelihood as follows (for ease of exposition the
 dependence on the model parameters is dropped here):
 \begin{equation}
-	L_{T} = Pr(\vc{O}_{1}, \ldots, \vc{O}_{T}) = \prod_{t=1}^{T} 
-Pr(\vc{O}_{t}|\vc{O}_{1}, 
-	\ldots, \vc{O}_{t-1}), 
+	L_{T} = Pr(\vc{O}_{1:T}) = \prod_{t=1}^{T} 
+	Pr(\vc{O}_{t}|\vc{O}_{1:t-1}), 
 	\label{condLike}
 \end{equation}
 where $Pr(\vc{O}_{1}|\vc{O}_{0}):=Pr(\vc{O}_{1})$. Note that for a 
@@ -250,7 +270,7 @@ $Pr(\vc{O}_{t}|\vc{O}_{1},\ldots,
 \vc{O}_{t-1})=Pr(\vc{O}_{t}|\vc{O}_{t-1})$.
 The log-likelihood can now be expressed as:
 \begin{equation}
-	l_{T} = \sum_{t=1}^{T} \log[Pr(\vc{O}_{t}|\vc{O}_{1}, \ldots, 
+	l_{T} = \sum_{t=1}^{T} \log[\Prob(\vc{O}_{t}|\vc{O}_{1}, \ldots, 
 \vc{O}_{t-1})].
 	\label{eq:condLogl}
 \end{equation}
@@ -258,10 +278,10 @@ The log-likelihood can now be expressed as:
 To compute the log-likelihood, \cite{Lystig2002} define the following 
 (forward) recursion:
 \begin{align}
-	\phi_{1}(j) &:= Pr(\vc{O}_{1}, S_{1}=j) = \pi_{j} b_{j}(\vc{O}_{1}) 
+	\phi_{1}(j) &:= \Prob(\vc{O}_{1}, S_{1}=j) = \pi_{j} b_{j}(\vc{O}_{1}) 
 	\label{eq:fwd1} \\
 \begin{split}
-	\phi_{t}(j) &:= Pr(\vc{O}_{t}, S_{t}=j|\vc{O}_{1}, \ldots, 
+	\phi_{t}(j) &:= \Prob(\vc{O}_{t}, S_{t}=j|\vc{O}_{1}, \ldots, 
 \vc{O}_{t-1}) \\
 	&= \sum_{i=1}^{N} [\phi_{t-1}(i)a_{ij}b_{j}(\vc{O}_{t})] \times 
 (\Phi_{t-1})^{-1},
@@ -269,7 +289,7 @@ To compute the log-likelihood, \cite{Lystig2002} define the following
 \end{split} 
 \end{align}
 where $\Phi_{t}=\sum_{i=1}^{N} \phi_{t}(i)$. Combining 
-$\Phi_{t}=Pr(\vc{O}_{t}|\vc{O}_{1}, \ldots, \vc{O}_{t-1})$, and 
+$\Phi_{t}=\Prob(\vc{O}_{t}|\vc{O}_{1}, \ldots, \vc{O}_{t-1})$, and 
 equation~(\ref{eq:condLogl}) gives the following expression for the 
 log-likelihood:
 \begin{equation}
