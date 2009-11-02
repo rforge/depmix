@@ -31,8 +31,8 @@ to work do the following:
 licencse says, among other things, "The free use of donlp2 and parts of it
 is restricted for research purposes.")
 
-2) Change the default optimization option in the function fitdmm, ie the method argument,
-to "donlp", ie set method="donlp".
+2) Change the default optimization option in the function fitdmm, ie the 
+method argument, to "donlp", ie set method="donlp".
 
 3) Install depmix. 
 

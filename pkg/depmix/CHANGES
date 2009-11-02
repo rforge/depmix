@@ -12,3 +12,9 @@ Changes from 0.9.5 to 0.9.6
 2) NPSOL support now works with an options file (see the NPSOL manual
 for details on how to structure that file), which should live in your
 working directory. 
+
+Changes from 0.9.6 to 0.9.7
+
+1) Minor changes in documentation that produced warnings in R CMD CHECK 
+as of version R 2.10.0
+
