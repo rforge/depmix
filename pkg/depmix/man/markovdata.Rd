@@ -89,7 +89,7 @@
 
 The function \code{markovdata} coerces a given data frame or matrix to be
 an object of class \code{md} such that it can be used in
-\code{\link[depmix]{fithmm}}.  The \code{md} object has its own summary,
+\code{\link[depmix]{fitdmm}}.  The \code{md} object has its own summary,
 print and plot methods.
 
 The functions dname, itemtypes, ntimes, and replicates retrieve the
