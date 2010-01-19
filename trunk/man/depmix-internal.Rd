@@ -6,7 +6,6 @@
 \alias{logDens}
 \alias{lystig}
 
-\alias{makeMix}
 \alias{makePriorModel}
 \alias{makeResponseModels}
 \alias{makeTransModels}
@@ -36,7 +35,7 @@
 
 \alias{fit,GLMresponse-method}
 \alias{fit,BINOMresponse-method}
-\alias{fit,NORMresponse-method}w
+\alias{fit,NORMresponse-method}
 \alias{fit,MULTINOMresponse-method}
 \alias{fit,MVNresponse-method}
 \alias{fit,transInit-method}
@@ -55,19 +54,23 @@
 \alias{getpars,MVNresponse-method}
 \alias{setpars,MVNresponse-method}
 
-
 \alias{npar,response-method}
 
-\title{Depmix internal functions}
+\title{DepmixS4 internal functions}
 
 \description{
+
   Internal depmix functions, methods and classes.
+
 }
 
 \details{
+
   These are not to be called by the user.
+
 }
 
 \author{Ingmar Visser}
 
 \keyword{internal}
+

@@ -1,9 +1,10 @@
 
-\name{depmix}
+\name{makeDepmix}
 
 \docType{methods}
 
 \alias{makeDepmix}
+\alias{makeMix}
 
 \title{Dependent Mixture Model Specifiction: full control and adding response models}
 
@@ -135,14 +136,17 @@ require(gamlss.dist)
 
 data(speed)
 rt <- speed$rt
-# define a response class which only contains the standard slots, no additional slotssetClass("exgaus", contains="response")
+
+# define a response class which only contains the standard slots, no additional slots
+setClass("exgaus", contains="response")
 
 # define a generic for the method defining the response class
 
 setGeneric("exgaus", function(y, pstart = NULL, fixed = NULL, ...) standardGeneric("exgaus"))
 
 # define the method that creates the response class
-setMethod("exgaus", 
+
+setMethod("exgaus", 
     signature(y="ANY"), 
     function(y,pstart=NULL,fixed=NULL, ...) {
         y <- matrix(y,length(y))
@@ -157,7 +161,9 @@ setGeneric("exgaus", function(y, pstart = NULL, fixed = NULL, ...) standardGener
 		  parameters$nu <- log(pstart[3])
         }
         mod <- new("exgaus",parameters=parameters,fixed=fixed,x=x,y=y,npar=npar)
-        mod	})
+        mod
+	}
+)
 
 setMethod("show","exgaus",
     function(object) {
@@ -216,7 +222,16 @@ setMethod("fit","exgaus",
     function(object,w) {
         if(missing(w)) w <- NULL
         y <- object@y
-        fit <- gamlss(y~1,weights=w,family=exGAUS(),			control=gamlss.control(n.cyc=100,trace=FALSE),			mu.start=object@parameters$mu,			sigma.start=exp(object@parameters$sigma),			nu.start=exp(object@parameters$nu))		pars <- c(fit$mu.coefficients,fit$sigma.coefficients,fit$nu.coefficients)		object <- setpars(object,pars)		object	})
+        fit <- gamlss(y~1,weights=w,family=exGAUS(),
+			control=gamlss.control(n.cyc=100,trace=FALSE),
+			mu.start=object@parameters$mu,
+			sigma.start=exp(object@parameters$sigma),
+			nu.start=exp(object@parameters$nu))
+		pars <- c(fit$mu.coefficients,fit$sigma.coefficients,fit$nu.coefficients)
+		object <- setpars(object,pars)
+		object
+	}
+)
 
 setMethod("predict","exgaus", 
     function(object) {
