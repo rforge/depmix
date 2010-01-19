@@ -18,3 +18,8 @@ Changes from 0.9.6 to 0.9.7
 1) Minor changes in documentation that produced warnings in R CMD CHECK 
 as of version R 2.10.0
 
+Changes from 0.9.7 to 0.9.8
+
+1) Minor changes in C++ code to conform to compiler standards (producing
+an error on SUN systems).
+
