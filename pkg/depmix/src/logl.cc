@@ -11,8 +11,8 @@ void loglikelihood(double *pars, int *tdcov, double *objf, int *grad, int *hess,
 
 	int nrcomp=models.getNrComp();
 	int ngroups=models.getNrGroups();
-	int npars[nrcomp];
-	int nstates[nrcomp];
+	int *npars = new int[nrcomp];
+	int *nstates = new int[nrcomp];
 	int totalstates=0;
 	
 	for(int cp=0; cp<nrcomp; cp++) {
