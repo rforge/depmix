@@ -1,4 +1,14 @@
 
+Changes in depmixS4 version 0.3-0
+  
+  o added multinomial response function with identity link (no covariates
+    allowed in such a model); useful when (many) boundary values occur; 
+    currently no constraints are used for such models, and hence only EM
+    can be used for optimization, or alternatively, if and when Rdonlp2
+    is used, sum constraints need to be added when fitting the model.
+
+  o 
+
 Changes in depmixS4 version 0.2-2
 
   o fixed a warning produced when specifying conrows.upper and .lower in the
@@ -63,6 +73,5 @@ Changes in depmixS4 version 0.2-0
 Changes in depmixS4 version 0.1-1
 
   o adjusted for R 2.7.0
-
 
 First version released on CRAN: 0.1-0

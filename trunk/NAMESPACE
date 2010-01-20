@@ -9,6 +9,7 @@ export(
 	fb,
 	forwardbackward,
 	MVNresponse,
+	dm_dmvnorm,
 	llratio,
 	multinomial,
 	em,
