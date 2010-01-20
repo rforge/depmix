@@ -16,6 +16,8 @@ setGeneric("depmix", function(response,data=NULL,nstates,transition=~1,family=ga
 
 setGeneric("GLMresponse", function(formula, data = NULL, family = gaussian(), pstart =
                  NULL, fixed = NULL, prob=TRUE, ...) standardGeneric("GLMresponse"))
+                 
+setGeneric("MVNresponse", function(formula,data,pstart=NULL,fixed=NULL,...) standardGeneric("MVNresponse"))
 
 setGeneric("transInit", function(formula, nstates, data = NULL, family = multinomial(),
                  pstart = NULL, fixed = NULL, prob=TRUE, ...) standardGeneric("transInit"))
