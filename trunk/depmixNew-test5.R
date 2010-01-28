@@ -1,20 +1,13 @@
 
 # 
-# Started by Ingmar Visser 26-2-2008
+# Started by Ingmar Visser 29-01-2010
 # 
-# Usage: go to trunk directory and source("depmixNew-test4.R")
-# 
-
-# 
-# BALANCE SCALE data example with age as covariate on class membership
+# Usage: go to trunk directory and source("depmixNew-test5.R")
 # 
 
-# library(depmixS4) 
-
-# setwd("/Users/ivisser/Documents/projects/depmixProject/depmixNew/rforge/depmix/trunk/")
 
 # 
-# optimization speed profile: case 1: latent class data
+# multinomial response model with identity link
 # 
 
 require(depmixS4)
@@ -90,30 +83,13 @@ mod1
 
 
 
-# 
-# optimization speed profile: case 1: latent class data with cov on prior
-# 
 
-data(balance)
-
-instart=c(0.5,0.5,0,0)
-respstart=c(rep(c(0.1,0.9),4),rep(c(0.9,0.1),4))
-trstart=c(1,0,0,1)
-mod2 <- depmix(list(d1~1,d2~1,d3~1,d4~1), data=balance, nstates=2,
-	family=list(multinomial(),multinomial(),multinomial(),multinomial()),
-	trstart=trstart, instart=instart, respstart=respstart,
-	ntimes=rep(1,nrow(balance)), prior=~age, initdata=balance)
-
-gc()
-Rprof(file="lca2")
-mod2 <- fit(mod2)
-Rprof(NULL)
-summaryRprof("lca2")
 
 
 # 
-# multivariate normal
+# multivariate normal mixture models
 # 
+
 
 
 library(depmixS4)
