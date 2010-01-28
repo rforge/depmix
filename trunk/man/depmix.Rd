@@ -78,20 +78,21 @@
 	which needs to be fitted using \code{\link{fit}} to optimize the
 	parameters.
 	
-	The response model(s) are created by call(s) to \code{\link{response}}
-	providing the response formula and the family specifying the error
-	distribution.  If response is a list of formulae, the \code{response}'s
-	are assumed to be independent conditional on the latent state.
+	The response model(s) are by default created by call(s) to 
+	\code{\link{GLMresponse}} providing the response formula and the 
+	family specifying the error distribution.  If response is a list of 
+	formulae, the \code{response}'s are assumed to be independent 
+	conditional on the latent state.
 	
 	The transitions are modeled as a multinomial logistic model for each
 	state.  Hence, the transition matrix can be modeled as time-dependent,
 	depending on predictors.  The prior density is also modeled as a
-	multinomial logistic.  Both are created by calls to
+	multinomial logistic.  Both of these models are created by calls to
 	\code{\link{transInit}}.
 	
 	Starting values may be provided by the respective arguments.  The order
 	in which parameters must be provided can be easily studied by using the
-	\code{\link{setpars}} function.
+	\code{\link{setpars}} and \code{\link{getpars}} functions.
 	
 	Linear constraints on parameters can be provided as argument to the
 	\code{\link{fit}} function.
@@ -135,6 +136,12 @@ following slots:
 	parameters, in particular in the multinomial models for the transitions
 	and prior probabilities.}
 
+}
+
+\note{
+	Models are not fitted; the return value of \code{depmix} is a model
+	specification without optimized parameter values. Use the \code{\link{fit}}
+	function to optimize parameters, and to specify additional constraints.
 }
 
 \author{Ingmar Visser & Maarten Speekenbrink}
