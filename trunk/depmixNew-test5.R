@@ -93,15 +93,15 @@ mod1
 
 
 library(depmixS4)
-
 # use function xpnd and vech from MCMCpack to convert from lower.tri to square matrix and back
-
 
 # multivariate normal response model
 mn <- c(1,2,3)
 sig <- matrix(c(1,.5,0,.5,1,0,0,0,2),3,3)
 y <- mvrnorm(1000,mn,sig)
 mod <- MVNresponse(y~rnorm(1000))
+
+y <- simulate(mod)
 
 head(dens(mod,log=T))
 
@@ -128,6 +128,18 @@ y2 <- mvrnorm(50,m2,sd2)
 
 y <- rbind(y1,y2)
 
+m1 <- MVNresponse(y~1,pst=c(0,.1,1,0.1,1))
+
+m2 <- MVNresponse(y~1)
+
+m1 
+
+m1@parameters
+
+m2 
+
+m2@parameters
+
 rModels <- list(
 	list(
 		MVNresponse(y~1)
@@ -152,8 +164,16 @@ logLik(mod)
 
 
 fm <- fit(mod)
+fmd <- fit(mod,meth="donlp")
 
-fm <- fit(mod,meth="donlp")
+pem <- getpars(fm)[7:16]
+pdon <- getpars(fmd)[7:16]
+
+all.equal(pem,pdon)
+
+fm <- simulate(fm)
+
+fm <- fit(fm)
 
 fm 
 

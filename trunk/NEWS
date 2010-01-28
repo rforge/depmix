@@ -7,7 +7,9 @@ Changes in depmixS4 version 0.3-0
     can be used for optimization, or alternatively, if and when Rdonlp2
     is used, sum constraints need to be added when fitting the model.
 
-  o 
+  o added an example of how to specify a model with multivariate normal
+    responses (and fixed a bug in MVNresponse that prevented such models
+    from being specified in the first place). 
 
 Changes in depmixS4 version 0.2-2
 
