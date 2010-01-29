@@ -27,13 +27,12 @@
 
 \arguments{
 	
-	\item{response}{A two-dimensional list of response models. See
-	'Details'.}
+	\item{response}{A two-dimensional list of response models.  See
+		'Details'.}
 	
-	\item{transition}{A list of transition models, each created by a call
-	to \code{\link{transInit}} on for possibilities of specifying such
-	models.  The lenght of this list should be the nubmer of states of the
-	model.}
+	\item{transition}{A list of transition models, each created by a
+		call to \code{\link{transInit}}.  The lenght of this list should be
+		the nubmer of states of the model.}
 	
 	\item{prior}{The initial state probabilities model; created through a
 	call to \code{\link{transInit}}.}
@@ -52,22 +51,22 @@
 
 \details{ 
 
-	The function \code{makeDepmix} creates an S4 object of class \code{depmix},
-	which needs to be fitted using \code{\link{fit}} to optimize the
-	parameters. This function is provided to have full control, eg by
-	specifying one's own response models with distributions that are not
-	provided. 
+	The function \code{makeDepmix} creates an S4 object of class
+	\code{depmix}, which needs to be fitted using \code{\link{fit}} to
+	optimize the parameters.  This function is provided to have full
+	control, eg by specifying one's own response models with distributions
+	that are not provided.
 	
 	The response model(s) should be created by call(s) to
-	\code{\link{response}} or one's own created response models that should
-	extend the response class and have the following methods: dens, predict
-	and optionally fit.  The fit function should have an argument w,
-	providing the weights.  If the fit function is not provided,
+	\code{\link{GLMresponse}}, \code{MVNresponse} (see example below) or
+	user-defined response models (see example below) that should extend the
+	\code{\link{response-class}} and have the following methods: dens,
+	predict and optionally fit.  The fit function should have an argument
+	w, providing the weights.  If the fit function is not provided,
 	optimization should be done by using Rdonlp (use method="donlp" in
-	calling fit on the depmix model, this is currently not done
-	automatically).  The first index of response models runs over the
-	states of the model, and the seconde index over the responses to be
-	modeled.
+	calling fit on the depmix model, note that this is \emph{not} the default).
+	The first index of response models runs over the states of the model,
+	and the second index over the responses to be modeled.
 	
 }
 
@@ -82,7 +81,7 @@ See the \code{\link{depmix}} help page for the return value, a
 
 \seealso{
 
-	\code{\link{fit}}, \code{\link{transInit}}, \code{\link{response}},
+	\code{\link{fit}}, \code{\link{transInit}}, \code{\link{GLMresponse}},
 	\code{\link{depmix-methods}} for accessor functions to \code{depmix}
 	objects.
 

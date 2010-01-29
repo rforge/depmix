@@ -36,6 +36,7 @@
 \alias{fit,GLMresponse-method}
 \alias{fit,BINOMresponse-method}
 \alias{fit,NORMresponse-method}
+
 \alias{fit,MULTINOMresponse-method}
 \alias{fit,MVNresponse-method}
 \alias{fit,transInit-method}
@@ -45,8 +46,10 @@
 \alias{predict,GLMresponse-method}
 \alias{predict,BINOMresponse-method}
 \alias{predict,NORMresponse-method}
+
 \alias{predict,MULTINOMresponse-method}
 \alias{predict,transInit-method}
+\alias{predict,MVNresponse-method}
 
 \alias{getpars,GLMresponse-method}
 \alias{setpars,GLMresponse-method}
@@ -55,6 +58,9 @@
 \alias{setpars,MVNresponse-method}
 
 \alias{npar,response-method}
+
+\alias{MVNresponse,formula-method}
+
 
 \title{DepmixS4 internal functions}
 

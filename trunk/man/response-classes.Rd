@@ -24,7 +24,7 @@ models.}
 		\item{\code{formula}:}{A formula that specifies the model.}
 
 		\item{\code{family}:}{A family object specifying the link 
-		function. See the \code{\link{response}} help page for 
+		function. See the \code{\link{GLMresponse}} help page for 
 		possible options.}
 	}
 	
