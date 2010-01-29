@@ -54,8 +54,14 @@
 	\code{multinomial}.  Except for the latter option, the
 	\code{GLMresponse} model is an interface to the \code{glm} functions of
 	which the functionality is used: predict, fit and density functions.
-	The \code{multinomial} model uses functionality from the \code{nnet}
-	package to fit multinomial logistic models.	
+	
+	The \code{multinomial} model takes as link functions \code{mlogit}, the
+	default, and then uses functionality from the \code{nnet} package to
+	fit multinomial logistic models; it also takes \code{identity} as a
+	link function.  The latter is typically faster and is hence preferred
+	when no covariates are present.  Note that the sum constraint inherent
+	in such a model is automatically respected in the EM algorithm, but
+	must be supplied by the user in case of using Rdonlp optimization.
 	
 	See the \code{\link{responses}} help page for examples. 
 	
