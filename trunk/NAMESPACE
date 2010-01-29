@@ -1,6 +1,6 @@
 import(methods)
 
-importFrom(stats, predict, simulate)
+importFrom(stats, predict, simulate, AIC, logLik)
 
 export(	
 	makeDepmix,
@@ -9,7 +9,6 @@ export(
 	fb,
 	forwardbackward,
 	MVNresponse,
-	dm_dmvnorm,
 	llratio,
 	multinomial,
 	em,

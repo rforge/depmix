@@ -6,10 +6,12 @@ Changes in depmixS4 version 0.3-0
     currently no constraints are used for such models, and hence only EM
     can be used for optimization, or alternatively, if and when Rdonlp2
     is used, sum constraints need to be added when fitting the model.
+    See ?GLMresponse for details. 
 
   o added an example of how to specify a model with multivariate normal
     responses (and fixed a bug in MVNresponse that prevented such models
-    from being specified in the first place). 
+    from being specified in the first place). See ?makeDepmix for an 
+    example. 
 
 Changes in depmixS4 version 0.2-2
 
