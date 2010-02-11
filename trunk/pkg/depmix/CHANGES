@@ -1,25 +1,0 @@
-Changes from 0.9.0 to 0.9.11) Added case replicate-weights to save computational load in fittinglatent class models on categorical data.  Markovdata now has an extraargument which can be used to provide the number of replicates for eachcase. 2) Updated references and added a vignette called depmix-intro. Changes from 0.9.1 to 0.9.2 No changes except the addition that the package is now ORPHANED; this is an automatic change in the CRAN repositories because warnings occur.Changes from 0.9.2 to 0.9.3 1) Optimization is now done using the Rdonlp2 package by Tamura (optional support for NPSOL also still exists); the major advantage of this is that donlp2 handles general linear constraints without problems.2) Options for optimization with nlm and optim are removed as they were functioning suboptimal in some cases and have become unnessary.Changes from 0.9.3 to 0.9.41) Minor changes in C++ headers to make them compatible with new g++ versions. 
-
-
-Changes from 0.9.4 to 0.9.5
-
-1) Minor changes; fixed some documentation and warning issues. 
-
-Changes from 0.9.5 to 0.9.6
-
-1) Minor changes to make depmix compatible with R 2.9.1
-
-2) NPSOL support now works with an options file (see the NPSOL manual
-for details on how to structure that file), which should live in your
-working directory. 
-
-Changes from 0.9.6 to 0.9.7
-
-1) Minor changes in documentation that produced warnings in R CMD CHECK 
-as of version R 2.10.0
-
-Changes from 0.9.7 to 0.9.8
-
-1) Minor changes in C++ code to conform to compiler standards (producing
-an error on SUN systems).
-
