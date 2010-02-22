@@ -11,7 +11,7 @@
 
 # library(depmixS4) 
 
-# setwd("/Users/ivisser/Documents/projects/depmixProject/depmixNew/rforge/depmix/trunk/")
+# setwd("~/Documents/projects/depmixProject/codesvn/depmix/trunk/")
 
 # 
 # optimization speed profile: case 1: latent class data
