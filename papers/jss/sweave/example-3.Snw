@@ -1,0 +1,46 @@
+\documentclass[a4paper]{article}
+
+\begin{document}
+
+<<echo=false,results=hide>>=
+library(lattice)
+library(xtable)
+data(cats, package="MASS")
+@ 
+
+\section*{The Cats Data}
+
+Consider the \texttt{cats} regression example from Venables \& Ripley
+(1997). The data frame contains measurements of heart and body weight
+of \Sexpr{nrow(cats)} cats (\Sexpr{sum(cats$Sex=="F")} female,
+\Sexpr{sum(cats$Sex=="M")} male).
+
+A linear regression model of heart weight by sex and gender can be
+fitted in R using the command
+<<>>=
+lm1 = lm(Hwt~Bwt*Sex, data=cats)
+lm1
+@ 
+Tests for significance of the coefficients are shown in
+Table~\ref{tab:coef}, a scatter plot including the regression lines is
+shown in Figure~\ref{fig:cats}.
+
+\SweaveOpts{echo=false}
+
+<<results=tex>>=
+xtable(lm1, caption="Linear regression model for cats data.", label="tab:coef")
+@ 
+
+\begin{figure}
+  \centering
+<<fig=TRUE,width=12,height=6>>=
+lset(col.whitebg())
+print(xyplot(Hwt~Bwt|Sex, data=cats, type=c("p", "r")))
+@  
+  \caption{The cats data from package MASS.}
+  \label{fig:cats}
+\end{figure}
+\begin{center}
+\end{center}
+
+\end{document}
