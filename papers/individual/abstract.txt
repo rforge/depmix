@@ -1,0 +1,24 @@
+
+Title: A Framework for Modelling Discrete Change
+
+Author: Ingmar Visser
+
+
+Abstract
+
+A class of models is developed for measuring and detecting discrete change
+in learning and development.  The basic model for detecting such change is
+the latent or hidden Markov model.  Traditionally, these models were
+restricted to categorical, mostly binary, observed variables, placing
+severe restrictions on possible measurement models.  In this paper, the
+basic model is extended to include arbitrary distributions for the observed
+variables, including multi-variate distributions.  Moreover, there is
+optional support to include time-varying predictors.  In effect, this model
+consists of mixtures of general linear models with Markovian depencies over
+time to model the change process.  In addition, transition parameters can
+be made to depend on covariates as well, such that the switching regime
+between states depends on characteristics of the individual or the
+experimental situation.  The model is illustrated with several examples
+from experimental psychology and categorization learning.
+
+
