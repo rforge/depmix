@@ -1,0 +1,174 @@
+% -*- mode: noweb; noweb-default-code-mode: R-mode; -*-
+
+\documentclass[article]{jss}
+\usepackage{amsmath}
+
+%\usepackage[]{amsmath, amsfonts, amstext, amsthm} 
+%\usepackage{amssymb}
+%\usepackage[]{graphics} 
+%\usepackage{epsfig}
+%\usepackage{epstopdf}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% declarations for jss.cls %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% almost as usual
+\author{Ingmar Visser\\University of Amsterdam \And 
+        Maarten Speekenbrink\\University College London}
+        
+\title{\pkg{depmixS4} : An \proglang{R}-package for hidden Markov models}
+
+
+%% for pretty printing and a nice hypersummary also set:
+\Plainauthor{Ingmar Visser, Maarten Speekenbrink} %% comma-separated
+\Plaintitle{depmixS4: An R-package for hidden Markov models} %% without formatting
+
+\Shorttitle{depmixS4: Hidden Markov Models} %% a short title (if necessary)
+
+%% an abstract and keywords
+\Abstract{
+	
+	\pkg{depmixS4} implements a general framework for defining and
+	estimating dependent mixture models in the \proglang{R}
+	programming language \citep{R2009}.  This includes standard Markov
+	models, latent/hidden Markov models, and latent class and finite
+	mixture distribution models.  The models can be fitted on mixed
+	multivariate data with distributions from the \code{glm} family,
+	the logistic multinomial, or the multivariate normal distribution.
+	Other distributions can be added easily, and an example is
+	provided with the exgaus distribution.  Parameters are estimated by
+	the EM algorithm or, when (linear) constraints are imposed on the
+	parameters, by direct numerical optimization with the
+	\pkg{Rdonlp2} routine.}
+
+\Keywords{hidden Markov model, dependent mixture model, mixture model}
+
+\Plainkeywords{hidden Markov model, dependent mixture model, mixture model} %% without formatting
+%% at least one keyword must be supplied
+
+%% publication information
+%% NOTE: Typically, this can be left commented and will be filled out by the technical editor
+%% \Volume{13}
+%% \Issue{9}
+%% \Month{September}
+%% \Year{2004}
+%% \Submitdate{2004-09-29}
+%% \Acceptdate{2004-09-29}
+
+%% The address of (at least) one author should be given
+%% in the following format:
+\Address{
+Ingmar Visser\\
+Department of Psychology\\
+University of Amsterdam\\
+Roetersstraat 15\\
+1018 WB, Amsterdam\\
+The Netherlands\\
+E-mail: \email{i.visser@uva.nl} \\
+URL: \url{http://www.ingmar.org/}
+}
+
+%% It is also possible to add a telephone and fax number
+%% before the e-mail in the following format:
+%% Telephone: +43/1/31336-5053
+%% Fax: +43/1/31336-734
+
+\newcommand{\vc}{\mathbf}
+\newcommand{\mat}{\mathbf}
+\newcommand{\greekv}[1]{\mbox{\boldmath$\mathrm{#1}$}}
+\newcommand{\greekm}[1]{\mbox{\boldmath$#1$}}
+
+%% end of declarations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\batchmode
+
+
+
+\SweaveOpts{echo=FALSE}
+\usepackage{a4wide}
+
+% \batchmode
+
+\begin{document}
+
+\maketitle
+
+%% include your article here, just as usual
+%% Note that you should use the \pkg{}, \proglang{} and \code{} commands.
+
+% Refs to check: Jansen 2002, Dutilh 2009
+
+\begin{center}
+\bf{DRAFT: DO NOT QUOTE WITHOUT CONTACTING AUTHOR}
+\end{center}
+
+
+A simple example that will run in any S engine: The integers from 1 to
+10 are
+<<print=TRUE>>=
+1:10
+<<results=hide>>=
+print(1:20)
+@ % the above is just to ensure that 2 code chunks can follow each other
+
+We can also emulate a simple calculator:
+<<echo=TRUE,print=TRUE>>=
+1 + 1
+1 + pi
+sin(pi/2)
+@
+
+Now we look at Gaussian data:
+
+<<>>=
+library(stats)
+x <- rnorm(20)
+print(x)
+print(t1 <- t.test(x))
+@
+Note that we can easily integrate some numbers into standard text: The
+third element of vector \texttt{x} is \Sexpr{x[3]}, the
+$p$-value of the test is \Sexpr{format.pval(t1$p.value)}. % $
+
+Now we look at a summary of the famous iris data set, and we want to
+see the commands in the code chunks:
+
+\SweaveOpts{echo=true}
+
+% the following code is R-specific, as data(iris) will not run in Splus. 
+% Hence, we mark it as R code. 
+<<engine=R>>=
+data(iris)
+summary(iris)
+@ %def
+
+
+\begin{figure}[htbp]
+  \begin{center}
+<<fig=TRUE>>=
+library(graphics)
+pairs(iris)
+@
+    \caption{Pairs plot of the iris data.}
+  \end{center}
+\end{figure}
+
+\begin{figure}[htbp]
+  \begin{center}
+<<fig=true>>=
+boxplot(Sepal.Length~Species, data=iris)
+@
+    \caption{Boxplot of sepal length grouped by species.}
+  \end{center}
+\end{figure}
+
+
+% R is not S-PLUS, hence this chunk will be ignored:
+<<engine=S4>>=
+function.that.comes.only.with.Splus(x)
+@
+
+\end{document}
+
+
