@@ -1,4 +1,13 @@
 
+Changes in depmixS4 version 0.4-0
+
+  o added optimization using Rsolnp, which can be invoked by using 
+    method="rsolnp" in calling fit on (dep-)mix objects. The Rsolnp 
+    solver is currently available from r-forge. 
+
+  o 
+
+
 Changes in depmixS4 version 0.3-0
   
   o added multinomial response function with identity link (no covariates

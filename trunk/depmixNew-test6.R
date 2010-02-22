@@ -46,7 +46,6 @@ conpat[6] <- conpat[10] <- 3
 fm1sol <- fit(stmod,equal=conpat,method="rsolnp")
 fm1don <- fit(stmod,equal=conpat,method="donlp")
 
-
 fm1sol
 fm1don
 
@@ -56,6 +55,7 @@ summary(fm1don)
 getpars(fm1sol)
 getpars(fm1don)
 
+all.equal(getpars(fm1sol), getpars(fm1don))
 
 
 

@@ -129,6 +129,9 @@ setMethod("fit",
 					...
 				)
 				
+				if(class(object)=="depmix") class(object) <- "depmix.fitted"
+				if(class(object)=="mix") class(object) <- "mix.fitted"
+				
 				# convergence info
 				object@message <- result$message
 				
@@ -184,6 +187,9 @@ setMethod("fit",
 					control = list(trace = 1)
 				)
 				
+				if(class(object)=="depmix") class(object) <- "depmix.fitted"
+				if(class(object)=="mix") class(object) <- "mix.fitted"
+				
 				object@message <- c(res$convergence," (0 is good in Rsolnp, check manual for other values)")
 				
 				# put the result back into the model
@@ -191,9 +197,6 @@ setMethod("fit",
 				object <- setpars(object,allpars)
 				
 			}
-			
-			if(class(object)=="depmix") class(object) <- "depmix.fitted"
-			if(class(object)=="mix") class(object) <- "mix.fitted"
 			
 			object@conMat <- linconFull
 			object@lin.upper <- lin.u

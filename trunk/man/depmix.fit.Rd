@@ -64,9 +64,9 @@
 \details{ 
 
 	Models are fitted by the EM algorithm if there are no constraints on
-	the parameters.  Otherwise the general optimizer \code{donlp2} from the
-	package \code{Rdonlp2} is used which handles general linear
-	(in-)equality constraints.
+	the parameters.  Otherwise the general optimizers \code{donlp2} (from
+	package \code{Rdonlp2}) or \code{solnp} (from package \code{Rsolnp})
+	are used which handle general linear (in-)equality constraints.
 	
 	Three types of constraints can be specified on the parameters: fixed,
 	equality, and general linear (in-)equality constraints.  Constraint
@@ -79,7 +79,7 @@
 	estimated to be equal. Any integers can be used in this way except 0
 	and 1, which indicate fixed and free parameters, respectively. 
 
-	Using the \code{donlp2} optimizer a Newton-Raphson scheme is employed
+	Using \code{donlp2} or \code{solnp}, a Newton-Raphson scheme is employed
 	to estimate parameters subject to linear constraints by imposing:
 	
 			bl <= A*x <= bu,
@@ -121,7 +121,9 @@
 	through \code{\link{posterior}}.
 	
 	As fitted models are depmixS4 models, they can be used as starting
-	values for new fits, for example with constraints added. 
+	values for new fits, for example with constraints added. Note that 
+	when refitting already fitted models, the constraints, if any, are not
+	added automatically, they have to be added again. 
 
 }
 
@@ -137,13 +139,15 @@
 
 data(speed)
 
-# 2-state model on rt and corr from speed data set with Pacc as covariate on the transition matrix
-# starting values for the transition pars (without those EM does not get off the ground)
+# 2-state model on rt and corr from speed data set 
+# with Pacc as covariate on the transition matrix
+# starting values for the transition pars (without 
+# those EM does not get off the ground)
 set.seed(1)
 tr=runif(6)
 trst=c(tr[1:2],0,tr[3:5],0,tr[6])
-mod1 <- depmix(list(rt~1,corr~1),data=speed,transition=~Pacc,nstates=2,family=list(gaussian(),multinomial()),
-	trstart=trst)
+mod1 <- depmix(list(rt~1,corr~1),data=speed,transition=~Pacc,nstates=2,
+	family=list(gaussian(),multinomial()),trstart=trst)
 # fit the model
 fmod1 <- fit(mod1)
 fmod1 # to see the logLik and optimization information
