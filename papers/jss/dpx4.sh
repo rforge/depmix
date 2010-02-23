@@ -1,16 +1,18 @@
 #!/bin/sh
 
-R --vanilla < dpx4Sweave.R 
+cd ~/Documents/projects/depmixProject/codesvn/depmix/papers/jss/
 
-R --vanilla < dpx4Stangle.R
+R --vanilla < dpx4Sweave.R ;
 
-pdflatex dpx4Rev.tex
+R --vanilla < dpx4Stangle.R ;
 
-bibtex dpx4Rev
+pdflatex dpx4Rev.tex ;
 
-pdflatex dpx4Rev.tex
+bibtex dpx4Rev ;
 
-pdflatex dpx4Rev.tex
+pdflatex dpx4Rev.tex ;
+
+pdflatex dpx4Rev.tex ;
 
 open dpx4Rev.pdf
 
