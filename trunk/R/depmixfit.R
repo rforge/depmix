@@ -1,7 +1,7 @@
 
 setMethod("fit",
     signature(object="mix"),
-    function(object,fixed=NULL,equal=NULL,conrows=NULL,conrows.upper=0,conrows.lower=0,method=NULL,...) {
+    function(object,fixed=NULL,equal=NULL,conrows=NULL,conrows.upper=0,conrows.lower=0,method=NULL,tol=1e-8,crit=c("relative","absolute"),verbose=TRUE,...) {
 	
 		fi <- !is.null(fixed)
 		cr <- !is.null(conrows)
@@ -31,7 +31,7 @@ setMethod("fit",
 		if(is.nan(logLik(object))) stop("Initial model infeasible, log likelihood is NaN; please provide better starting values. ")
 		
 		if(method=="EM") {
-			object <- em(object,verbose=TRUE,...)
+			object <- em(object,tol=tol,crit=crit,verbose=verbose,...)
 		}
 		
 		if(method=="donlp"||method=="rsolnp") {
