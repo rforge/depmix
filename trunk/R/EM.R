@@ -2,7 +2,7 @@
 # Maarten Speekenbrink 23-3-2008
 # 
 
-em <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
+em <- function(object,maxit=100,tol=1e-8,crit=c(relative,absolute),verbose=FALSE,...) {
 	if(!is(object,"mix")) stop("object is not of class '(dep)mix'")
 	call <- match.call()
 	if(is(object,"depmix")) {
@@ -15,8 +15,9 @@ em <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 }
 
 # em for lca and mixture models
-em.mix <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
+em.mix <- function(object,maxit=100,tol=1e-8,crit=c("relative","absolute"),verbose=FALSE,...) {
 	if(!is(object,"mix")) stop("object is not of class 'mix'")
+	crit <- match.arg(crit)
 	
 	ns <- object@nstates
 	
@@ -66,9 +67,14 @@ em.mix <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 			cat("iteration",j,"logLik:",LL,"\n")
 		}
 		
-		if( (LL >= LL.old) & (LL - LL.old < tol))  {
-			cat("iteration",j,"logLik:",LL,"\n")
-			converge <- TRUE
+		if(LL >= LL.old) {
+		  if((crit == "absolute" &&  LL - LL.old < tol) || (crit == "relative" && (LL.old - LL)/LL.old  < tol)) {
+			  cat("iteration",j,"logLik:",LL,"\n")
+			  converge <- TRUE
+			}
+		} else {
+		  # this should not really happen...
+		  if(j > 0) warning("likelihood decreased on iteration",j)
 		}
 
 		LL.old <- LL
@@ -78,8 +84,12 @@ em.mix <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 
 	class(object) <- "mix.fitted"
 
-	if(converge) object@message <- "Log likelihood converged to within tol."
-	else object@message <- "'maxit' iterations reached in EM without convergence."
+	if(converge) {
+    object@message <- switch(crit,
+    relative = "Log likelihood converged to within tol. (relative change crit.)",
+    absolute = "Log likelihood converged to within tol. (absolute change crit.)"
+    )
+  } else object@message <- "'maxit' iterations reached in EM without convergence."
 
 	# no constraints in EM
 	object@conMat <- matrix()
@@ -91,9 +101,10 @@ em.mix <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 }
 
 # em for hidden markov models
-em.depmix <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
+em.depmix <- function(object,maxit=100,tol=1e-8,crit=c("relative","absolute"),verbose=FALSE,...) {
 	
 	if(!is(object,"depmix")) stop("object is not of class '(dep)mix'")
+	crit <- match.arg(crit)
 	
 	ns <- object@nstates
 	
@@ -155,9 +166,15 @@ em.depmix <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 		LL <- fbo$logLike
 				
 		if(verbose&((j%%5)==0)) cat("iteration",j,"logLik:",LL,"\n")
-		if( (LL >= LL.old) & (LL - LL.old < tol))  {
-			cat("iteration",j,"logLik:",LL,"\n")
-			converge <- TRUE
+		
+		if( (LL >= LL.old)) {
+		  if((crit == "absolute" &&  LL - LL.old < tol) || (crit == "relative" && (LL.old - LL)/LL.old  < tol)) {
+			  cat("iteration",j,"logLik:",LL,"\n")
+			  converge <- TRUE
+			}
+		} else {
+		  # this should not really happen...
+		  if(j > 0) warning("likelihood decreased on iteration",j)
 		}
 		
 		LL.old <- LL
@@ -170,8 +187,12 @@ em.depmix <- function(object,maxit=100,tol=1e-6,verbose=FALSE,...) {
 	
 	class(object) <- "depmix.fitted"
 	
-	if(converge) object@message <- "Log likelihood converged to within tol."
-	else object@message <- "'maxit' iterations reached in EM without convergence."
+	if(converge) {
+    object@message <- switch(crit,
+	  relative = "Log likelihood converged to within tol. (relative change crit.)",
+	  absolute = "Log likelihood converged to within tol. (absolute change crit.)"
+	 )
+	} else object@message <- "'maxit' iterations reached in EM without convergence."
 	
 	# no constraints in EM
 	object@conMat <- matrix()

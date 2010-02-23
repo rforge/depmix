@@ -28,12 +28,14 @@
 \usage{
 	
 	\S4method{fit}{depmix}(object, fixed=NULL, equal=NULL, conrows=NULL,
-		conrows.upper=0, conrows.lower=0, method=NULL,...)
+		conrows.upper=0, conrows.lower=0, method=NULL,tol=1e-8,
+		crit=c("relative","absolute"),verbose=TRUE,...)
 	
 	\S4method{summary}{depmix.fitted}(object)
 
 	\S4method{fit}{mix}(object, fixed=NULL, equal=NULL, conrows=NULL,
-		conrows.upper=0, conrows.lower=0, method=NULL,...)
+		conrows.upper=0, conrows.lower=0, method=NULL,tol=1e-8,
+		crit=c("relative","absolute"),verbose=TRUE,...)
 	
 	\S4method{summary}{mix.fitted}(object)
 
@@ -56,7 +58,14 @@
 
 	\item{method}{The optimization method; mostly determined by
 		constraints.}
-
+		
+  \item{tol}{The tolerance level for convergence.}
+  
+  \item{crit}{The convergence criterion in the EM algorithm; either the relative
+  change in the log likelihood, or the absolute change in the log-likelihood.}
+  
+  \item{verbose}{Should optimization information be displayed on screen?}
+  
 	\item{...}{Further arguments passed on to the optimization methods.}
 
 }
