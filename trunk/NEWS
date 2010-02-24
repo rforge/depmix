@@ -5,7 +5,8 @@ Changes in depmixS4 version 0.4-0
     method="rsolnp" in calling fit on (dep-)mix objects. The Rsolnp 
     solver is currently available from r-forge. 
 
-  o 
+  o added documentation for control arguments that can be passed to 
+    em algorithm. 
 
 
 Changes in depmixS4 version 0.3-0
