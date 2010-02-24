@@ -100,8 +100,13 @@
 	the conrows.lower and conrows.upper arguments to specify the bounds on
 	the constraints.  \code{conrows} is a matrix of npar(object) columns
 	and one row for each constraint (a vector in the case of a single
-	constraint). Examples of these three ways of constraining parameters
-	are provided below. 
+	constraint).  Examples of these three ways of constraining parameters
+	are provided below.
+	
+	Note that when specifying constraints that these should respect the
+	fixed constraints inherent in e.g. the multinomial logit models for the
+	initial and transition probabilities.  For example, the baseline
+	category coefficient in a multinomial logit model is fixed on zero.
 	
 	\code{\link{llratio}} performs a log-likelihood ratio test on two
 	\code{fit}'ted models; the first object should have the largest degrees
