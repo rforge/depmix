@@ -419,9 +419,31 @@ observations $O^k_t$.
 %\label{eq:MLA}
 %\hat{a}_{jk} = \frac{1}{N(T-1)} \sum_{i=1}^N \sum_{t=2}^T  \frac{\xi^i_t(j,k)}{\gamma_{t-1}^i(j)}.
 %\end{equation}
-%Fixing certain elements of $\mat{A}$ to 0, as in the DT version, does not affect the estimation of the other elements. When elements $a_{jk}$ are assumed identical, we simply extend the summation in (\ref{eq:MLA}) to include all those elements, changing the denominator $N(T-1)$ accordingly.
 
-%To estimate $\greekv{\lambda}$, we note that the term containing this parameter has the form of a weighted likelihood, where $\gamma_t^i(j)$ can be interpreted as the number of replications of $r^i_t$. Hence, we can rely on standard ML estimates of the logistic regression coefficients $\lambda_i$, using the values $\gamma_t^i(j)$ as ``case weights'' \cite<e.g.,>{Agresti02,McCullagh83}\footnote{To be more specific, we replicate each observation $r^i_t$ a total of 6 times, once for each of the states besides the random state (which offers no information regarding $\lambda_i$). For the $j$-th replication (corresponding to the $j$-th state), we used $v_j(\vec{x}_t)$ as a predictor variable and $\gamma^i_t(j)$ as a case weight. All these replications were used to obtain the maximum likelihood estimate of $\lambda$ from a single GLM, using the ``glm.fit'' function in R \cite{R}.}. The resulting parameter estimates are then used in a new Expectation step, followed by another Maximisation step, until convergence. Under mild regularity conditions, it can be shown that the EM algorithm converges to a (local) maximum of the likelihood \cite{EM}. 
+%Fixing certain elements of $\mat{A}$ to 0, as in the DT version, does
+%not affect the estimation of the other elements.  When elements
+%$a_{jk}$ are assumed identical, we simply extend the summation in
+%(\ref{eq:MLA}) to include all those elements, changing the
+%denominator $N(T-1)$ accordingly.
+
+%To estimate $\greekv{\lambda}$, we note that the term containing this
+%parameter has the form of a weighted likelihood, where
+%$\gamma_t^i(j)$ can be interpreted as the number of replications of
+%$r^i_t$.  Hence, we can rely on standard ML estimates of the logistic
+%regression coefficients $\lambda_i$, using the values $\gamma_t^i(j)$
+%as ``case weights'' \cite<e.g.,>{Agresti02,McCullagh83}\footnote{To
+%be more specific, we replicate each observation $r^i_t$ a total of 6
+%times, once for each of the states besides the random state (which
+%offers no information regarding $\lambda_i$).  For the $j$-th
+%replication (corresponding to the $j$-th state), we used
+%$v_j(\vec{x}_t)$ as a predictor variable and $\gamma^i_t(j)$ as a
+%case weight.  All these replications were used to obtain the maximum
+%likelihood estimate of $\lambda$ from a single GLM, using the
+%``glm.fit'' function in R \cite{R}.}.  The resulting parameter
+%estimates are then used in a new Expectation step, followed by
+%another Maximisation step, until convergence.  Under mild regularity
+%conditions, it can be shown that the EM algorithm converges to a
+%(local) maximum of the likelihood \cite{EM}.
 
 
 The EM algorithm however has some drawbacks.  First, it can be slow to
@@ -447,7 +469,7 @@ below with examples:
 \begin{enumerate}
 	\item model specification with function \code{depmix} (or with \code{mix}
 	for latent class and finite mixture models, see example below on adding
-	covariates to prior probabilities)
+	covariates to prior probabilities in section~\ref{sec:prior})
 	
 	\item  model fitting with function \code{fit}
 \end{enumerate}
@@ -460,14 +482,51 @@ actually fitting the model.
 
 Throughout this article a data set called \code{speed} is used.  As
 already indicated in the Introduction, it consists of three time
-series with three variables: response time, accuracy, and a covariate
-Pacc which defines the relative pay-off for speeded versus accurate
-responding.  The participant in this experiment switches between fast
-responding at chance level and relatively slower responding at a high
-level of accuracy.  Interesting hypotheses to test are: is the
-switching regime symmetric?  Is there evidence for two states or does
-one state suffice?  Is the guessing state actually a guessing state,
-i.e., is the probability of a correct response at chance level (0.5)?
+series with three variables: response time, accuracy, and a covariate,
+Pacc, which defines the relative pay-off for speeded versus accurate
+responding.  Before describing some of the models that are fitted
+to these data, we provide a brief sketch of the reasons for gathering
+these data in the first place.
+
+Response times are a very common dependent variable in psychological
+experiments and hence form the basis for infernce about many
+psychological processes.  A potential threat to such inference based
+on response times is formed by the speed-accuracy trade-off: different
+participants in an experiment may respond differently to typical
+instructions to `respond as fast and accurate as possible'.  A popular
+model which takes the speed-accuracy trade-off into account is the
+diffusion model \citep{Ratcliff1978}, which has proven to provide
+accurate descriptions of response times in many different settings.
+
+One potential problem with the diffusion model is that it predicts a
+continuous trade-off between speed and accuracy of responding, i.e.,
+when participants are pressed to respond faster and faster, the
+diffusion model predicts that this would lead to a gradual decrease in
+accuracy.  The \code{speed} data set that we analyze below was
+gathered to test this hypothesis versus the alternative hypothesis
+stating that there is a sudden transition from slow and accurate
+responding to fast responding at chance level.  At each trial of the
+experiment, the participant is shown the current setting of the
+relative reward for speed versus accuracy.  The bottom panel of
+figure~ref{fig:speed} shows the values of this variable.  The main
+question in this experiment was what would happen when this reward
+variable would change from reward for accuracy only to reward for
+speed only.  The \code{speed} data that we analyse here are from
+participant A in Experiment 1 in \citet{Dutilh2009}, who provide a
+complete description of the experiment and the relevant theoretical
+background.
+
+The central hypothesis about this data is whether indeed it is best 
+described by two modes of responding rather than a single mode of 
+responding with a continuous trade-off between speed and accuracy. 
+The hallmark of having a discontinuity between slow versus speeded 
+responding is that the switching between the two modes is assymetric
+\citep[see e.g.][for a theoretical underpinning of this 
+claim]{Maas1992}. The \code{fit} help page of \pkg{depmixS4} provides 
+a number of examples in which the assymetricity of the switching 
+process is tested; those examples are discussed at length in 
+\citet{Visser2009b}. 
+
 
 \subsection{A simple model}
 
@@ -475,19 +534,45 @@ A dependent mixture model is defined by the number of states and the
 initial state, state transition, and response distribution functions.
 A dependent mixture model can be created with the
 \code{depmix}-function as follows:
-
 <<>>=
 library(depmixS4)
 data(speed)
 set.seed(1)
-mod <- depmix(rt~1, data=speed, nstates=2, trstart=runif(4))
+mod <- depmix(response=rt~1, data=speed, nstates=2, trstart=runif(4))
 @
 
-The \code{depmix} function returns an object of class \code{depmix}
-which contains the model specification (and not a fitted model!).
+The first line of code loads the \pkg{depmixS4} package and 
+\code{data(speed)} loads the \code{speed} data set. The line
+\code{set.seed(1)} is necessary to get starting values that will 
+result in the right model, see more on starting values below. 
+
+The call to \code{depmix} specifies the model with a number of
+arguments.  The \code{response} argument is used to specify the
+response variable, possibly with covariates, in the familiar format
+using formulae such as in \code{lm} or \code{glm} models.  The second
+argument, \code{data=speed}, provides the \code{data.frame} in which
+the variables from \code{response} are interpreted.  Third, the number
+of states of the model is given by \code{nstates=2}. 
+
+\subsubsection{Starting values}
+
 Note also that start values for the transition parameters are provided
 in this call using the \code{trstart} argument.  At this time, the
-package does not provide automatic starting values.
+package does not provide automatic starting values.  Starting values
+for parameters can be provided using three arguments: \code{instart}
+for the parameters relating to the prior probabilities,
+\coce{trstart}, relating the transition models, and \code{respstart}
+for the parameters of the response models.  Note that the starting
+values for the initial and transition models as well as of the
+multinomial logit response models are interpreted as {\em probabilities},
+and internally converted to multinomial logit parameters.
+
+
+\subsubsection{Fitting the model and printing results}
+
+The \code{depmix} function returns an object of class \code{depmix}
+which contains the model specification, and not a fitted model. Hence,
+the model needs to be fitted by calling \code{fit}: 
 
 <<>>=
 fm <- fit(mod)
@@ -502,7 +587,6 @@ values:
 fm
 @
 
-
 These statistics can also be extracted using \code{logLik}, \code{AIC}
 and \code{BIC}, respectively.  By comparison, a 1-state model for
 these data, i.e. assuming there is no mixture, has a log-likelihood of
@@ -514,18 +598,19 @@ as it will simply return the mean and the sd of the rt variable.
 
 The \code{summary} method of \code{fit}ted models provides the
 parameter estimates, first for the prior probabilities model, second
-for the transition model, and third for the response models.
+for the transition models, and third for the response models.
 <<>>=
 summary(fm)
 @
 
 
-Note that, since no further arguments were specified, the initial
-state, state transition and response distributions were set to their
-defaults (multinomial distributions for the first two, and Gaussian
-distributions for the response distributions).
 
-\subsection{Covariates on transition parameters}
+Since no further arguments were specified, the initial state, state
+transition and response distributions were set to their defaults
+(multinomial distributions for the first two, and a Gaussian
+distribution for the response).
+
+\subsection{Covariates on transition parameters\label{sec:trans}}
 
 By default, the transition probabilities and the initial state
 probabilities are parameterized using the multinomial logistic model.
@@ -552,10 +637,10 @@ mod <- depmix(rt~1, data=speed, nstates=2, family=gaussian(),
 fm <- fit(mod)
 @
 
-Applying \code{summary} to the \code{fit}ted object gives (only transition models
-printed here): 
+Applying \code{summary} to the \code{fit}ted object gives (only
+transition models printed here):
 <<>>=
-summary(fm)
+summary(fm) 
 @
 
 The summary provides all parameters of the model, also the (redundant)
@@ -599,13 +684,47 @@ multivariate response model.  The only multivariate response model
 currently implemented in \pkg{depmixS4} is for multivariate normal
 variables.
 
-\subsection{Adding covariates on the prior probabilities}
+\subsection{Adding covariates on the prior probabilities\label{sec:prior}}
 
 To illustrate the use of covariates on the prior probabilities we have
 included another data set with \pkg{depmixS4}.  The \code{balance}
 data consists of 4 binary items (correct-incorrect) on a balance scale
-task \citet{Siegler1981}.  The data form a subset of the data
-published in \citet{Jansen2002}.
+task \citep{Siegler1981}.  The data form a subset of the data
+published in \citet{Jansen2002}. Before specifying specifying a model 
+for these data, we briefly describe them. 
+
+The balance scale taks is a famous task for testing cognitive
+strategies developed by Piaget \citep{Siegler1981}.
+Figure~\ref{fig:balance} provides an example of a balance scale item.
+Participants' task is to say to which side the balance will tip when
+released, or alternatively, whether it will stay in balance.  The item
+shown in Figure~\ref{fig:balance} is a so-callled distance item: the
+number of weights placed on each side is equal, and only the distance
+of the weights to the fulcrum differs between each side.
+
+\begin{figure}[htbp]
+\begin{center}
+	\includegraphic{graphs:baldist.pdf}
+	\caption{Balance scale item; this is a so-called distance item.}
+	\label{fig:balance}  
+\end{center}
+\end{figure}
+
+
+Children in the lower grades of primary school are known to ignore the
+distance dimension, and base their answer only on the number of
+weights on each side.  Hence, they would typically provide the wrong
+answer to these distance items.  Slightly older children do take
+distance into account when responding to balance scale items, but they
+only do so when the number of weights is equal on each side.  These
+two strategies that children employ are known a Rule I and Rule II.
+Other strategies can be teased apart by administering different items.
+The \code{balance} data set that we analyse here consists of 4
+distance items on a balance scale task administered to 779
+participants ranging from 5 to 19 years of age.  The full set of items
+consisted of 25 items; other items in the test are used to detect
+other strategies that children (and young adults) employ in solving
+balance scale items \citep[see][for details]{Jansen2002}. 
 
 Similarly to the transition matrix, covariates on the prior
 probabilities of the latent states (or classes in this case), are
