@@ -18,6 +18,9 @@
 \alias{viterbi2}
 \alias{viterbi.fb}
 
+\alias{cov2par}
+\alias{par2cov}
+
 \alias{nlin}
 \alias{nlin,depmix.fitted-method}
 \alias{nlin,mix.fitted-method}
