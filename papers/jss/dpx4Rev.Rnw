@@ -516,16 +516,16 @@ participant A in Experiment 1 in \citet{Dutilh2009}, who provide a
 complete description of the experiment and the relevant theoretical
 background.
 
-The central hypothesis about this data is whether indeed it is best 
-described by two modes of responding rather than a single mode of 
-responding with a continuous trade-off between speed and accuracy. 
-The hallmark of having a discontinuity between slow versus speeded 
+The central hypothesis about this data is whether indeed it is best
+described by two modes of responding rather than a single mode of
+responding with a continuous trade-off between speed and accuracy.
+The hallmark of having a discontinuity between slow versus speeded
 responding is that the switching between the two modes is assymetric
-\citep[see e.g.][for a theoretical underpinning of this 
-claim]{Maas1992}. The \code{fit} help page of \pkg{depmixS4} provides 
-a number of examples in which the assymetricity of the switching 
-process is tested; those examples are discussed at length in 
-\citet{Visser2009b}. 
+\citep[see e.g.][for a theoretical underpinning of this
+claim]{Maas1992}.  The \code{fit} help page of \pkg{depmixS4} provides
+a number of examples in which the assymetricity of the switching
+process is tested; those examples and other candidate models are
+discussed at length in \citet{Visser2009b}.
 
 
 \subsection{A simple model}
@@ -554,37 +554,37 @@ argument, \code{data=speed}, provides the \code{data.frame} in which
 the variables from \code{response} are interpreted.  Third, the number
 of states of the model is given by \code{nstates=2}. 
 
-\subsubsection{Starting values}
 
-Note also that start values for the transition parameters are provided
-in this call using the \code{trstart} argument.  At this time, the
-package does not provide automatic starting values.  Starting values
-for parameters can be provided using three arguments: \code{instart}
-for the parameters relating to the prior probabilities,
-\coce{trstart}, relating the transition models, and \code{respstart}
-for the parameters of the response models.  Note that the starting
-values for the initial and transition models as well as of the
-multinomial logit response models are interpreted as {\em probabilities},
-and internally converted to multinomial logit parameters.
+\paragraph{Starting values} Note also that start values for the
+transition parameters are provided in this call using the
+\code{trstart} argument.  At this time, the package does not provide
+automatic starting values.  Starting values for parameters can be
+provided using three arguments: \code{instart} for the parameters
+relating to the prior probabilities, \coce{trstart}, relating the
+transition models, and \code{respstart} for the parameters of the
+response models.  Note that the starting values for the initial and
+transition models as well as of the multinomial logit response models
+are interpreted as {\em probabilities}, and internally converted to
+multinomial logit parameters.
 
 
-\subsubsection{Fitting the model and printing results}
-
-The \code{depmix} function returns an object of class \code{depmix}
-which contains the model specification, and not a fitted model. Hence,
-the model needs to be fitted by calling \code{fit}: 
-
+\paragraph{Fitting the model and printing results} The \code{depmix}
+function returns an object of class \code{depmix} which contains the
+model specification, and not a fitted model.  Hence, the model needs
+to be fitted by calling \code{fit}:
 <<>>=
 fm <- fit(mod)
 @
+
 The \code{fit}-function returns an object of class
 \code{depmix.fitted} which extends the \code{depmix} class, adding
 convergence information (and information about constraints if these
-were applied, see below).  The \code{print} method provides summary
-information on convergence, the log-likelihood and the AIC and BIC
-values:
+were applied, see below).  The class has \code{print} and
+\code{summary} methods to see the results.  The \code{print} method
+provides summary information on convergence, the log-likelihood and
+the AIC and BIC values:
 <<>>=
-fm
+fm 
 @
 
 These statistics can also be extracted using \code{logLik}, \code{AIC}
@@ -602,8 +602,6 @@ for the transition models, and third for the response models.
 <<>>=
 summary(fm)
 @
-
-
 
 Since no further arguments were specified, the initial state, state
 transition and response distributions were set to their defaults
@@ -640,7 +638,7 @@ fm <- fit(mod)
 Applying \code{summary} to the \code{fit}ted object gives (only
 transition models printed here):
 <<>>=
-summary(fm) 
+summary(fm, which="transition") 
 @
 
 The summary provides all parameters of the model, also the (redundant)
@@ -669,7 +667,7 @@ fm <- fit(mod)
 This provides the following fitted model parameters (only the 
 response parameters are given here): 
 <<>>=
-summary(fm)
+summary(fm,which="response")
 @
 
 As can be seen, state 1 has fast response times and accuracy is
@@ -709,7 +707,6 @@ of the weights to the fulcrum differs between each side.
 	\label{fig:balance}  
 \end{center}
 \end{figure}
-
 
 Children in the lower grades of primary school are known to ignore the
 distance dimension, and base their answer only on the number of
@@ -751,8 +748,13 @@ this is implemented as such in the EM algorithms in \pkg{depmixS4}.
 The summary of the \code{fit}ted model gives the following (only the
 prior model is shown here):
 <<>>=
-summary(fm)
+summary(fm,which="prior")
 @
+
+%
+% add more explanation about the parameters, possibly add a plot of 
+% the class membership as function of age
+%
 
 Hence at young ages, children have a high probability of incorrect 
 responding in class~1, whereas the prior probability for class~2 
@@ -761,20 +763,20 @@ increases with age.
 
 \subsection{Fixing and constraining parameters}
 
-Using package \pkg{Rdonlp2} by \citet{Tamura2009}, parameters may be
-fitted subject to general linear (in-)equality constraints.
-Constraining and fixing parameters is done using the \code{conpat}
-argument to the \code{fit}-function, which specifies for each
-parameter in the model whether it's fixed (0) or free (1 or higher).
-Equality constraints can be imposed by having two parameters have the
-same number in the \code{conpat} vector.  When only fixed values are
-required, the \code{fixed} argument can be used instead of
-\code{conpat}, with zeroes for fixed parameters and other values (ones
-e.g.) for non-fixed parameters.  Fitting the models subject to these
-constraints is handled by the optimization routine \code{donlp2}.  To
-be able to construct the \code{conpat} and/or \code{fixed} vectors one
-needs the correct ordering of parameters which is briefly discussed
-next before proceeding with an example.
+Using package \pkg{Rdonlp2} by \citet{Tamura2009} or \pkg{Rsolnp}
+\citet{ZZZZ???}, parameters may be fitted subject to general linear
+(in-)equality constraints.  Constraining and fixing parameters is done
+using the \code{conpat} argument to the \code{fit}-function, which
+specifies for each parameter in the model whether it's fixed (0) or
+free (1 or higher).  Equality constraints can be imposed by having two
+parameters have the same number in the \code{conpat} vector.  When
+only fixed values are required, the \code{fixed} argument can be used
+instead of \code{conpat}, with zeroes for fixed parameters and other
+values (ones e.g.) for non-fixed parameters.  Fitting the models
+subject to these constraints is handled by the optimization routine
+\code{donlp2}.  To be able to construct the \code{conpat} and/or
+\code{fixed} vectors one needs the correct ordering of parameters
+which is briefly discussed next before proceeding with an example.
 
 \paragraph{Parameter numbering} When using the \code{conpat} and
 \code{fixed} arguments, complete parameter vectors should be supplied,
@@ -916,12 +918,18 @@ setMethod("exgaus",
     mod
   }
 )
+
 @
+
+
 
 <<echo=FALSE>>=
 setMethod("dens","exgaus",
     function(object,log=FALSE) {
-        dexGAUS(object@y, mu = predict(object), sigma = exp(object@parameters$sigma), nu = exp(object@parameters$nu), log = log)
+    	dexGAUS(object@y, mu = predict(object), 
+	sigma = exp(object@parameters$sigma), 
+	nu = exp(object@parameters$nu), 
+	log = log)
     }
 )
 
@@ -956,7 +964,7 @@ setMethod("setpars","exgaus",
 		  "fixed" = {
 		      object@fixed <- as.logical(values)
 		  }
-		  )
+	    )
         names(object@parameters) <- nms
         return(object)
     }

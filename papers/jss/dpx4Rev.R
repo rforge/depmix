@@ -12,7 +12,7 @@ plot(as.ts(speed[1:168,]),main="Speed-accuracy trade-off")
 library(depmixS4)
 data(speed)
 set.seed(1)
-mod <- depmix(rt~1, data=speed, nstates=2, trstart=runif(4))
+mod <- depmix(response=rt~1, data=speed, nstates=2, trstart=runif(4))
 
 
 ###################################################
@@ -24,7 +24,7 @@ fm <- fit(mod)
 ###################################################
 ### chunk number 4: 
 ###################################################
-fm
+fm 
 
 
 ###################################################
@@ -45,7 +45,7 @@ fm <- fit(mod)
 ###################################################
 ### chunk number 7: 
 ###################################################
-summary(fm)
+summary(fm, which="transition") 
 
 
 ###################################################
@@ -61,7 +61,7 @@ fm <- fit(mod)
 ###################################################
 ### chunk number 9: 
 ###################################################
-summary(fm)
+summary(fm,which="response")
 
 
 ###################################################
@@ -80,7 +80,7 @@ fm <- fit(mod)
 ###################################################
 ### chunk number 11: 
 ###################################################
-summary(fm)
+summary(fm,which="prior")
 
 
 ###################################################
@@ -151,12 +151,16 @@ setMethod("exgaus",
 )
 
 
+
 ###################################################
 ### chunk number 18: 
 ###################################################
 setMethod("dens","exgaus",
     function(object,log=FALSE) {
-        dexGAUS(object@y, mu = predict(object), sigma = exp(object@parameters$sigma), nu = exp(object@parameters$nu), log = log)
+    	dexGAUS(object@y, mu = predict(object), 
+	sigma = exp(object@parameters$sigma), 
+	nu = exp(object@parameters$nu), 
+	log = log)
     }
 )
 
@@ -191,7 +195,7 @@ setMethod("setpars","exgaus",
 		  "fixed" = {
 		      object@fixed <- as.logical(values)
 		  }
-		  )
+	    )
         names(object@parameters) <- nms
         return(object)
     }
