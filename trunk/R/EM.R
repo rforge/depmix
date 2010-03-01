@@ -144,8 +144,11 @@ em.depmix <- function(object,maxit=100,tol=1e-8,crit=c("relative","absolute"),ve
 					for(k in 1:ns) {
 						trm[i,k] <- sum(fbo$xi[-c(et),k,i])/sum(fbo$gamma[-c(et),i])
 					}
-					# FIX THIS; it will only work with a specific trinModel
-					object@transition[[i]]@parameters$coefficients <- object@transition[[i]]@family$linkfun(trm[i,],base=object@transition[[i]]@family$base)
+					# FIX THIS; it will only work with specific trinModels??
+					object@transition[[i]]@parameters$coefficients <- switch(object@transition[[i]]@family$link,
+					identity = object@transition[[i]]@family$linkfun(trm[i,]),
+					mlogit = object@transition[[i]]@family$linkfun(trm[i,],base=object@transition[[i]]@family$base),
+					object@transition[[i]]@family$linkfun(trm[i,]))
 				}
 				# update trDens slot of the model
 				object@trDens[,,i] <- dens(object@transition[[i]])
