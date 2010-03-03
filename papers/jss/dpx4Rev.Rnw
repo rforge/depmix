@@ -31,7 +31,7 @@
 	
 	\pkg{depmixS4} implements a general framework for defining and
 	estimating dependent mixture models in the \proglang{R}
-	programming language \citep{R2009}.  This includes standard Markov
+	programming language \citep{R2010}.  This includes standard Markov
 	models, latent/hidden Markov models, and latent class and finite
 	mixture distribution models.  The models can be fitted on mixed
 	multivariate data with distributions from the \code{glm} family,
@@ -810,7 +810,7 @@ switch between applying different strategies.
 \subsection{Fixing and constraining parameters}
 
 Using package \pkg{Rdonlp2} by \citet{Tamura2009} or \pkg{Rsolnp}
-\citet{ZZZZ???}, parameters may be fitted subject to general linear
+\citet{Ghalanos2010}, parameters may be fitted subject to general linear
 (in-)equality constraints.  Constraining and fixing parameters is done
 using the \code{conpat} argument to the \code{fit}-function, which
 specifies for each parameter in the model whether it's fixed (0) or
