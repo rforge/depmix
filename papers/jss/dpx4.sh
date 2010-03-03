@@ -2,9 +2,10 @@
 
 cd ~/Documents/projects/depmixProject/codesvn/depmix/papers/jss/
 
+R --vanilla < dpx4Sweave.R ;
+
 R --vanilla < dpx4Stangle.R ;
 
-R --vanilla < dpx4Sweave.R ;
 
 pdflatex dpx4Rev.tex ;
 

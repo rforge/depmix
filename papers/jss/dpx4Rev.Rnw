@@ -31,7 +31,7 @@
 	
 	\pkg{depmixS4} implements a general framework for defining and
 	estimating dependent mixture models in the \proglang{R}
-	programming language \citep{R2010}.  This includes standard Markov
+	programming language \citep{R2009}.  This includes standard Markov
 	models, latent/hidden Markov models, and latent class and finite
 	mixture distribution models.  The models can be fitted on mixed
 	multivariate data with distributions from the \code{glm} family,
@@ -98,7 +98,6 @@ URL: \url{http://www.ingmar.org/}
 %% include your article here, just as usual
 %% Note that you should use the \pkg{}, \proglang{} and \code{} commands.
 
-% Refs to check: Jansen 2002, Dutilh 2009
 
 \begin{center}
 \bf{DRAFT: DO NOT QUOTE WITHOUT CONTACTING AUTHOR}
@@ -175,7 +174,7 @@ variable reflecting the relative reward for speeded and/or accurate
 responding.  These variables are measured on 168, 134 and 137
 occasions respectively (the first part of this series is plotted in
 Figure~\ref{fig:speed}).  These data are more fully described in
-\citet{Dutilh2009}.
+\citet{Dutilh2010}.
 
 \begin{figure}[htbp]
 \begin{center}
@@ -512,7 +511,7 @@ figure~ref{fig:speed} shows the values of this variable.  The main
 question in this experiment was what would happen when this reward
 variable would change from reward for accuracy only to reward for
 speed only.  The \code{speed} data that we analyse here are from
-participant A in Experiment 1 in \citet{Dutilh2009}, who provide a
+participant A in Experiment 1 in \citet{Dutilh2010}, who provide a
 complete description of the experiment and the relevant theoretical
 background.
 
@@ -632,7 +631,7 @@ following example:
 set.seed(1)
 mod <- depmix(rt~1, data=speed, nstates=2, family=gaussian(), 
     transition=~scale(Pacc), instart=runif(2))
-fm <- fit(mod)
+fm <- fit(mod,verbose=FALSE)
 @
 
 Applying \code{summary} to the \code{fit}ted object gives (only
@@ -661,7 +660,7 @@ set.seed(1)
 mod <- depmix(list(rt~1,corr~1), data=speed, nstates=2, 
     family=list(gaussian(),multinomial()),
     transition=~scale(Pacc),instart=runif(2))
-fm <- fit(mod)
+fm <- fit(mod,verbose=FALSE)
 @
 
 This provides the following fitted model parameters (only the 
@@ -737,7 +736,7 @@ mod <- mix(list(d1~1,d2~1,d3~1,d4~1), data=balance, nstates=3,
 	family=list(multinomial("identity"), multinomial("identity"),
 	multinomial("identity"), multinomial("identity")),
 	respstart=runif(24), prior=~age, initdata=balance)
-fm <- fit(mod) 
+fm <- fit(mod,verbose=FALSE) 
 fm
 @
 
@@ -840,14 +839,14 @@ numbered in the following order:
 \end{enumerate}
 
 To see the ordering of parameters use the following:
-<<>>=
+<<term=FALSE>>=
 setpars(mod, value=1:npar(mod))
 @
 
 To see which parameters are fixed (by default only baseline parameters
 in the multinomial logistic models for the transition models and the
 initial state probabilities model):
-<<>>=
+<<term=FALSE>>=
 setpars(mod, getpars(mod,which="fixed"))
 @
 When fitting constraints it is useful to have good starting values 
@@ -858,13 +857,13 @@ trst <- c(0.9,0.1,0,0,0.1,0.9,0,0)
 mod <- depmix(list(rt~1,corr~1),data=speed,transition=~Pacc,
 	  nstates=2,family=list(gaussian(),multinomial()),
 	  trstart=trst,inst=c(.999,0.001))
-fm1 <- fit(mod)
+fm1 <- fit(mod,verbose=FALSE)
 @
 
 After this, we use the fitted values from this model to constrain the
 regression coefficients on the transition matrix (parameters number~6
 and~10):
-<<>>=
+<<term=FALSE>>=
 # start with fixed and free parameters
 conpat <- c(0,1,rep(c(0,1),4),1,1,0,1,1,1,0,1)
 # constrain the beta's on the transition parameters to be equal
@@ -938,7 +937,7 @@ function.  The \code{exgaus} example uses the \pkg{gamlss} and
 
 The constructor method return an object of class \code{exgaus}, and is
 defined as follows:
-<<>>=
+<<term=FALSE>>=
 setGeneric("exgaus", function(y, pstart = NULL, fixed = NULL, ...) 
   standardGeneric("exgaus"))
 
@@ -1079,7 +1078,7 @@ the model:
 <<>>=
 mod <- makeDepmix(response=rModels,transition=transition,
     prior=inMod,stat=FALSE)
-fm <- fit(mod)
+fm <- fit(mod,verbose=FALSE)
 @
 
 Using \code{summary} will print the fitted parameters.  Note that the
@@ -1117,7 +1116,7 @@ are also planning to implement goodness-of-fit statistics
 Ingmar Visser was supported by an EC Framework 6 grant, project 516542
 (NEST).  Maarten Speekenbrink was supported by the ESRC Centre for
 Economic Learning and Social Evolution (ELSE).  Han van der Maas
-provided the speed-accuracy data \cite{Dutilh2009} and thereby
+provided the speed-accuracy data \cite{Dutilh2010} and thereby
 neccessitated implementing models with time-dependent covariates.
 Brenda Jansen provided the balance scale data set \citep{Jansen2002}
 which was the perfect opportunity to test the covariates on the prior
