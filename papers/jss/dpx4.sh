@@ -15,7 +15,9 @@ pdflatex dpx4Rev.tex ;
 
 pdflatex dpx4Rev.tex ;
 
-open dpx4Rev.pdf
+open dpx4Rev.pdf; 
+
+
 
 
 

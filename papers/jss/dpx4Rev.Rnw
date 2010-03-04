@@ -98,7 +98,6 @@ URL: \url{http://www.ingmar.org/}
 %% include your article here, just as usual
 %% Note that you should use the \pkg{}, \proglang{} and \code{} commands.
 
-
 \begin{center}
 \bf{DRAFT: DO NOT QUOTE WITHOUT CONTACTING AUTHOR}
 \end{center}
@@ -468,7 +467,7 @@ below with examples:
 \begin{enumerate}
 	\item model specification with function \code{depmix} (or with \code{mix}
 	for latent class and finite mixture models, see example below on adding
-	covariates to prior probabilities in section~\ref{sec:prior})
+	covariates to prior probabilities)
 	
 	\item  model fitting with function \code{fit}
 \end{enumerate}
