@@ -308,7 +308,7 @@ where we have the following elements:
 
 For the example data above, $b_j^k$ could be a Gaussian distribution
 function for the response time variable, and a Bernoulli distribution
-for the accuracy variable.  In the models we are considering here,
+for the accuracy variable.  In the models considered here,
 both the transition probability functions $a_{ij}$ and the initial
 state probability functions $\greekv{\pi}$ may depend on covariates as
 well as the response distributions $b_{j}^{k}$.
@@ -488,7 +488,7 @@ to these data, we provide a brief sketch of the reasons for gathering
 these data in the first place.
 
 Response times are a very common dependent variable in psychological
-experiments and hence form the basis for infernce about many
+experiments and hence form the basis for inference about many
 psychological processes.  A potential threat to such inference based
 on response times is formed by the speed-accuracy trade-off: different
 participants in an experiment may respond differently to typical
@@ -507,22 +507,22 @@ stating that there is a sudden transition from slow and accurate
 responding to fast responding at chance level.  At each trial of the
 experiment, the participant is shown the current setting of the
 relative reward for speed versus accuracy.  The bottom panel of
-figure~ref{fig:speed} shows the values of this variable.  The main
-question in this experiment was what would happen when this reward
-variable would change from reward for accuracy only to reward for
+figure~\ref{fig:speed} shows the values of this variable.  The 
+experiment was designed to investigate what would happen when this reward
+variable changes from reward for accuracy only to reward for
 speed only.  The \code{speed} data that we analyse here are from
 participant A in Experiment 1 in \citet{Dutilh2010}, who provide a
 complete description of the experiment and the relevant theoretical
 background.
 
-The central hypothesis about this data is whether indeed it is best
+The central question regarding this data is whether it is indeed best
 described by two modes of responding rather than a single mode of
 responding with a continuous trade-off between speed and accuracy.
-The hallmark of having a discontinuity between slow versus speeded
-responding is that the switching between the two modes is assymetric
+The hallmark of a discontinuity between slow versus speeded
+responding is that switching between the two modes is asymmetric
 \citep[see e.g.][for a theoretical underpinning of this
 claim]{Maas1992}.  The \code{fit} help page of \pkg{depmixS4} provides
-a number of examples in which the assymetricity of the switching
+a number of examples in which the asymmetry of the switching
 process is tested; those examples and other candidate models are
 discussed at length in \citet{Visser2009b}.
 
@@ -537,7 +537,8 @@ A dependent mixture model can be created with the
 library(depmixS4)
 data(speed)
 set.seed(1)
-mod <- depmix(response=rt~1, data=speed, nstates=2, trstart=runif(4))
+mod <- depmix(response=rt~1, data=speed, nstates=2, 
+    trstart=runif(4))
 @
 
 The first line of code loads the \pkg{depmixS4} package and 
@@ -555,16 +556,16 @@ of states of the model is given by \code{nstates=2}.
 
 
 \paragraph{Starting values} Note also that start values for the
-transition parameters are provided in this call using the
+transition parameters are provided in this call by the
 \code{trstart} argument.  At this time, the package does not provide
 automatic starting values.  Starting values for parameters can be
 provided using three arguments: \code{instart} for the parameters
 relating to the prior probabilities, \code{trstart}, relating the
 transition models, and \code{respstart} for the parameters of the
 response models.  Note that the starting values for the initial and
-transition models as well as of the multinomial logit response models
+transition models as well as multinomial logit response models
 are interpreted as {\em probabilities}, and internally converted to
-multinomial logit parameters.
+multinomial logit parameters (if a logit link function is used).
 
 
 \paragraph{Fitting the model and printing results} The \code{depmix}
@@ -589,7 +590,7 @@ fm
 These statistics can also be extracted using \code{logLik}, \code{AIC}
 and \code{BIC}, respectively.  By comparison, a 1-state model for
 these data, i.e. assuming there is no mixture, has a log-likelihood of
--305.33, and 614.66, and 622.83 for the AIC and BIC respectively.
+$-305.33$, and 614.66, and 622.83 for the AIC and BIC respectively.
 Hence, the 2-state model fits the data much better than the 1-state
 model.  Note that the 1-state model can be specified using \code{mod <-
 depmix(rt~1, data=speed, nstates=1)}, although this model is trivial
@@ -610,18 +611,18 @@ distribution for the response).
 \subsection{Covariates on transition parameters}
 
 By default, the transition probabilities and the initial state
-probabilities are parameterized using the multinomial logistic model.
-More precisely, each row of the transition matrix is parameterized by
+probabilities are parameterized using a multinomial model with an 
+identity link function.
+Using a multinomial logistic model allows us to include covariates on the
+initial state and transition probabilities. In this case, each row of the 
+transition matrix is parameterized by
 a baseline category logistic multinomial, meaning that the parameter
 for the base category is fixed at zero \citep[see][p.\ 267 ff., for
 multinomial logistic models and various
 parameterizations]{Agresti2002}.  The default baseline category is the
 first state.  Hence, for example, for a 3-state model, the initial
 state probability model would have three parameters of which the first
-is fixed at zero and the other two are freely estimated.
-
-The multinomial logistic model allows us to include covariates on the
-initial state and transition probabilities.  \citet{Chung2007} discuss
+is fixed at zero and the other two are freely estimated. \citet{Chung2007} discuss
 a related latent transition model for repeated measurement data
 ($T=2$) using logistic regression on the transition parameters; they
 rely on Bayesian methods of estimation.  Covariates on the transition
@@ -652,7 +653,7 @@ easier.
 Multivariate data can be modelled by providing a list of formulae as
 well as a list of family objects for the distributions of the various
 responses.  In above examples we have only used the response times
-which were modelled with the Gaussian distribution.  The accuracy
+which were modelled as a Gaussian distribution.  The accuracy
 variable in the \code{speed} data can be modelled with a multinomial
 by specifying the following:
 <<>>=
@@ -691,7 +692,7 @@ published in \citet{Jansen2002}. Before specifying specifying a model
 for these data, we briefly describe them. 
 
 The balance scale taks is a famous task for testing cognitive
-strategies developed by Jean Piaget \citep[see]{Siegler1981}.
+strategies developed by Jean Piaget \citep[see][]{Siegler1981}.
 Figure~\ref{fig:balance} provides an example of a balance scale item.
 Participants' task is to say to which side the balance will tip when
 released, or alternatively, whether it will stay in balance.  The item
@@ -741,10 +742,10 @@ fm
 @
 
 Note here that we define a \code{mix} model instead of a \code{depmix}
-models as these data form independent observations.  More formally,
+model as these data form independent observations.  More formally,
 \code{depmix} models extend the class of \code{mix} models by adding
-the transition models.  As for fitting \code{mix} models: as can be
-seen in equation~\ref{eq:Q}, the EM algorithm can be applied by simply
+transition models.  As for fitting \code{mix} models: as can be
+seen in Equation~\ref{eq:Q}, the EM algorithm can be applied by simply
 dropping the second summand containing the transition parameters, and 
 this is implemented as such in the EM algorithms in \pkg{depmixS4}.
 
@@ -813,8 +814,8 @@ Using package \pkg{Rdonlp2} by \citet{Tamura2009} or \pkg{Rsolnp}
 (in-)equality constraints.  Constraining and fixing parameters is done
 using the \code{conpat} argument to the \code{fit}-function, which
 specifies for each parameter in the model whether it's fixed (0) or
-free (1 or higher).  Equality constraints can be imposed by having two
-parameters have the same number in the \code{conpat} vector.  When
+free (1 or higher).  Equality constraints can be imposed by giving two
+parameters the same number in the \code{conpat} vector.  When
 only fixed values are required, the \code{fixed} argument can be used
 instead of \code{conpat}, with zeroes for fixed parameters and other
 values (ones e.g.) for non-fixed parameters.  Fitting the models
@@ -825,7 +826,7 @@ which is briefly discussed next before proceeding with an example.
 
 \paragraph{Parameter numbering} When using the \code{conpat} and
 \code{fixed} arguments, complete parameter vectors should be supplied,
-i.e., these vectors should have length of the number of parameters of
+i.e., these vectors should have length equal to the number of parameters of
 the model, which can be obtained by calling \code{npar(object)}.  Note
 that this is not the same as the degrees of freedom used e.g.\ in the
 \code{logLik} function because \code{npar} also counts the baseline
@@ -901,8 +902,8 @@ have the following slots:
 	\item y: the response variable
 	\item x: the design matrix, possibly only an intercept
 	\item paramaters: a named list with the coefficients and possibly 
-	other parameters, e.g., the standard deviation in the Gaussian 
-	response model
+	other parameters (e.g., the standard deviation in the Gaussian 
+	response model)
 	\item fixed: a vector of logicals indicating whether parameters are 
 	fixed
 	\item npar: numerical indicating the number of parameters of the model
@@ -1048,7 +1049,7 @@ back into their respective slots in the `exgaus' object. See the help
 for \code{gamlss.distr} for interpretation of these parameters. 
 
 After defining all the necessary methods for the new response model, 
-we can  now define the dependent mixture model using this reponse model. 
+we can  now define the dependent mixture model using this response model. 
 The function \code{makeDepmix} is included in \pkg{depmixS4} to have 
 full control over model specification, and we need it here. 
 
@@ -1086,7 +1087,7 @@ use of \code{makeDepmix} allows the possibility of, say, fitting a
 Gaussian in one state and an exgaus distribution in another state.
 Note also that according to the AIC and BIC, the model with the exgaus
 describes the data much better than the same model in which the
-response times are modeled as gaussian.
+response times are modelled as Gaussian.
 
 
 \section[Conclusions and future work]{Conclusions \& future work}
@@ -1096,7 +1097,7 @@ mixture models for a large variety of response distributions.  It can
 also fit latent class regression and finite mixture models, although
 it should be noted that more specialized packages are available for
 this such as \pkg{FlexMix} \citep{Leisch2004}.  The package is
-intended for modeling of (individual) time series data with the aim of
+intended for modelling of (individual) time series data with the aim of
 characterizing the transition processes underlying the data.  The
 possibility to use covariates on the transition matrix greatly
 enhances the flexibility of the model.  The EM algorithm uses a very
@@ -1114,9 +1115,9 @@ are also planning to implement goodness-of-fit statistics
 \section*{Acknowledgements} 
 
 Ingmar Visser was supported by an EC Framework 6 grant, project 516542
-(NEST).  Maarten Speekenbrink was supported by the ESRC Centre for
-Economic Learning and Social Evolution (ELSE).  Han van der Maas
-provided the speed-accuracy data \cite{Dutilh2010} and thereby
+(NEST).  Maarten Speekenbrink was supported by ESRC grant RES-062-23-1511 
+and the ESRC Centre for Economic Learning and Social Evolution (ELSE).  
+Han van der Maas provided the speed-accuracy data \cite{Dutilh2010} and thereby
 neccessitated implementing models with time-dependent covariates.
 Brenda Jansen provided the balance scale data set \citep{Jansen2002}
 which was the perfect opportunity to test the covariates on the prior
