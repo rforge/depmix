@@ -17,7 +17,7 @@ function(response,data=NULL,nstates,family,values=NULL,prob=TRUE,...) {
 	nresp <- length(resp)
 	for(i in 1:nstates) {
 		response[[i]] <- list()
-		for(j in 1:nresp) {				
+		for(j in 1:nresp) {
 			response[[i]][[j]] <- GLMresponse(resp[[j]],data=data,family=family[[j]])
 			nresppars <- nresppars + npar(response[[i]][[j]])
 		}

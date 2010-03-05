@@ -164,7 +164,7 @@ set.seed(1)
 tr=runif(6)
 trst=c(tr[1:2],0,tr[3:5],0,tr[6])
 mod1 <- depmix(list(rt~1,corr~1),data=speed,transition=~Pacc,nstates=2,
-	family=list(gaussian(),multinomial()),trstart=trst)
+	family=list(gaussian(),multinomial("identity")),trstart=trst)
 # fit the model
 fmod1 <- fit(mod1)
 fmod1 # to see the logLik and optimization information
