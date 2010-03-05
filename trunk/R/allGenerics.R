@@ -40,7 +40,7 @@ setGeneric("freepars", function(object, ...) standardGeneric("freepars"))
 
 setGeneric("nlin", function(object, ...) standardGeneric("nlin"))
 
-setGeneric("getModel", function(object, ...) standardGeneric("getModel"))
+# setGeneric("getModel", function(object, ...) standardGeneric("getModel"))
 
 # setGeneric("logLik", function(object, ...) standardGeneric("logLik"))
 

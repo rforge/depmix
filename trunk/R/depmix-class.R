@@ -131,14 +131,14 @@ setMethod("simulate",signature(object="mix"),
 	}
 )
 
-setMethod("getModel",signature(object="mix"),
-	function(object,which="response",...) {
-		res <- switch(which,
-			"prior"=object@prior,
-			"response"=object@response)
-		res
-	}
-)
+# setMethod("getModel",signature(object="mix"),
+# 	function(object,which="response",...) {
+# 		res <- switch(which,
+# 			"prior"=object@prior,
+# 			"response"=object@response)
+# 		res
+# 	}
+# )
 
 # 
 # PRINT method
@@ -304,15 +304,15 @@ setMethod("simulate",signature(object="depmix"),
 	}
 )
 
-setMethod("getModel",signature(object="depmix"),
-	function(object,which="response",...) {
-		res <- switch(which,
-			"prior"=object@prior,
-			"response"=object@response,
-			"transition"=object@transition)
-		res
-	}
-)
+# setMethod("getModel",signature(object="depmix"),
+# 	function(object,which="response",...) {
+# 		res <- switch(which,
+# 			"prior"=object@prior,
+# 			"response"=object@response,
+# 			"transition"=object@transition)
+# 		res
+# 	}
+# )
 
 # 
 # SUMMARY method: to do
