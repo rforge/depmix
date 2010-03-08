@@ -16,11 +16,12 @@ em <- function(object,maxit=100,tol=1e-8,crit=c(relative,absolute),verbose=FALSE
 
 # em for lca and mixture models
 em.mix <- function(object,maxit=100,tol=1e-8,crit=c("relative","absolute"),verbose=FALSE,...) {
+	
 	if(!is(object,"mix")) stop("object is not of class 'mix'")
+	
 	crit <- match.arg(crit)
 	
 	ns <- object@nstates
-	
 	ntimes <- ntimes(object)
 	lt <- length(ntimes)
 	et <- cumsum(ntimes)
@@ -85,11 +86,11 @@ em.mix <- function(object,maxit=100,tol=1e-8,crit=c("relative","absolute"),verbo
 	class(object) <- "mix.fitted"
 
 	if(converge) {
-    object@message <- switch(crit,
-    relative = "Log likelihood converged to within tol. (relative change crit.)",
-    absolute = "Log likelihood converged to within tol. (absolute change crit.)"
-    )
-  } else object@message <- "'maxit' iterations reached in EM without convergence."
+		object@message <- switch(crit,
+			"relative" = "Log likelihood converged to within tol. (relative change crit.)",
+			"absolute" = "Log likelihood converged to within tol. (absolute change crit.)"
+		)
+	} else object@message <- "'maxit' iterations reached in EM without convergence."
 
 	# no constraints in EM
 	object@conMat <- matrix()
@@ -136,27 +137,25 @@ em.depmix <- function(object,maxit=100,tol=1e-8,crit=c("relative","absolute"),ve
 				
 		trm <- matrix(0,ns,ns)
 		for(i in 1:ns) {
-			if(max(ntimes(object)>1)) { # skip transition parameters update in case of latent class model
-				if(!object@stationary) {
-					object@transition[[i]]@y <- fbo$xi[,,i]/fbo$gamma[,i]
-					object@transition[[i]] <- fit(object@transition[[i]],w=as.matrix(fbo$gamma[,i]),ntimes=ntimes(object)) # check this
-				} else {
-					for(k in 1:ns) {
-						trm[i,k] <- sum(fbo$xi[-c(et),k,i])/sum(fbo$gamma[-c(et),i])
-					}
-					# FIX THIS; it will only work with specific trinModels??
-					object@transition[[i]]@parameters$coefficients <- switch(object@transition[[i]]@family$link,
+			if(!object@stationary) {
+				object@transition[[i]]@y <- fbo$xi[,,i]/fbo$gamma[,i]
+				object@transition[[i]] <- fit(object@transition[[i]],w=as.matrix(fbo$gamma[,i]),ntimes=ntimes(object)) # check this
+			} else {
+				for(k in 1:ns) {
+					trm[i,k] <- sum(fbo$xi[-c(et),k,i])/sum(fbo$gamma[-c(et),i])
+				}
+				# FIX THIS; it will only work with specific trinModels??
+				object@transition[[i]]@parameters$coefficients <- switch(object@transition[[i]]@family$link,
 					identity = object@transition[[i]]@family$linkfun(trm[i,]),
 					mlogit = object@transition[[i]]@family$linkfun(trm[i,],base=object@transition[[i]]@family$base),
-					object@transition[[i]]@family$linkfun(trm[i,]))
-				}
-				# update trDens slot of the model
-				object@trDens[,,i] <- dens(object@transition[[i]])
+					object@transition[[i]]@family$linkfun(trm[i,])
+				)
 			}
+			# update trDens slot of the model
+			object@trDens[,,i] <- dens(object@transition[[i]])
 		}
 		
 		for(i in 1:ns) {
-			
 			for(k in 1:nresp(object)) {
 				object@response[[i]][[k]] <- fit(object@response[[i]][[k]],w=fbo$gamma[,i])
 				# update dens slot of the model
@@ -184,17 +183,14 @@ em.depmix <- function(object,maxit=100,tol=1e-8,crit=c("relative","absolute"),ve
 		j <- j+1
 		
 	}
-	
-	#if(class(object)=="depmix") class(object) <- "depmix.fitted"
-	#if(class(object)=="mix") class(object) <- "mix.fitted"
-	
+		
 	class(object) <- "depmix.fitted"
 	
 	if(converge) {
-    object@message <- switch(crit,
-	  relative = "Log likelihood converged to within tol. (relative change crit.)",
-	  absolute = "Log likelihood converged to within tol. (absolute change crit.)"
-	 )
+		object@message <- switch(crit,
+			"relative" = "Log likelihood converged to within tol. (relative change crit.)",
+			"absolute" = "Log likelihood converged to within tol. (absolute change crit.)"
+		)
 	} else object@message <- "'maxit' iterations reached in EM without convergence."
 	
 	# no constraints in EM

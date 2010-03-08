@@ -13,7 +13,7 @@ setMethod("fit",
 		# otherwise EM is good
 		if(is.null(method)) {
 			if(constr) {
-				method="donlp"
+				method="rsolnp"
 			} else {
 				method="EM"
 			}
@@ -57,28 +57,77 @@ setMethod("fit",
 			
 		    # get the full set of parameters
 		    allpars <- getpars(object)
-		    # get the reduced set of parameters, ie the ones that will be optimized
+						
+			# get the reduced set of parameters, ie the ones that will be optimized
 		    pars <- allpars[!fixed]
 		    
 		    # set bounds, if any (should add bounds for eg sd parameters at some point ...)
-		    par.u <- rep(+Inf, length(pars))
-		    par.l <- rep(-Inf, length(pars))
+		    par.u <- rep(+Inf, npar(object))
+		    par.l <- rep(-Inf, npar(object))
 		    
-		    # make loglike function that only depends on pars
-			logl <- function(pars) {
-				allpars[!fixed] <- pars
-				object <- setpars(object,allpars)
-				ans = -as.numeric(logLik(object))
-				if(is.na(ans)) ans = 100000
-				ans
-			}
-
 		    # make constraint matrix and its upper and lower bounds
 			lincon <- matrix(0,nr=0,nc=npar(object))
 			lin.u <- numeric(0)
 			lin.l <- numeric(0)
 			
-			# incorporate equality constraints, if any
+			ns <- nstates(object)
+			nrsp <- nresp(object)
+			
+			# get bounds from submodels
+			# get internal linear constraints from submodels
+			
+			# first for the prior model
+			bp <- 1
+			ep <- npar(object@prior)
+			if(!is.null(object@prior@constr)) {
+				par.u[bp:ep] <- object@prior@constr$parup
+				par.l[bp:ep] <- object@prior@constr$parlow
+				# add linear constraints, if any
+				if(!is.null(object@prior@constr$lin)) {
+					lincon <- rbind(lincon,0)
+					lincon[nrow(lincon),bp:ep] <- object@prior@constr$lin
+					lin.u[nrow(lincon)] <- object@prior@constr$linup
+					lin.l[nrow(lincon)] <- object@prior@constr$linlow
+				}
+			}
+			
+			# ... for the transition models
+			if(is(object,"depmix"))	{
+				for(i in 1:ns) {
+					bp <- ep + 1
+					ep <- ep+npar(object@transition[[i]])
+					if(!is.null(object@transition[[i]]@constr)) {
+						par.u[bp:ep] <- object@transition[[i]]@constr$parup
+						par.l[bp:ep] <- object@transition[[i]]@constr$parlow
+					}
+					if(!is.null(object@transition[[i]]@constr$lin)) {
+						lincon <- rbind(lincon,0)
+						lincon[nrow(lincon),bp:ep] <- object@transition[[i]]@constr$lin
+						lin.u[nrow(lincon)] <- object@transition[[i]]@constr$linup
+						lin.l[nrow(lincon)] <- object@transition[[i]]@constr$linlow
+					}
+				}
+			}
+			
+			# ... for the response models
+			for(i in 1:ns) {
+				for(j in 1:nrsp) {
+					bp <- ep + 1
+					ep <- ep + npar(object@response[[i]][[j]])
+					if(!is.null(object@response[[i]][[j]]@constr)) {
+						par.u[bp:ep] <- object@response[[i]][[j]]@constr$parup
+						par.l[bp:ep] <- object@response[[i]][[j]]@constr$parlow
+					}
+					if(!is.null(object@response[[i]][[j]]@constr$lin)) {
+						lincon <- rbind(lincon,0)
+						lincon[nrow(lincon),bp:ep] <- object@response[[i]][[j]]@constr$lin
+						lin.u[nrow(lincon)] <- object@response[[i]][[j]]@constr$linup
+						lin.l[nrow(lincon)] <- object@response[[i]][[j]]@constr$linlow
+					}
+				}
+			}
+						
+			# incorporate equality constraints provided with the fit function, if any
 			if(eq) {
 				if(length(equal)!=npar(object)) stop("'equal' does not have correct length")
 				equal <- pa2conr(equal)$conr
@@ -105,9 +154,42 @@ setMethod("fit",
 				}
 			}
 			
+			print(round(allpars,2))
+			print(par.u)
+			print(par.l)
+			
+			print(lincon)
+			print(lin.u)
+			print(lin.l)
+			
 			# select only those columns of the constraint matrix that correspond to non-fixed parameters
 			linconFull <- lincon
-			lincon <- lincon[,!fixed,drop=FALSE]
+			lincon <- lincon[,!fixed,drop=FALSE]			
+						
+			# remove redundant rows in lincon (all zeroes)
+			allzero <- which(apply(lincon,1,function(y) all(y==0)))
+			if(length(allzero)>0) {
+				lincon <- lincon[-allzero,,drop=FALSE]
+				lin.u <- lin.u[-allzero]
+				lin.l <- lin.l[-allzero]
+			}
+			
+			print(round(pars,2))
+			print(par.u[!fixed])
+			print(par.l[!fixed])
+			
+			print(lincon)
+			print(lin.u)
+			print(lin.l)
+
+			# make loglike function that only depends on pars
+			logl <- function(pars) {
+				allpars[!fixed] <- pars
+				object <- setpars(object,allpars)
+				ans = -as.numeric(logLik(object))
+				if(is.na(ans)) ans = 100000
+				ans
+			}
 			
 			if(method=="donlp") {
 				# set donlp2 control parameters
@@ -119,8 +201,8 @@ setMethod("fit",
 				
 				# optimize the parameters
 				result <- donlp2(pars,logl,
-					par.upper=par.u,
-					par.lower=par.l,
+					par.upper=par.u[!fixed],
+					par.lower=par.l[!fixed],
 					A=lincon,
 					lin.upper=lin.u,
 					lin.lower=lin.l,
@@ -146,7 +228,9 @@ setMethod("fit",
 				ineq <- which(lin.u!=lin.l)
 				if(length(ineq)>0) lineq <- lincon[-ineq, ,drop=FALSE]
 				else lineq <- lincon
-								
+				
+				print(lincon)
+				
 				# returns the evaluated equality constraints
 				if(nrow(lineq)>0) {
 					eqfun <- function(pp) {
@@ -160,6 +244,8 @@ setMethod("fit",
 					eqfun=NULL
 					lineq.bound=NULL
 				}
+				
+				print(lineq.bound)
 				
 				# select the inequality constraints
 				if(length(ineq)>0) {
@@ -182,8 +268,8 @@ setMethod("fit",
 					ineqLB = ineqLB, 
 					ineqUB = ineqUB, 
 					ineqgrad = NULL, 
-					LB = NULL, 
-					UB = NULL, 
+					LB = par.l[!fixed], 
+					UB = par.u[!fixed], 
 					control = list(trace = 1)
 				)
 				

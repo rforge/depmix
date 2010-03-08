@@ -8,7 +8,6 @@
 	require(methods)
 	require(MASS)
  	require(nnet)
-	require(MCMCpack)
 }
 
 .Last.lib <- function(libpath) {}

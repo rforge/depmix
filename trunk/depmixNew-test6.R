@@ -91,16 +91,7 @@ all.equal(getpars(fm1sol), getpars(fm1don))
 # Constraints on multinomial identity models
 #
 
-
-# 2-state model on rt and corr from speed data set 
-# with Pacc as covariate on the transition matrix
-# starting values for the transition pars (without 
-# those EM does not get off the ground)
-set.seed(1)
-mod1 <- depmix(list(rt~1,corr~1),data=speed,nstates=2,
-	family=list(gaussian(),multinomial("identity")),trstart=runif(4))
-
-mod1
+library(depmixS4)
 
 data(balance)
 # four binary items on the balance scale task
@@ -113,26 +104,44 @@ mod4 <- mix(list(d1~1,d2~1,d3~1,d4~1), data=balance, nstates=2,
 	family=list(multinomial("identity"),multinomial("identity"),multinomial("identity"),multinomial("identity")),
 	respstart=respstart,instart=runif(2))
 
-m1 <- GLMresponse(d1~age,data=balance,fam=multinomial("identity"),pst=c(.9,.1))
+freepars(mod4)
+
+fmod4 <- fit(mod4)
+
+freepars(fmod4)
+
+fmod4sol <- fit(mod4, meth="rsolnp")
+
+fmod4don <- fit(mod4, meth="donlp")
+
+
+
 
 
 library(depmixS4)
+
 data(speed)
 
-# 2-state model on rt and corr from speed data set 
-# with Pacc as covariate on the transition matrix
-# starting values for the transition pars (without 
-# those EM does not get off the ground)
-set.seed(1)
-tr=runif(6)
-trst=c(tr[1:2],0,tr[3:5],0,tr[6])
+mod1 <- depmix(list(rt~1,corr~1),data=speed,nstates=2,
+	family=list(gaussian(),multinomial("identity")),trstart=runif(4),
+	respst=c(5,.2,.5,.5,6.5,.2,.1,.9))
+
+
 mod1 <- depmix(list(rt~1,corr~1),data=speed,transition=~Pacc,nstates=2,
-	family=list(gaussian(),multinomial("identity")),trstart=trst)
-# fit the model
+	family=list(gaussian(),multinomial("identity")),trstart=c(.9,.1,0,10,.9,.1,0,15),
+	respst=c(5,.2,.5,.5,6.5,.2,.1,.9))
+
+logLik(mod1)
+
 fmod1 <- fit(mod1)
-fmod1 # to see the logLik and optimization information
-# to see the parameters
-summary(fmod1)
+
+# fmod1sol <- fit(mod1,meth="rsolnp")
+ 
+# fmod1don <- fit(mod1,meth="donlp")
+
+# 
+# summary(fmod1don)
+
 
 ## Not run: 
 # NOTE: this requires Rdonlp2 package to be installed
@@ -158,22 +167,35 @@ mod2 <- setpars(mod1,pars)
 logLik(mod2)
 
 # fix the parameters by setting: 
-free <- c(0,0,rep(c(0,1),4),1,1,0,0,1,1,0,1)
+free <- c(0,0,rep(c(0,1),4),1,1,0,0,1,1,1,1)
 # fit the model
+
 fmod2 <- fit(mod2,fixed=!free)
 
+logLik(fmod2)
 
 pars <- c(unlist(getpars(fmod2)))
+
+pars[4] <- -4
+pars[8] <- -4
+pars[6] <- 10
+pars[10] <- 10
+
 mod3 <- setpars(mod2,pars)
 
+logLik(mod3)
+
 # start with fixed and free parameters
-conpat <- c(0,0,rep(c(0,1),4),1,1,0,0,1,1,0,1)
+conpat <- c(0,0,rep(c(0,1),4),1,1,0,0,1,1,1,1)
 # constrain the beta's on the transition parameters to be equal
 conpat[4] <- conpat[8] <- 2
 conpat[6] <- conpat[10] <- 3
 
 fmod3 <- fit(mod3,equal=conpat)
 
+fmod3
+
+summary(fmod3)
 
 
 

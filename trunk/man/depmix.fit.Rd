@@ -185,12 +185,14 @@ pars <- c(unlist(getpars(fmod1)))
 # also constrain the guessing probs to be 0.5 and 0.5 
 # (ie the probabilities of corr in state 1)
 # change the ones that we want to constrain
-pars[2]=+Inf # this means the process will always start in state 2
-pars[14]=0 # the corr parameters in state 1 are now both 0, corresponding the 0.5 prob
+pars[1]=0
+pars[2]=1 # this means the process will always start in state 2
+pars[13]=0.5
+pars[14]=0.5 # the corr parameters in state 1 are now both 0, corresponding the 0.5 prob
 mod2 <- setpars(mod1,pars)
 
 # fix the parameters by setting: 
-free <- c(0,0,rep(c(0,1),4),1,1,0,0,1,1,0,1)
+free <- c(0,0,rep(c(0,1),4),1,1,0,0,1,1,1,1)
 # fit the model
 fmod2 <- fit(mod2,fixed=!free)
 
@@ -206,7 +208,7 @@ pars <- c(unlist(getpars(fmod2)))
 mod3 <- setpars(mod2,pars)
 
 # start with fixed and free parameters
-conpat <- c(0,0,rep(c(0,1),4),1,1,0,0,1,1,0,1)
+conpat <- c(0,0,rep(c(0,1),4),1,1,0,0,1,1,1,1)
 # constrain the beta's on the transition parameters to be equal
 conpat[4] <- conpat[8] <- 2
 conpat[6] <- conpat[10] <- 3
@@ -217,7 +219,8 @@ llratio(fmod2,fmod3)
 
 # above constraints can also be specified using the conrows argument as follows
 conr <- matrix(0,2,18)
-# pars 4 and 8 have to be equal, otherwise stated, their diffence should be zero
+# parameters 4 and 8 have to be equal, otherwise stated, their diffence should be zero,
+# and similarly for parameters 6 & 10
 conr[1,4] <- 1
 conr[1,8] <- -1
 conr[2,6] <- 1
