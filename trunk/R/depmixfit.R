@@ -156,9 +156,7 @@ setMethod("fit",
 				ineq <- which(lin.u!=lin.l)
 				if(length(ineq)>0) lineq <- lincon[-ineq, ,drop=FALSE]
 				else lineq <- lincon
-				
-				print(lincon)
-				
+								
 				# returns the evaluated equality constraints
 				if(nrow(lineq)>0) {
 					eqfun <- function(pp) {
@@ -172,9 +170,7 @@ setMethod("fit",
 					eqfun=NULL
 					lineq.bound=NULL
 				}
-				
-				print(lineq.bound)
-				
+								
 				# select the inequality constraints
 				if(length(ineq)>0) {
 					linineq <- lincon[ineq, ,drop=FALSE]

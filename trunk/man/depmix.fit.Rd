@@ -172,9 +172,6 @@ fmod1 # to see the logLik and optimization information
 # to see the parameters
 summary(fmod1)
 
-\dontrun{
-# NOTE: this requires Rdonlp2 package to be installed
-
 # FIX SOME PARAMETERS
 
 # get the starting values of this model to the optimized 
@@ -206,6 +203,8 @@ llratio(fmod1,fmod2)
 # values of the previously fitted model to speed optimization
 
 pars <- c(unlist(getpars(fmod2)))
+pars[4] <- pars[8] <- -4
+pars[6] <- pars[10] <- 10
 mod3 <- setpars(mod2,pars)
 
 # start with fixed and free parameters
@@ -229,9 +228,7 @@ conr[2,10] <- -1
 
 # note here that we use the fitted model fmod2 as that has appropriate 
 # starting values
-fmod3b <- fit(fmod2,conrows=conr,fixed=!free) # using free defined above
-
-}
+fmod3b <- fit(mod3,conrows=conr,fixed=!free) # using free defined above
 
 data(balance)
 # four binary items on the balance scale task

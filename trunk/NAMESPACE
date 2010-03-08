@@ -45,7 +45,6 @@ exportMethods(
 	depmix,
 	mix,
 	posterior,
-	getModel,
 	GLMresponse,
 	MVNresponse,
 	transInit,

@@ -142,7 +142,8 @@ setMethod("MVNresponse",
 		constr <- NULL
 		parameters$coefficients <- matrix(0.0,ncol=ncol(y),nrow=ncol(x))
 		parameters$Sigma <- cov2par(diag(ncol(y)))
-		npar <- length(unlist(parameters))		
+		npar <- length(unlist(parameters))
+# 		constr <- list(parlow=c(rep(-Inf,length(unlist(parameters$coefficients))),
 		if(is.null(fixed)) fixed <- as.logical(rep(0,npar))
 		if(!is.null(pstart)) {
 			if(length(pstart)!=npar) stop("length of 'pstart' must be",npar)
