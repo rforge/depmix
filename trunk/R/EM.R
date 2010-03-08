@@ -2,7 +2,7 @@
 # Maarten Speekenbrink 23-3-2008
 # 
 
-em <- function(object,maxit=100,tol=1e-8,crit=c(relative,absolute),verbose=FALSE,...) {
+em <- function(object,maxit=100,tol=1e-8,crit=c("relative","absolute"),verbose=FALSE,...) {
 	if(!is(object,"mix")) stop("object is not of class '(dep)mix'")
 	call <- match.call()
 	if(is(object,"depmix")) {
@@ -87,8 +87,8 @@ em.mix <- function(object,maxit=100,tol=1e-8,crit=c("relative","absolute"),verbo
 
 	if(converge) {
 		object@message <- switch(crit,
-			"relative" = "Log likelihood converged to within tol. (relative change crit.)",
-			"absolute" = "Log likelihood converged to within tol. (absolute change crit.)"
+			relative = "Log likelihood converged to within tol. (relative change crit.)",
+			absolute = "Log likelihood converged to within tol. (absolute change crit.)"
 		)
 	} else object@message <- "'maxit' iterations reached in EM without convergence."
 
@@ -188,8 +188,8 @@ em.depmix <- function(object,maxit=100,tol=1e-8,crit=c("relative","absolute"),ve
 	
 	if(converge) {
 		object@message <- switch(crit,
-			"relative" = "Log likelihood converged to within tol. (relative change crit.)",
-			"absolute" = "Log likelihood converged to within tol. (absolute change crit.)"
+			relative = "Log likelihood converged to within tol. (relative change crit.)",
+			absolute = "Log likelihood converged to within tol. (absolute change crit.)"
 		)
 	} else object@message <- "'maxit' iterations reached in EM without convergence."
 	
