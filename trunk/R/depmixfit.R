@@ -61,71 +61,13 @@ setMethod("fit",
 			# get the reduced set of parameters, ie the ones that will be optimized
 		    pars <- allpars[!fixed]
 		    
-		    # set bounds, if any (should add bounds for eg sd parameters at some point ...)
-		    par.u <- rep(+Inf, npar(object))
-		    par.l <- rep(-Inf, npar(object))
-		    
-		    # make constraint matrix and its upper and lower bounds
-			lincon <- matrix(0,nr=0,nc=npar(object))
-			lin.u <- numeric(0)
-			lin.l <- numeric(0)
+			constraints <- getConstraints(object)
 			
-			ns <- nstates(object)
-			nrsp <- nresp(object)
-			
-			# get bounds from submodels
-			# get internal linear constraints from submodels
-			
-			# first for the prior model
-			bp <- 1
-			ep <- npar(object@prior)
-			if(!is.null(object@prior@constr)) {
-				par.u[bp:ep] <- object@prior@constr$parup
-				par.l[bp:ep] <- object@prior@constr$parlow
-				# add linear constraints, if any
-				if(!is.null(object@prior@constr$lin)) {
-					lincon <- rbind(lincon,0)
-					lincon[nrow(lincon),bp:ep] <- object@prior@constr$lin
-					lin.u[nrow(lincon)] <- object@prior@constr$linup
-					lin.l[nrow(lincon)] <- object@prior@constr$linlow
-				}
-			}
-			
-			# ... for the transition models
-			if(is(object,"depmix"))	{
-				for(i in 1:ns) {
-					bp <- ep + 1
-					ep <- ep+npar(object@transition[[i]])
-					if(!is.null(object@transition[[i]]@constr)) {
-						par.u[bp:ep] <- object@transition[[i]]@constr$parup
-						par.l[bp:ep] <- object@transition[[i]]@constr$parlow
-					}
-					if(!is.null(object@transition[[i]]@constr$lin)) {
-						lincon <- rbind(lincon,0)
-						lincon[nrow(lincon),bp:ep] <- object@transition[[i]]@constr$lin
-						lin.u[nrow(lincon)] <- object@transition[[i]]@constr$linup
-						lin.l[nrow(lincon)] <- object@transition[[i]]@constr$linlow
-					}
-				}
-			}
-			
-			# ... for the response models
-			for(i in 1:ns) {
-				for(j in 1:nrsp) {
-					bp <- ep + 1
-					ep <- ep + npar(object@response[[i]][[j]])
-					if(!is.null(object@response[[i]][[j]]@constr)) {
-						par.u[bp:ep] <- object@response[[i]][[j]]@constr$parup
-						par.l[bp:ep] <- object@response[[i]][[j]]@constr$parlow
-					}
-					if(!is.null(object@response[[i]][[j]]@constr$lin)) {
-						lincon <- rbind(lincon,0)
-						lincon[nrow(lincon),bp:ep] <- object@response[[i]][[j]]@constr$lin
-						lin.u[nrow(lincon)] <- object@response[[i]][[j]]@constr$linup
-						lin.l[nrow(lincon)] <- object@response[[i]][[j]]@constr$linlow
-					}
-				}
-			}
+			lincon=constraints$lincon
+			lin.u=constraints$lin.u
+			lin.l=constraints$lin.l
+			par.u=constraints$par.u
+			par.l=constraints$par.l
 						
 			# incorporate equality constraints provided with the fit function, if any
 			if(eq) {
@@ -154,14 +96,6 @@ setMethod("fit",
 				}
 			}
 			
-			print(round(allpars,2))
-			print(par.u)
-			print(par.l)
-			
-			print(lincon)
-			print(lin.u)
-			print(lin.l)
-			
 			# select only those columns of the constraint matrix that correspond to non-fixed parameters
 			linconFull <- lincon
 			lincon <- lincon[,!fixed,drop=FALSE]			
@@ -174,14 +108,6 @@ setMethod("fit",
 				lin.l <- lin.l[-allzero]
 			}
 			
-			print(round(pars,2))
-			print(par.u[!fixed])
-			print(par.l[!fixed])
-			
-			print(lincon)
-			print(lin.u)
-			print(lin.l)
-
 			# make loglike function that only depends on pars
 			logl <- function(pars) {
 				allpars[!fixed] <- pars
@@ -263,11 +189,9 @@ setMethod("fit",
 					logl, 
 					eqfun = eqfun, 
 					eqB = lineq.bound, 
-					eqgrad =NULL, 
 					ineqfun = ineqfun, 
 					ineqLB = ineqLB, 
 					ineqUB = ineqUB, 
-					ineqgrad = NULL, 
 					LB = par.l[!fixed], 
 					UB = par.u[!fixed], 
 					control = list(trace = 1)
@@ -293,5 +217,82 @@ setMethod("fit",
 		object@posterior <- viterbi(object)
 		
 		return(object)
+	}
+)
+
+
+setMethod("getConstraints",
+    signature(object="mix"), 
+	function(object) {
+		
+		# set bounds, if any (should add bounds for eg sd parameters at some point ...)
+		par.u <- rep(+Inf, npar(object))
+		par.l <- rep(-Inf, npar(object))
+		
+		# make constraint matrix and its upper and lower bounds
+		lincon <- matrix(0,nr=0,nc=npar(object))
+		lin.u <- numeric(0)
+		lin.l <- numeric(0)
+		
+		ns <- nstates(object)
+		nrsp <- nresp(object)
+		
+		# get bounds from submodels
+		# get internal linear constraints from submodels
+		
+		# first for the prior model
+		bp <- 1
+		ep <- npar(object@prior)
+		if(!is.null(object@prior@constr)) {
+			par.u[bp:ep] <- object@prior@constr$parup
+			par.l[bp:ep] <- object@prior@constr$parlow
+			# add linear constraints, if any
+			if(!is.null(object@prior@constr$lin)) {
+				lincon <- rbind(lincon,0)
+				lincon[nrow(lincon),bp:ep] <- object@prior@constr$lin
+				lin.u[nrow(lincon)] <- object@prior@constr$linup
+				lin.l[nrow(lincon)] <- object@prior@constr$linlow
+			}
+		}
+		
+		# ... for the transition models
+		if(is(object,"depmix"))	{
+			for(i in 1:ns) {
+				bp <- ep + 1
+				ep <- ep+npar(object@transition[[i]])
+				if(!is.null(object@transition[[i]]@constr)) {
+					par.u[bp:ep] <- object@transition[[i]]@constr$parup
+					par.l[bp:ep] <- object@transition[[i]]@constr$parlow
+				}
+				if(!is.null(object@transition[[i]]@constr$lin)) {
+					lincon <- rbind(lincon,0)
+					lincon[nrow(lincon),bp:ep] <- object@transition[[i]]@constr$lin
+					lin.u[nrow(lincon)] <- object@transition[[i]]@constr$linup
+					lin.l[nrow(lincon)] <- object@transition[[i]]@constr$linlow
+				}
+			}
+		}
+		
+		# ... for the response models
+		for(i in 1:ns) {
+			for(j in 1:nrsp) {
+				bp <- ep + 1
+				ep <- ep + npar(object@response[[i]][[j]])
+				if(!is.null(object@response[[i]][[j]]@constr)) {
+					par.u[bp:ep] <- object@response[[i]][[j]]@constr$parup
+					par.l[bp:ep] <- object@response[[i]][[j]]@constr$parlow
+				}
+				if(!is.null(object@response[[i]][[j]]@constr$lin)) {
+					lincon <- rbind(lincon,0)
+					lincon[nrow(lincon),bp:ep] <- object@response[[i]][[j]]@constr$lin
+					lin.u[nrow(lincon)] <- object@response[[i]][[j]]@constr$linup
+					lin.l[nrow(lincon)] <- object@response[[i]][[j]]@constr$linlow
+				}
+			}
+		}
+		
+		res <- list(lincon=lincon,lin.u=lin.u,lin.l=lin.l,par.u=par.u,par.l=par.l)
+		res
+		
 	}
 )

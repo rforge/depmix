@@ -45,6 +45,8 @@ setGeneric("nlin", function(object, ...) standardGeneric("nlin"))
 
 setGeneric("fit", function(object, ...) standardGeneric("fit"))
 
+setGeneric("getConstraints", function(object, ...) standardGeneric("getConstraints"))
+
 setGeneric("posterior", function(object, ...) standardGeneric("posterior"))
 
 setGeneric("forwardbackward", function(object, ...) standardGeneric("forwardbackward"))

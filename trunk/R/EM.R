@@ -92,10 +92,12 @@ em.mix <- function(object,maxit=100,tol=1e-8,crit=c("relative","absolute"),verbo
 		)
 	} else object@message <- "'maxit' iterations reached in EM without convergence."
 
-	# no constraints in EM
-	object@conMat <- matrix()
-	object@lin.lower <- numeric()
-	object@lin.upper <- numeric()
+	# no constraints in EM, except for the standard constraints ...
+	# which are produced by the following (only necessary for getting df right in logLik and such)
+	constraints <- getConstraints(object)
+	object@conMat <- constraints$lincon
+	object@lin.lower <- constraints$lin.l
+	object@lin.upper <- constraints$lin.u
 	
 	object
 	
@@ -193,10 +195,12 @@ em.depmix <- function(object,maxit=100,tol=1e-8,crit=c("relative","absolute"),ve
 		)
 	} else object@message <- "'maxit' iterations reached in EM without convergence."
 	
-	# no constraints in EM
-	object@conMat <- matrix()
-	object@lin.lower <- numeric()
-	object@lin.upper <- numeric()
+	# no constraints in EM, except for the standard constraints ...
+	# which are produced by the following (only necessary for getting df right in logLik and such)
+	constraints <- getConstraints(object)
+	object@conMat <- constraints$lincon
+	object@lin.lower <- constraints$lin.l
+	object@lin.upper <- constraints$lin.u
 	
 	object
 }
