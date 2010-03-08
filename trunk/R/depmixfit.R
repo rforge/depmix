@@ -26,7 +26,6 @@ setMethod("fit",
 			}
 		}
 		
-		
 		# check feasibility of starting values
 		if(is.nan(logLik(object))) stop("Initial model infeasible, log likelihood is NaN; please provide better starting values. ")
 		
@@ -36,7 +35,10 @@ setMethod("fit",
 		
 		if(method=="donlp"||method=="rsolnp") {
 			
-			if(method=="donlp"&!require(Rdonlp2)) method="rsolnp"
+			if(method=="donlp"&!require(Rdonlp2)) {
+				warning("Rdonlp2 not available, method changed to rsolnp")
+				method="rsolnp"
+			}
 			
 			if(method=="rsolnp"&!(require(Rsolnp))) stop("Optimization requires either 'Rdonlp2' or 'Rsolnp'")
 			

@@ -56,7 +56,8 @@ summary(fm,which="response")
 
 allpars <- getpars(fmod1)
 
-allpars[2]=Inf # this means the process will always start in state 2
+allpars[2]=1 # this means the process will always start in state 2
+allpars[1]=0
 allpars[14]=0 # the corr parameters in state 1 are now both 0, corresponding the 0.5 prob
 
 allpars[c(4,8)] <- -4
@@ -69,8 +70,14 @@ conpat <- c(0,0,rep(c(0,1),4),1,1,0,0,1,1,0,1)
 conpat[4] <- conpat[8] <- 2
 conpat[6] <- conpat[10] <- 3
 
-fm1sol <- fit(stmod,equal=conpat,method="rsolnp")
+logLik(stmod)
+
+# source("R/depmixfit.R")
+
 fm1don <- fit(stmod,equal=conpat,method="donlp")
+
+
+fm1sol <- fit(stmod,equal=conpat,method="rsolnp")
 
 fm1sol
 fm1don

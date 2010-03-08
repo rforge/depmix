@@ -76,9 +76,10 @@
 \details{ 
 
 	Models are fitted by the EM algorithm if there are no constraints on
-	the parameters.  Otherwise the general optimizers \code{donlp2} (from
-	package \code{Rdonlp2}) or \code{solnp} (from package \code{Rsolnp})
-	are used which handle general linear (in-)equality constraints.
+	the parameters.  Otherwise the general optimizers \code{solnp}, the
+	default (from package \code{Rsolnp}) or \code{donlp2} (from package
+	\code{Rdonlp2}) are used which handle general linear (in-)equality
+	constraints.
 	
 	Three types of constraints can be specified on the parameters: fixed,
 	equality, and general linear (in-)equality constraints.  Constraint
@@ -91,7 +92,7 @@
 	estimated to be equal. Any integers can be used in this way except 0
 	and 1, which indicate fixed and free parameters, respectively. 
 
-	Using \code{donlp2} or \code{solnp}, a Newton-Raphson scheme is employed
+	Using \code{solnp} or \code{donlp2} , a Newton-Raphson scheme is employed
 	to estimate parameters subject to linear constraints by imposing:
 	
 			bl <= A*x <= bu,
