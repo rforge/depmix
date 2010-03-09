@@ -35,12 +35,13 @@ setMethod("fit",
 		
 		if(method=="donlp"||method=="rsolnp") {
 			
-			if(method=="donlp"&!require(Rdonlp2)) {
+			reqdon <- require(Rdonlp2,quietly=TRUE)
+			if(method=="donlp"&!reqdon) {
 				warning("Rdonlp2 not available, method changed to rsolnp")
 				method="rsolnp"
 			}
 			
-			if(method=="rsolnp"&!(require(Rsolnp))) stop("Optimization requires either 'Rdonlp2' or 'Rsolnp'")
+			if(method=="rsolnp"&!(require(Rsolnp,quietly=TRUE))) stop("Optimization requires either 'Rdonlp2' or 'Rsolnp'")
 			
 			# determine which parameters are fixed
  			if(fi) {

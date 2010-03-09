@@ -15,8 +15,6 @@ par2cov <- function(x) {
 	cov
 }
 
-
-
 setClass("MVNresponse",
   representation(formula="formula"),
   contains="response"
@@ -50,7 +48,6 @@ dm_dmvnorm <- function(x,mean,sigma,log=FALSE,logdet,invSigma) {
     	invSigma <- solve(sigma)
     }
 	# check consistency
-	
 	if (NCOL(x) != NCOL(invSigma)) {
 	    stop("x and sigma have non-conforming size")
 	}
@@ -83,7 +80,6 @@ dm_dmvnorm <- function(x,mean,sigma,log=FALSE,logdet,invSigma) {
       return(exp(logretval))
     }
 }
-
 
 setMethod("logDens","MVNresponse",
 	function(object,...) {
@@ -139,11 +135,19 @@ setMethod("MVNresponse",
 		y <- model.response(mf)
 		if(!is.matrix(y)) y <- matrix(y,ncol=1)
 		parameters <- list()
-		constr <- NULL
 		parameters$coefficients <- matrix(0.0,ncol=ncol(y),nrow=ncol(x))
 		parameters$Sigma <- cov2par(diag(ncol(y)))
 		npar <- length(unlist(parameters))
-# 		constr <- list(parlow=c(rep(-Inf,length(unlist(parameters$coefficients))),
+		parlow.coeff=rep(-Inf,length(unlist(parameters$coefficients)))
+		parup.coeff=rep(Inf,length(unlist(parameters$coefficients)))
+		parup.cov <- rep(Inf,length(unlist(parameters$Sigma)))
+		mcov <- matrix(-Inf,ncol(y),ncol(y))
+		diag(mcov) <- .Machine$double.eps
+		parlow.cov <- cov2par(mcov)
+		constr <- list(	
+			parup = c(parup.coeff,parup.cov),
+			parlow = c(parlow.coeff,parlow.cov)
+		)
 		if(is.null(fixed)) fixed <- as.logical(rep(0,npar))
 		if(!is.null(pstart)) {
 			if(length(pstart)!=npar) stop("length of 'pstart' must be",npar)
