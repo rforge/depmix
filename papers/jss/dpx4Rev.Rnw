@@ -520,16 +520,16 @@ transition and response distributions were set to their defaults
 distribution for the response).  The resulting model indicates two
 well-separated states, one with slow and the second with fast
 responses.  The transition probabilities indicate rather stable
-states, i.e., the probability in either of the states is around 0.9.
+states, i.e., the probability of remaining in either of the states is around 0.9.
 The initial state probability estimates indicate that state 1 is the
-starting for the process, with a negligible probability of starting in
+starting state for the process, with a negligible probability of starting in
 state 2.
 
 \subsection{Covariates on transition parameters}
 
 By default, the transition probabilities and the initial state
 probabilities are parameterized using a multinomial model with an
-identity link function.  Using a multinomial logistic model allows us
+identity link function.  Using a multinomial logistic model allows one
 to include covariates on the initial state and transition
 probabilities.  In this case, each row of the transition matrix is
 parameterized by a baseline category logistic multinomial, meaning
@@ -577,7 +577,7 @@ by specifying the following:
 <<>>=
 set.seed(1)
 mod <- depmix(list(rt~1,corr~1), data=speed, nstates=2, 
-    family=list(gaussian(),multinomial()),
+    family=list(gaussian(),multinomial("identity")),
     transition=~scale(Pacc),instart=runif(2))
 fm <- fit(mod,verbose=FALSE)
 @
@@ -596,8 +596,8 @@ Note that by specifying multivariate observations in terms of a list,
 the variables are considered conditionally independent (given the
 states).  Conditionally \emph{dependent} variables must be handled as
 a single element in the list.  Effectively, this means specifying a
-multivariate response model.  The only multivariate response model
-currently implemented in \pkg{depmixS4} is for multivariate normal
+multivariate response model.  Currently, \pkg{depmixS4} has one 
+multivariate response model which is for multivariate normal
 variables.
 
 
@@ -614,7 +614,7 @@ fixed values are required, the \code{fixed} argument can be used
 instead of \code{conpat}, with zeroes for fixed parameters and other
 values (ones e.g.) for non-fixed parameters.  Fitting the models
 subject to these constraints is handled by the optimization routine
-\code{donlp2}.  To be able to construct the \code{conpat} and/or
+\code{solnp} or, optionally, by \code{donlp2}.  To be able to construct the \code{conpat} and/or
 \code{fixed} vectors one needs the correct ordering of parameters
 which is briefly discussed next before proceeding with an example.
 
@@ -650,8 +650,8 @@ constraints:
 <<>>=
 trst <- c(0.9,0.1,0,0,0.1,0.9,0,0)
 mod <- depmix(list(rt~1,corr~1),data=speed,transition=~Pacc,
-	  nstates=2,family=list(gaussian(),multinomial()),
-	  trstart=trst,inst=c(.999,0.001))
+	  nstates=2,family=list(gaussian(),multinomial("identity")),
+	  trstart=trst,inst=c(0.99,0.01))
 fm1 <- fit(mod,verbose=FALSE)
 @
 
@@ -661,16 +661,23 @@ and~10):
 <<term=FALSE>>=
 pars <- c(unlist(getpars(fm1)))
 pars[6] <- pars[10] <- 11
-fm1 <- setpars(fm1,pars)
+pars[1]=0
+pars[2]=1
+pars[13] <- pars[14] <- 0.5
+fm1 <- setpars(mod,pars)
 # start with fixed and free parameters
-conpat <- c(0,1,rep(c(0,1),4),1,1,0,1,1,1,0,1)
+conpat <- c(0,0,rep(c(0,1),4),1,1,0,0,1,1,1,1)
 # constrain the beta's on the transition parameters to be equal
 conpat[6] <- conpat[10] <- 2
 fm2 <- fit(fm1,equal=conpat)
 @
 
 Using \code{summary} on the fitted model shows that the regression
-coefficients are now estimated at the same value of 12.667.  The
+coefficients are now estimated at the same value of 12.66.  Setting 
+elements 13 and 14 of \code{conpat} to zero resulted in fixing those parameters
+at their starting values of 0.5.  This means that state 1 can now be interpreted
+as a 'guessing' state which is associated with comparatively fast responses.
+Similarly for elements 1 and 2, resulting in fixed initial probabilities. The
 function \code{llratio} computes the likelihood ratio
 $\chi^2$-statistic and the associated $p$-value with appropriate
 degrees of freedom for testing the tenability of constraints
@@ -702,7 +709,8 @@ of the weights to the fulcrum differs between each side.
 \begin{figure}[htbp]
 \begin{center}
 	\includegraphics{graphs/baldist.pdf}
-	\caption{Balance scale item; this is a so-called distance item.}
+	\caption{Balance scale item; this is a distance item (see the text 
+	for details).}
 	\label{fig:balance}  
 \end{center}
 \end{figure}
@@ -891,7 +899,7 @@ setMethod("exgaus",
 
 
 
-<<echo=FALSE>>=
+<<echo=FALSE, term=FALSE>>=
 setMethod("dens","exgaus",
     function(object,log=FALSE) {
     	dexGAUS(object@y, mu = predict(object), 
@@ -1007,10 +1015,10 @@ fm <- fit(mod,verbose=FALSE)
 
 Using \code{summary} will print the fitted parameters.  Note that the
 use of \code{makeDepmix} allows the possibility of, say, fitting a
-Gaussian in one state and an exgaus distribution in another state.
+gaussian in one state and an exgaus distribution in another state.
 Note also that according to the AIC and BIC, the model with the exgaus
 describes the data much better than the same model in which the
-response times are modelled as Gaussian.
+response times are modelled as gaussian.
 
 
 \section[Conclusions and future work]{Conclusions \& future work}
@@ -1032,7 +1040,7 @@ and transition models with two goals in mind.  First, to speed up
 analytic gradients are useful in computing the Hessian of the
 estimated parameters so as to arrive at standard errors for those.  We
 are also planning to implement goodness-of-fit statistics
-\citep{Titman2008}, and automatic generation of starting values.
+\citep{Titman2008}. 
 
 
 \section*{Acknowledgements} 
