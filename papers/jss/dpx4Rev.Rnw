@@ -35,12 +35,12 @@
 	models, latent/hidden Markov models, and latent class and finite
 	mixture distribution models.  The models can be fitted on mixed
 	multivariate data with distributions from the \code{glm} family,
-	the logistic multinomial, or the multivariate normal distribution.
+	the (logistic) multinomial, or the multivariate normal distribution.
 	Other distributions can be added easily, and an example is
 	provided with the exgaus distribution.  Parameters are estimated by
 	the EM algorithm or, when (linear) constraints are imposed on the
 	parameters, by direct numerical optimization with the
-	\pkg{Rdonlp2} or \pkg{Rsolnp} routines.}
+	\pkg{Rsolnp} or \pkg{Rdonlp2} routines.}
 
 \Keywords{hidden Markov model, dependent mixture model, mixture 
 model, constraints}
@@ -180,19 +180,16 @@ for these data is described.
 
 \begin{figure}[htbp]
 \begin{center}
-
-	<<fig=TRUE,echo=FALSE,height=5,width=7,eps=FALSE>>=
-	library(depmixS4)
-	data(speed)
-	plot(as.ts(speed[1:168,]),main="Speed-accuracy trade-off")
-	@
-
+<<fig=TRUE,echo=FALSE,height=5,width=7,eps=FALSE>>=	
+.Options$digits<-3
+library(depmixS4)
+data(speed)
+plot(as.ts(speed[1:168,]),main="Speed-accuracy trade-off")
+@
 	\caption{Response times (rt), accuracy (corr) and pay-off 
 	values (Pacc) for the first series of responses in dataset 
 	\code{speed}.}
-	
 	\label{fig:speed}
-	
 \end{center}
 \end{figure}
 
@@ -367,10 +364,11 @@ constraints to parameters can be problematic; in particular, EM can
 lead to wrong parameter estimates when applying constraints.  Hence,
 in \pkg{depmixS4}, EM is used by default in unconstrained models, but
 otherwise, direct optimization is used.  Two options are available for
-direct optimization using package \pkg{Rdonlp2}
-\citep{Tamura2009,Spellucci2002}, or package \pkg{Rsolnp}
-\citep{Ghalanos2010}.  Both packages can handle general linear
-(in)equality constraints (and optionally also non-linear constraints).
+direct optimization using package \pkg{Rsolnp}
+\citep{Ghalanos2010,Ye1987}, or \pkg{Rdonlp2}
+\citep{Tamura2009,Spellucci2002}.  Both packages can handle general
+linear (in)equality constraints (and optionally also non-linear
+constraints).
 
 \section[Using depmixS4]{Using \pkg{depmixS4}}
 
@@ -449,7 +447,7 @@ library(depmixS4)
 data(speed)
 set.seed(1)
 mod <- depmix(response=rt~1, data=speed, nstates=2, 
-    trstart=runif(4))
+    trst=runif(4))
 @
 
 The first line of code loads the \pkg{depmixS4} package and
@@ -467,17 +465,19 @@ of states of the model is given by \code{nstates=2}.
 
 
 \paragraph{Starting values} Note also that start values for the
-transition parameters are provided in this call by the
-\code{trstart} argument.  At this time, the package does not provide
-automatic starting values.  Starting values for parameters can be
-provided using three arguments: \code{instart} for the parameters
-relating to the prior probabilities, \code{trstart}, relating the
-transition models, and \code{respstart} for the parameters of the
-response models.  Note that the starting values for the initial and
-transition models as well as multinomial logit response models
-are interpreted as {\em probabilities}, and internally converted to
-multinomial logit parameters (if a logit link function is used).
-
+transition parameters are provided in this call by the \code{trstart}
+argument.  Starting values for parameters can be provided using three
+arguments: \code{instart} for the parameters relating to the prior
+probabilities, \code{trstart}, relating the transition models, and
+\code{respstart} for the parameters of the response models.  Note that
+the starting values for the initial and transition models as well as
+multinomial logit response models are interpreted as {\em
+probabilities}, and internally converted to multinomial logit
+parameters (if a logit link function is used).  Start values can also
+be generated randomly within the EM algorithm by generating random
+uniform values for the values of $\gamma_{t}$ in (\ref{eq:Q}) at
+iteration 0.  Automatic generation of starting values is not available
+for constrained models (see below). 
 
 \paragraph{Fitting the model and printing results} The \code{depmix}
 function returns an object of class \code{depmix} which contains the
@@ -492,7 +492,7 @@ The \code{fit}-function returns an object of class
 convergence information (and information about constraints if these
 were applied, see below).  The class has \code{print} and
 \code{summary} methods to see the results.  The \code{print} method
-provides summary information on convergence, the log-likelihood and
+provides information on convergence, the log-likelihood and
 the AIC and BIC values:
 <<>>=
 fm 
@@ -517,38 +517,45 @@ summary(fm)
 Since no further arguments were specified, the initial state, state
 transition and response distributions were set to their defaults
 (multinomial distributions for the first two, and a Gaussian
-distribution for the response).
+distribution for the response).  The resulting model indicates two
+well-separated states, one with slow and the second with fast
+responses.  The transition probabilities indicate rather stable
+states, i.e., the probability in either of the states is around 0.9.
+The initial state probability estimates indicate that state 1 is the
+starting for the process, with a negligible probability of starting in
+state 2.
 
 \subsection{Covariates on transition parameters}
 
 By default, the transition probabilities and the initial state
-probabilities are parameterized using a multinomial model with an 
-identity link function.
-Using a multinomial logistic model allows us to include covariates on the
-initial state and transition probabilities. In this case, each row of the 
-transition matrix is parameterized by
-a baseline category logistic multinomial, meaning that the parameter
-for the base category is fixed at zero \citep[see][p.\ 267 ff., for
-multinomial logistic models and various
+probabilities are parameterized using a multinomial model with an
+identity link function.  Using a multinomial logistic model allows us
+to include covariates on the initial state and transition
+probabilities.  In this case, each row of the transition matrix is
+parameterized by a baseline category logistic multinomial, meaning
+that the parameter for the base category is fixed at zero
+\citep[see][p.\ 267 ff., for multinomial logistic models and various
 parameterizations]{Agresti2002}.  The default baseline category is the
 first state.  Hence, for example, for a 3-state model, the initial
 state probability model would have three parameters of which the first
-is fixed at zero and the other two are freely estimated. \citet{Chung2007} discuss
-a related latent transition model for repeated measurement data
-($T=2$) using logistic regression on the transition parameters; they
-rely on Bayesian methods of estimation.  Covariates on the transition
-probabilities can be specified using a one-sided formula as in the
-following example:
+is fixed at zero and the other two are freely estimated.
+\citet{Chung2007} discuss a related latent transition model for
+repeated measurement data ($T=2$) using logistic regression on the
+transition parameters; they rely on Bayesian methods of estimation.
+Covariates on the transition probabilities can be specified using a
+one-sided formula as in the following example: 
 <<>>=
 set.seed(1)
-mod <- depmix(rt~1, data=speed, nstates=2, family=gaussian(), 
-    transition=~scale(Pacc), instart=runif(2))
-fm <- fit(mod,verbose=FALSE)
+mod <- depmix(rt~1, data=speed, nstates=2, family=gaussian(),
+	   transition=~scale(Pacc), instart=runif(2)) 
+fm <-fit(mod,verbose=FALSE) 
 @
 
-Applying \code{summary} to the \code{fit}ted object gives (only
-transition models printed here):
-<<>>=
+Note the use of \code{verbose=FALSE} to suppress printing of
+information on the iterations of the fitting process.  Applying
+\code{summary} to the \code{fit}ted object gives (only transition
+models printed here by using argument \code{which}): 
+<<>>= 
 summary(fm, which="transition") 
 @
 
@@ -592,6 +599,87 @@ a single element in the list.  Effectively, this means specifying a
 multivariate response model.  The only multivariate response model
 currently implemented in \pkg{depmixS4} is for multivariate normal
 variables.
+
+
+\subsection{Fixing and constraining parameters}
+
+Using package \pkg{Rsolnp} \citet{Ghalanos2010} or \pkg{Rdonlp2} by
+\citet{Tamura2009}, parameters may be fitted subject to general linear
+(in-)equality constraints.  Constraining and fixing parameters is done
+using the \code{conpat} argument to the \code{fit}-function, which
+specifies for each parameter in the model whether it's fixed (0) or
+free (1 or higher).  Equality constraints can be imposed by giving two
+parameters the same number in the \code{conpat} vector.  When only
+fixed values are required, the \code{fixed} argument can be used
+instead of \code{conpat}, with zeroes for fixed parameters and other
+values (ones e.g.) for non-fixed parameters.  Fitting the models
+subject to these constraints is handled by the optimization routine
+\code{donlp2}.  To be able to construct the \code{conpat} and/or
+\code{fixed} vectors one needs the correct ordering of parameters
+which is briefly discussed next before proceeding with an example.
+
+\paragraph{Parameter numbering} When using the \code{conpat} and
+\code{fixed} arguments, complete parameter vectors should be supplied,
+i.e., these vectors should have length equal to the number of parameters of
+the model, which can be obtained by calling \code{npar(object)}.  Note
+that this is not the same as the degrees of freedom used e.g.\ in the
+\code{logLik} function because \code{npar} also counts the baseline
+category zeroes from the multinomial logistic models.  Parameters are
+numbered in the following order:
+\begin{enumerate}
+	\item  the prior model parameters
+	\item  the parameters for the transition models
+	\item  the response model parameters per state (and subsequently
+	per response in the case of multivariate time series)
+\end{enumerate}
+
+To see the ordering of parameters use the following:
+<<term=FALSE>>=
+setpars(mod, value=1:npar(mod))
+@
+
+To see which parameters are fixed (by default only baseline parameters
+in the multinomial logistic models for the transition models and the
+initial state probabilities model):
+<<term=FALSE>>=
+setpars(mod, getpars(mod,which="fixed"))
+@
+When fitting constraints it is useful to have good starting values 
+for the parameters and hence we first fit the following model without
+constraints:
+<<>>=
+trst <- c(0.9,0.1,0,0,0.1,0.9,0,0)
+mod <- depmix(list(rt~1,corr~1),data=speed,transition=~Pacc,
+	  nstates=2,family=list(gaussian(),multinomial()),
+	  trstart=trst,inst=c(.999,0.001))
+fm1 <- fit(mod,verbose=FALSE)
+@
+
+After this, we use the fitted values from this model to constrain the
+regression coefficients on the transition matrix (parameters number~6
+and~10):
+<<term=FALSE>>=
+pars <- c(unlist(getpars(fm1)))
+pars[6] <- pars[10] <- 11
+fm1 <- setpars(fm1,pars)
+# start with fixed and free parameters
+conpat <- c(0,1,rep(c(0,1),4),1,1,0,1,1,1,0,1)
+# constrain the beta's on the transition parameters to be equal
+conpat[6] <- conpat[10] <- 2
+fm2 <- fit(fm1,equal=conpat)
+@
+
+Using \code{summary} on the fitted model shows that the regression
+coefficients are now estimated at the same value of 12.667.  The
+function \code{llratio} computes the likelihood ratio
+$\chi^2$-statistic and the associated $p$-value with appropriate
+degrees of freedom for testing the tenability of constraints
+\citep{Dannemann2007}.  Note that these arguments (i.e. \code{conpat}
+and \code{conrows}) provide the possibility for arbitrary constraints,
+also between, e.g., a multinomial regression coefficient for the
+transition matrix and the mean of a Gaussian response model.  Whether
+such constraints make sense is hence the responsibility of the user.
+
 
 \subsection{Adding covariates on the prior probabilities}
 
@@ -717,82 +805,6 @@ increases with age, and then decreases again. This suggests that
 children pass through a phase in which they are uncertain or possibly 
 switch between applying different strategies. 
 
-
-\subsection{Fixing and constraining parameters}
-
-Using package \pkg{Rdonlp2} by \citet{Tamura2009} or \pkg{Rsolnp}
-\citet{Ghalanos2010}, parameters may be fitted subject to general linear
-(in-)equality constraints.  Constraining and fixing parameters is done
-using the \code{conpat} argument to the \code{fit}-function, which
-specifies for each parameter in the model whether it's fixed (0) or
-free (1 or higher).  Equality constraints can be imposed by giving two
-parameters the same number in the \code{conpat} vector.  When
-only fixed values are required, the \code{fixed} argument can be used
-instead of \code{conpat}, with zeroes for fixed parameters and other
-values (ones e.g.) for non-fixed parameters.  Fitting the models
-subject to these constraints is handled by the optimization routine
-\code{donlp2}.  To be able to construct the \code{conpat} and/or
-\code{fixed} vectors one needs the correct ordering of parameters
-which is briefly discussed next before proceeding with an example.
-
-\paragraph{Parameter numbering} When using the \code{conpat} and
-\code{fixed} arguments, complete parameter vectors should be supplied,
-i.e., these vectors should have length equal to the number of parameters of
-the model, which can be obtained by calling \code{npar(object)}.  Note
-that this is not the same as the degrees of freedom used e.g.\ in the
-\code{logLik} function because \code{npar} also counts the baseline
-category zeroes from the multinomial logistic models.  Parameters are
-numbered in the following order:
-\begin{enumerate}
-	\item  the prior model parameters
-	\item  the parameters for the transition models
-	\item  the response model parameters per state (and subsequently
-	per response in the case of multivariate time series)
-\end{enumerate}
-
-To see the ordering of parameters use the following:
-<<term=FALSE>>=
-setpars(mod, value=1:npar(mod))
-@
-
-To see which parameters are fixed (by default only baseline parameters
-in the multinomial logistic models for the transition models and the
-initial state probabilities model):
-<<term=FALSE>>=
-setpars(mod, getpars(mod,which="fixed"))
-@
-When fitting constraints it is useful to have good starting values 
-for the parameters and hence we first fit the following model without
-constraints:
-<<>>=
-trst <- c(0.9,0.1,0,0,0.1,0.9,0,0)
-mod <- depmix(list(rt~1,corr~1),data=speed,transition=~Pacc,
-	  nstates=2,family=list(gaussian(),multinomial()),
-	  trstart=trst,inst=c(.999,0.001))
-fm1 <- fit(mod,verbose=FALSE)
-@
-
-After this, we use the fitted values from this model to constrain the
-regression coefficients on the transition matrix (parameters number~6
-and~10):
-<<term=FALSE>>=
-# start with fixed and free parameters
-conpat <- c(0,1,rep(c(0,1),4),1,1,0,1,1,1,0,1)
-# constrain the beta's on the transition parameters to be equal
-conpat[6] <- conpat[10] <- 2
-fm2 <- fit(fm1,equal=conpat)
-@
-
-Using \code{summary} on the fitted model shows that the regression 
-coefficients are now estimated at the same value of 12.66. The function
-\code{llratio} computes the likelihood ratio $\chi^2$-statistic and the
-associated $p$-value with appropriate degrees of freedom for testing the
-tenability of constraints \citep{Dannemann2007}. Note that these arguments 
-provide the possibility for arbitrary 
-constraints, also between, e.g., a multinomial regression coefficient 
-for the transition matrix and the mean of a Gaussian response model. 
-Whether such constraints make sense is hence the responsibility of 
-the user. 
 
 \section[Extending depmixS4]{Extending \pkg{depmixS4}}
 
@@ -1035,8 +1047,7 @@ which was the perfect opportunity to test the covariates on the prior
 model parameters.  The examples in the help files use both of these
 data sets.
 
-
-\bibliography{all,ingmar}
+\bibliography{dpx4Rev}
 
 \end{document}
 
