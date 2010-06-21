@@ -257,7 +257,9 @@ fitdmm <- function(dat,dmm,printlevel=1,poster=TRUE,tdcov=0,ses=TRUE,method="opt
 	
 	##  call npmain to optimize the model (non-linear constraints not implemented yet)
 	if(method=="donlp") {
-			
+		
+		require("Rdonlp2")
+		
 		bu=bu[which(fixed==1)]
 		bl=bl[which(fixed==1)]
 		

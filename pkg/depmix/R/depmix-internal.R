@@ -81,8 +81,8 @@ checkSetRecode <- function(dat,dmm,tdcov=0,printlevel=1) {
 			PACKAGE="depmix")
 		datset <- list()
 		for(i in 1:xgmod$ng) {
-			catit=0
-			dc=numeric(0)
+# 			catit=0
+# 			dc=numeric(0)
 			datset[[i]] <- .C("ngCovSetUp",
 				as.integer(i),
 				as.double(t(dcov[[i]])),
@@ -144,10 +144,9 @@ checkSetRecode <- function(dat,dmm,tdcov=0,printlevel=1) {
  				else dc[catit]=0
 			}
 		}
-		if(all(dc)) recdat=dat[[i]]
+		if(all(as.logical(dc))) recdat=dat[[i]]
 		else recdat=recode(dat[[i]],xm)
 		
-
 		datset[[i]] <- .C("ngDataSetUp",
 			as.integer(i),
 			as.double(t(recdat)),
