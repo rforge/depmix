@@ -17,12 +17,12 @@
 \author{Ingmar Visser\\University of Amsterdam \And 
         Maarten Speekenbrink\\University College London}
         
-\title{\pkg{depmixS4} : An \proglang{R}-package for hidden Markov models}
+\title{\pkg{depmixS4} : An \proglang{R}-package for Hidden Markov Models}
 
 
 %% for pretty printing and a nice hypersummary also set:
 \Plainauthor{Ingmar Visser, Maarten Speekenbrink} %% comma-separated
-\Plaintitle{depmixS4: An R-package for hidden Markov models} %% without formatting
+\Plaintitle{depmixS4: An R-package for Hidden Markov Models} %% without formatting
 
 \Shorttitle{depmixS4: Hidden Markov Models} %% a short title (if necessary)
 
@@ -31,16 +31,18 @@
 	
 	\pkg{depmixS4} implements a general framework for defining and
 	estimating dependent mixture models in the \proglang{R}
-	programming language \citep{R2009}.  This includes standard Markov
+	programming language \citep{R2010}.  This includes standard Markov
 	models, latent/hidden Markov models, and latent class and finite
 	mixture distribution models.  The models can be fitted on mixed
 	multivariate data with distributions from the \code{glm} family,
-	the (logistic) multinomial, or the multivariate normal distribution.
-	Other distributions can be added easily, and an example is
-	provided with the exgaus distribution.  Parameters are estimated by
-	the EM algorithm or, when (linear) constraints are imposed on the
-	parameters, by direct numerical optimization with the
-	\pkg{Rsolnp} or \pkg{Rdonlp2} routines.}
+	the (logistic) multinomial, or the multivariate normal
+	distribution.  Other distributions can be added easily, and an
+	example is provided with the {\em exgaus} distribution.
+	Parameters are estimated by the EM algorithm or, when (linear)
+	constraints are imposed on the parameters, by direct numerical
+	optimization with the \pkg{Rsolnp} or \pkg{Rdonlp2} routines.
+	
+}
 
 \Keywords{hidden Markov model, dependent mixture model, mixture 
 model, constraints}
@@ -88,21 +90,23 @@ URL: \url{http://www.ingmar.org/}
 \SweaveOpts{echo=TRUE}
 \usepackage{a4wide}
 
-%\usepackage{Sweave}
+%% \usepackage{Sweave}
 
 \begin{document}
+
 
 %set width of figures produced by Sweave
 \setkeys{Gin}{width=0.9\textwidth}
 
 \maketitle
 
+<<echo=FALSE>>=	
+.Options$digits<-3
+library(depmixS4)
+@
+
 %% include your article here, just as usual
 %% Note that you should use the \pkg{}, \proglang{} and \code{} commands.
-
-\begin{center}
-\bf{DRAFT: DO NOT QUOTE WITHOUT CONTACTING AUTHOR}
-\end{center}
 
 \section{Introduction}
 %% Note: If there is markup in \(sub)section, then it has to be escape as above.
@@ -119,7 +123,9 @@ genetics \citep{Krogh1998}.  In these latter areas of application,
 latent Markov models are usually referred to as hidden Markov models.
 See for example \citet{Fruhwirth2006} for an overview of hidden Markov
 models with extensions.  Further examples of applications can be found
-in e.g.\ \citet[][chapter~1]{Cappe2005}.
+in e.g.\ \citet[][chapter~1]{Cappe2005}.  A more gentle introduction
+into hidden Markov models with applications is the book by
+\citet{Zucchini2009}.
 
 The \pkg{depmixS4} package was motivated by the fact that while Markov
 models are used commonly in the social sciences, no comprehensive
@@ -181,8 +187,6 @@ for these data is described.
 \begin{figure}[htbp]
 \begin{center}
 <<fig=TRUE,echo=FALSE,height=5,width=7,eps=FALSE>>=	
-.Options$digits<-3
-library(depmixS4)
 data(speed)
 plot(as.ts(speed[1:168,]),main="Speed-accuracy trade-off")
 @
@@ -214,12 +218,6 @@ These latter dependencies are assumed to follow a first-order Markov
 process.  In the models we are considering here, the mixture
 distributions, the initial mixture probabilities and transition
 probabilities can all depend on covariates $\vc{z}_t$.
-
-%transition probability functions $a_{ij}$ and the initial state
-%probability functions $\greekv{\pi}$ may depend on covariates as well
-%as the response distributions $\vc{b_{j}^{k}}$.  See for example
-%\citet{Fruhwirth2006} for an overview of hidden Markov models with
-%extensions.
 
 In a dependent mixture model, the joint likelihood of observations
 $\vc{O}_{1:T}$ and latent states $\vc{S}_{1:T} = (S_1,\ldots,S_T)$,
@@ -258,6 +256,7 @@ for the accuracy variable.  In the models considered here,
 both the transition probability functions $a_{ij}$ and the initial
 state probability functions $\greekv{\pi}$ may depend on covariates as
 well as the response distributions $b_{j}^{k}$.
+
 
 \subsection{Likelihood}
 
@@ -357,7 +356,6 @@ standard \code{glm} routine.  Note that for the latter maximisation,
 the expected values $\gamma_t(j)$ are used as prior weights of the
 observations $O^k_t$.
 
-
 The EM algorithm however has some drawbacks.  First, it can be slow to
 converge towards the end of optimization.  Second, applying
 constraints to parameters can be problematic; in particular, EM can
@@ -370,14 +368,16 @@ direct optimization using package \pkg{Rsolnp}
 linear (in)equality constraints (and optionally also non-linear
 constraints).
 
+
 \section[Using depmixS4]{Using \pkg{depmixS4}}
 
 Two steps are involved in using \pkg{depmixS4} which are illustrated
 below with examples:
 \begin{enumerate}
-	\item model specification with function \code{depmix} (or with \code{mix}
-	for latent class and finite mixture models, see example below on adding
-	covariates to prior probabilities)
+	
+	\item model specification with function \code{depmix} (or with
+	\code{mix} for latent class and finite mixture models, see example
+	below on adding covariates to prior probabilities)
 	
 	\item  model fitting with function \code{fit}
 \end{enumerate}
@@ -520,10 +520,10 @@ transition and response distributions were set to their defaults
 distribution for the response).  The resulting model indicates two
 well-separated states, one with slow and the second with fast
 responses.  The transition probabilities indicate rather stable
-states, i.e., the probability of remaining in either of the states is around 0.9.
-The initial state probability estimates indicate that state 1 is the
-starting state for the process, with a negligible probability of starting in
-state 2.
+states, i.e., the probability of remaining in either of the states is
+around 0.9.  The initial state probability estimates indicate that
+state 1 is the starting state for the process, with a negligible
+probability of starting in state 2.
 
 \subsection{Covariates on transition parameters}
 
@@ -543,7 +543,7 @@ is fixed at zero and the other two are freely estimated.
 repeated measurement data ($T=2$) using logistic regression on the
 transition parameters; they rely on Bayesian methods of estimation.
 Covariates on the transition probabilities can be specified using a
-one-sided formula as in the following example: 
+one-sided formula as in the following example:
 <<>>=
 set.seed(1)
 mod <- depmix(rt~1, data=speed, nstates=2, family=gaussian(),
@@ -614,9 +614,10 @@ fixed values are required, the \code{fixed} argument can be used
 instead of \code{conpat}, with zeroes for fixed parameters and other
 values (ones e.g.) for non-fixed parameters.  Fitting the models
 subject to these constraints is handled by the optimization routine
-\code{solnp} or, optionally, by \code{donlp2}.  To be able to construct the \code{conpat} and/or
-\code{fixed} vectors one needs the correct ordering of parameters
-which is briefly discussed next before proceeding with an example.
+\code{solnp} or, optionally, by \code{donlp2}.  To be able to
+construct the \code{conpat} and/or \code{fixed} vectors one needs the
+correct ordering of parameters which is briefly discussed next before
+proceeding with an example.
 
 \paragraph{Parameter numbering} When using the \code{conpat} and
 \code{fixed} arguments, complete parameter vectors should be supplied,
@@ -673,19 +674,20 @@ fm2 <- fit(fm1,equal=conpat)
 @
 
 Using \code{summary} on the fitted model shows that the regression
-coefficients are now estimated at the same value of 12.66.  Setting 
-elements 13 and 14 of \code{conpat} to zero resulted in fixing those parameters
-at their starting values of 0.5.  This means that state 1 can now be interpreted
-as a 'guessing' state which is associated with comparatively fast responses.
-Similarly for elements 1 and 2, resulting in fixed initial probabilities. The
-function \code{llratio} computes the likelihood ratio
-$\chi^2$-statistic and the associated $p$-value with appropriate
-degrees of freedom for testing the tenability of constraints
-\citep{Dannemann2007}.  Note that these arguments (i.e. \code{conpat}
-and \code{conrows}) provide the possibility for arbitrary constraints,
-also between, e.g., a multinomial regression coefficient for the
-transition matrix and the mean of a Gaussian response model.  Whether
-such constraints make sense is hence the responsibility of the user.
+coefficients are now estimated at the same value of 12.66.  Setting
+elements 13 and 14 of \code{conpat} to zero resulted in fixing those
+parameters at their starting values of 0.5.  This means that state 1
+can now be interpreted as a 'guessing' state which is associated with
+comparatively fast responses.  Similarly for elements 1 and 2,
+resulting in fixed initial probabilities.  The function \code{llratio}
+computes the likelihood ratio $\chi^2$-statistic and the associated
+$p$-value with appropriate degrees of freedom for testing the
+tenability of constraints \citep{Dannemann2007}.  Note that these
+arguments (i.e. \code{conpat} and \code{conrows}) provide the
+possibility for arbitrary constraints, also between, e.g., a
+multinomial regression coefficient for the transition matrix and the
+mean of a Gaussian response model.  Whether such constraints make
+sense is hence the responsibility of the user.
 
 
 \subsection{Adding covariates on the prior probabilities}
@@ -694,8 +696,8 @@ To illustrate the use of covariates on the prior probabilities we have
 included another data set with \pkg{depmixS4}.  The \code{balance}
 data consists of 4 binary items (correct-incorrect) on a balance scale
 task \citep{Siegler1981}.  The data form a subset of the data
-published in \citet{Jansen2002}. Before specifying specifying a model 
-for these data, we briefly describe them. 
+published in \citet{Jansen2002}.  Before specifying specifying a model
+for these data, we briefly describe them.
 
 The balance scale taks is a famous task for testing cognitive
 strategies developed by Jean Piaget \citep[see][]{Siegler1981}.
@@ -1036,26 +1038,27 @@ general interface that allows easy addition of new response models.
 
 We are currently working on implementing the gradients for response
 and transition models with two goals in mind.  First, to speed up
-(constrained) parameter optimization using \pkg{Rdonlp2}.  Second,
-analytic gradients are useful in computing the Hessian of the
-estimated parameters so as to arrive at standard errors for those.  We
-are also planning to implement goodness-of-fit statistics
-\citep{Titman2008}. 
+(constrained) parameter optimization using \pkg{Rdonlp2} or
+\pkg{Rsolnp}.  Second, analytic gradients are useful in computing the
+Hessian of the estimated parameters so as to arrive at standard errors
+for those.  We are also planning to implement goodness-of-fit
+statistics \citep{Titman2008}.
 
 
 \section*{Acknowledgements} 
 
 Ingmar Visser was supported by an EC Framework 6 grant, project 516542
-(NEST).  Maarten Speekenbrink was supported by ESRC grant RES-062-23-1511 
-and the ESRC Centre for Economic Learning and Social Evolution (ELSE).  
-Han van der Maas provided the speed-accuracy data \cite{Dutilh2010} and thereby
-neccessitated implementing models with time-dependent covariates.
-Brenda Jansen provided the balance scale data set \citep{Jansen2002}
-which was the perfect opportunity to test the covariates on the prior
-model parameters.  The examples in the help files use both of these
-data sets.
+(NEST).  Maarten Speekenbrink was supported by ESRC grant
+RES-062-23-1511 and the ESRC Centre for Economic Learning and Social
+Evolution (ELSE).  Han van der Maas provided the speed-accuracy data
+\citep{Dutilh2010} and thereby neccessitated implementing models with
+time-dependent covariates.  Brenda Jansen provided the balance scale
+data set \citep{Jansen2002} which was the perfect opportunity to test
+the covariates on the prior model parameters.  The examples in the
+help files use both of these data sets.
 
 \bibliography{dpx4Rev}
+
 
 \end{document}
 
