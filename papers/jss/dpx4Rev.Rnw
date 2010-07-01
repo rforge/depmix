@@ -100,8 +100,8 @@ URL: \url{http://www.ingmar.org/}
 \maketitle
 
 <<echo=FALSE,results=hide>>=	
-.Options$digits<-3
-options(continue="+	",width=70,useFancyQuotes=FALSE)
+options(prompt="R> ", continue="+	",width=70, useFancyQuotes=FALSE,
+digits=3)
 library(depmixS4)
 @
 
@@ -113,9 +113,9 @@ library(depmixS4)
 
 Markov and latent Markov models are frequently used in the social
 sciences, in different areas and applications.  In psychology, they
-are used for modelling learning processes (see \citealp{Wickens1982},
-for an overview, and e.g. \citealp{Schmittmann2006}, for a recent
-application).  In economics, latent Markov models are so-called regime
+are used for modelling learning processes; see \citet{Wickens1982},
+for an overview, and e.g. \citet{Schmittmann2006}, for a recent
+application.  In economics, latent Markov models are so-called regime
 switching models (see e.g., \citealp{Kim1994} and
 \citealp{Ghysels1994}).  Further applications include speech
 recognition \citep{Rabiner1989}, EEG analysis \citep{Rainer2000}, and
@@ -446,8 +446,7 @@ A dependent mixture model can be created with the
 library(depmixS4)
 data(speed)
 set.seed(1)
-mod <- depmix(response=rt~1, data=speed, nstates=2, 
-    trst=runif(4))
+mod <- depmix(response=rt~1, data=speed, nstates=2, trstart=runif(4))
 @
 
 The first line of code loads the \pkg{depmixS4} package and
@@ -503,9 +502,10 @@ and \code{BIC}, respectively.  By comparison, a 1-state model for
 these data, i.e. assuming there is no mixture, has a log-likelihood of
 $-305.33$, and 614.66, and 622.83 for the AIC and BIC respectively.
 Hence, the 2-state model fits the data much better than the 1-state
-model.  Note that the 1-state model can be specified using \code{mod <-
-depmix(rt~1, data=speed, nstates=1)}, although this model is trivial
-as it will simply return the mean and the sd of the rt variable.
+model.  Note that the 1-state model can be specified using \code{mod
+<- depmix(rt~1, data=speed, nstates=1)}, although this model is
+trivial as it will simply return the mean and standard deviation of
+the \code{rt} variable.
 
 The \code{summary} method of \code{fit}ted models provides the
 parameter estimates, first for the prior probabilities model, second
@@ -652,7 +652,7 @@ constraints:
 trst <- c(0.9,0.1,0,0,0.1,0.9,0,0)
 mod <- depmix(list(rt~1,corr~1),data=speed,transition=~Pacc,
 	  nstates=2,family=list(gaussian(),multinomial("identity")),
-	  trstart=trst,inst=c(0.99,0.01))
+	  trstart=trst,instart=c(0.99,0.01))
 fm1 <- fit(mod,verbose=FALSE)
 @
 
@@ -670,6 +670,8 @@ fm1 <- setpars(mod,pars)
 conpat <- c(0,0,rep(c(0,1),4),1,1,0,0,1,1,1,1)
 # constrain the beta's on the transition parameters to be equal
 conpat[6] <- conpat[10] <- 2
+@
+<<echo=TRUE,results=hide>>=
 fm2 <- fit(fm1,equal=conpat)
 @
 
@@ -832,14 +834,14 @@ straightforward.
 User-defined distributions should extend the \code{response}-class and
 have the following slots:
 \begin{enumerate}
-	\item y: the response variable
-	\item x: the design matrix, possibly only an intercept
-	\item parameters: a named list with the coefficients and possibly 
-	other parameters (e.g., the standard deviation in the Gaussian 
+	\item \code{y}: the response variable
+	\item \code{x}: the design matrix, possibly only an intercept
+	\item \code{parameters}: a named list with the coefficients and possibly 
+	other parameters (e.g., the standard deviation in the normal 
 	response model)
-	\item fixed: a vector of logicals indicating whether parameters are 
+	\item \code{fixed}: a vector of logicals indicating whether parameters are 
 	fixed
-	\item npar: numerical indicating the number of parameters of the model
+	\item \code{npar}: numerical indicating the number of parameters of the model
 \end{enumerate}
 
 In the \code{speed} data example, it may be more appropriate to model
@@ -854,33 +856,34 @@ The so-defined class now needs a number of methods:
 \begin{enumerate}
 	\item constructor: function to create instances of the class 
 	with starting values
-	\item show method: to print the model to the terminal
-	\item dens: the function that computes the density of the responses
-	\item getpars and setpars: to get and set parameters 
-	\item predict: to generate predict'ed values 
-	\item fit: function to fit the model using posterior weights (used 
+	\item \code{show}: to print the model to the terminal
+	\item \code{dens}: the function that computes the density of the responses
+	\item \code{getpars} and \code{setpars}: to get and set parameters 
+	\item \code{predict}: to generate predict'ed values 
+	\item \code{fit}: function to fit the model using posterior weights (used 
 	by the EM algorithm)
 \end{enumerate}
 
-Only the constructor and the fit methods are provided here; the
+Only the constructor and the \code{fit} methods are provided here; the
 complete code can be found in the help file of the \code{makeDepmix}
-function.  The \code{exgaus} example uses the \pkg{gamlss} and
-\pkg{gamlss.distr} packages
-\citep{Rigby2005, Stasinopoulos2007,Stasinopoulos2009a,Stasinopoulos2009b} 
-for computing the \code{dens}ity and for \code{fit}ting the parameters.
+function.  The example with the exgaus distribution uses the
+\pkg{gamlss} and \pkg{gamlss.distr} packages \citep{Rigby2005,
+Stasinopoulos2007,Stasinopoulos2009a,Stasinopoulos2009b} for computing
+the \code{dens}ity and for \code{fit}ting the parameters.
 
 The constructor method return an object of class \code{exgaus}, and is
 defined as follows:
+<<results=hide>>=
+require(gamlss)
+require(gamlss.dist)
+@
 <<term=FALSE>>=
 setGeneric("exgaus", function(y, pstart = NULL, fixed = NULL, ...) 
   standardGeneric("exgaus"))
 
-require(gamlss)
-require(gamlss.dist)
-
 setMethod("exgaus", 
   signature(y="ANY"), 
-  function(y,pstart=NULL,fixed=NULL, ...) {
+  function(y, pstart=NULL, fixed=NULL, ...) {
     y <- matrix(y,length(y))
     x <- matrix(1) 
     parameters <- list()
@@ -896,10 +899,7 @@ setMethod("exgaus",
     mod
   }
 )
-
 @
-
-
 
 <<echo=FALSE, term=FALSE>>=
 setMethod("dens","exgaus",
@@ -954,22 +954,24 @@ setMethod("predict","exgaus",
         return(ret)
     }
 )
-
 @
 
 
 The \code{fit} method is defined as follows: 
 <<>>=
 setMethod("fit","exgaus",
-  function(object,w) {
+  function(object, w) {
     if(missing(w)) w <- NULL
     y <- object@y
-    fit <- gamlss(y~1,weights=w,family=exGAUS(),
+    
+	fit <- gamlss(y~1,weights=w,family=exGAUS(),
       control=gamlss.control(n.cyc=100,trace=FALSE),
-      mu.start=object@parameters$mu, 
-      sigma.start=exp(object@parameters$sigma), 
-      nu.start=exp(object@parameters$nu))
-    pars <- c(fit$mu.coefficients,fit$sigma.coefficients,fit$nu.coefficients)
+      mu.start=object@parameters$mu, sigma.start=exp(object@parameters$sigma), 
+      nu.start=exp(object@parameters$nu)
+	)
+    
+	pars <- c(fit$mu.coefficients, fit$sigma.coefficients, 
+		fit$nu.coefficients)
     object <- setpars(object,pars)
     object
   }
@@ -988,12 +990,16 @@ full control over model specification, and we need it here.
 
 We first create all the response models that we need as a double list: 
 <<>>=
-rModels <- list( list( 
-		exgaus(speed$rt,pstart=c(5,.1,.1)),	
-		GLMresponse(formula=corr~1,data=speed,family=multinomial(),pstart=c(0.5,0.5))),
-	list(
-		exgaus(speed$rt,pstart=c(6,.1,.1)),
-		GLMresponse(formula=corr~1,data=speed,family=multinomial(),pstart=c(.1,.9))))
+rModels <- list()
+rModels[[1]] <- list()
+rModels[[1]][[1]] <- exgaus(speed$rt, pstart=c(5,.1,.1))
+rModels[[1]][[2]] <- GLMresponse(formula=corr~1, data=speed, 
+	family=multinomial(), pstart=c(0.5,0.5))
+
+rModels[[2]] <- list()
+rModels[[2]][[1]] <- exgaus(speed$rt, pstart=c(6,.1,.1))
+rModels[[2]][[2]] <- GLMresponse(formula=corr~1, data=speed, 
+	family=multinomial(), pstart=c(.1,.9))
 @
 
 Next, we define the transition and prior probability models using the 
@@ -1002,17 +1008,19 @@ the response class):
 <<>>=
 trstart=c(0.9,0.1,0.1,0.9)
 transition <- list()
-transition[[1]] <- transInit(~Pacc,nst=2,data=speed,pstart=c(0.9,0.1,0,0))
-transition[[2]] <- transInit(~Pacc,nst=2,data=speed,pstart=c(0.1,0.9,0,0))
-inMod <- transInit(~1,ns=2,pstart=c(0.1,0.9),data=data.frame(1))
+transition[[1]] <- transInit(~Pacc,nst=2, data=speed, 
+	pstart=c(0.9,0.1,0,0))
+transition[[2]] <- transInit(~Pacc,nst=2, data=speed, 
+	pstart=c(0.1,0.9,0,0))
+inMod <- transInit(~1, ns=2, pstart=c(0.1,0.9), data=data.frame(1))
 @
 
 Finally, we put everything together using \code{makeDepmix} and fit 
 the model: 
 <<>>=
-mod <- makeDepmix(response=rModels,transition=transition,
-    prior=inMod,stat=FALSE)
-fm <- fit(mod,verbose=FALSE)
+mod <- makeDepmix(response=rModels, transition=transition,
+    prior=inMod, stat=FALSE)
+fm <- fit(mod, verbose=FALSE)
 @
 
 Using \code{summary} will print the fitted parameters.  Note that the
@@ -1030,7 +1038,7 @@ mixture models for a large variety of response distributions.  It can
 also fit latent class regression and finite mixture models, although
 it should be noted that more specialized packages are available for
 this such as \pkg{FlexMix} \citep{Leisch2004}.  The package is
-intended for modelling of (individual) time series data with the aim of
+intended for modelling (individual) time series data with the aim of
 characterizing the transition processes underlying the data.  The
 possibility to use covariates on the transition matrix greatly
 enhances the flexibility of the model.  The EM algorithm uses a very
