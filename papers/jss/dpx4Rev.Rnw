@@ -95,7 +95,7 @@ URL: \url{http://www.ingmar.org/}
 \begin{document}
 
 %set width of figures produced by Sweave
-\setkeys{Gin}{width=0.9\textwidth}
+\setkeys{Gin}{width=0.8\textwidth}
 
 \maketitle
 
@@ -866,8 +866,8 @@ Only the constructor and the fit methods are provided here; the
 complete code can be found in the help file of the \code{makeDepmix}
 function.  The \code{exgaus} example uses the \pkg{gamlss} and
 \pkg{gamlss.distr} packages
-\citep{Stasinopoulos2009a,Stasinopoulos2009b} for computing the
-\code{dens}ity and for \code{fit}ting the parameters.
+\citep{Rigby2005, Stasinopoulos2007,Stasinopoulos2009a,Stasinopoulos2009b} 
+for computing the \code{dens}ity and for \code{fit}ting the parameters.
 
 The constructor method return an object of class \code{exgaus}, and is
 defined as follows:
