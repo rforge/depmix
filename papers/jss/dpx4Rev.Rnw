@@ -101,7 +101,7 @@ URL: \url{http://www.ingmar.org/}
 
 <<echo=FALSE,results=hide>>=	
 options(prompt="R> ", continue="+	",width=70, useFancyQuotes=FALSE,
-digits=3)
+digits=4)
 library(depmixS4)
 @
 
@@ -958,6 +958,9 @@ setMethod("predict","exgaus",
 
 
 The \code{fit} method is defined as follows: 
+<<echo=FALSE>>=
+options(width=60)
+@
 <<>>=
 setMethod("fit","exgaus",
   function(object, w) {
@@ -966,9 +969,9 @@ setMethod("fit","exgaus",
     
 	fit <- gamlss(y~1,weights=w,family=exGAUS(),
       control=gamlss.control(n.cyc=100,trace=FALSE),
-      mu.start=object@parameters$mu, sigma.start=exp(object@parameters$sigma), 
-      nu.start=exp(object@parameters$nu)
-	)
+      mu.start=object@parameters$mu, 
+	  sigma.start=exp(object@parameters$sigma), 
+      nu.start=exp(object@parameters$nu))
     
 	pars <- c(fit$mu.coefficients, fit$sigma.coefficients, 
 		fit$nu.coefficients)
@@ -989,6 +992,9 @@ The function \code{makeDepmix} is included in \pkg{depmixS4} to have
 full control over model specification, and we need it here. 
 
 We first create all the response models that we need as a double list: 
+<<echo=FALSE>>=
+options(width=80)
+@
 <<>>=
 rModels <- list()
 rModels[[1]] <- list()
@@ -1005,6 +1011,9 @@ rModels[[2]][[2]] <- GLMresponse(formula=corr~1, data=speed,
 Next, we define the transition and prior probability models using the 
 \code{transInit} function (which produces a transInit model, which also extends 
 the response class): 
+<<echo=FALSE>>=
+options(width=70)
+@
 <<>>=
 trstart=c(0.9,0.1,0.1,0.9)
 transition <- list()
