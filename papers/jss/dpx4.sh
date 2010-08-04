@@ -9,15 +9,15 @@ R --vanilla < dpx4Sweave.R ;
 R --vanilla < dpx4Stangle.R ;
 
 
-pdflatex dpx4Rev.tex ;
+pdflatex depmixS4.tex ;
 
-bibtex dpx4Rev ;
+bibtex depmixS4 ;
 
-pdflatex dpx4Rev.tex ;
+pdflatex depmixS4.tex ;
 
-pdflatex dpx4Rev.tex ;
+pdflatex depmixS4.tex ;
 
-open dpx4Rev.pdf; 
+open depmixS4.pdf ;
 
 
 

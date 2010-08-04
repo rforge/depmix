@@ -1,1 +1,1 @@
-Stangle("dpx4Rev.Rnw")
+Stangle("depmixS4.Rnw")
