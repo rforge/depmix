@@ -352,11 +352,11 @@ actually fitting the model.
 
 Throughout this article a data set called \code{speed} is used.  As
 already indicated in the introduction, it consists of three time
-series with three variables: response time \code{rt}, accuracy \code{corr}, and a covariate,
-\code{Pacc}, which defines the relative pay-off for speeded versus accurate
-responding.  Before describing some of the models that are fitted to
-these data, we provide a brief sketch of the reasons for gathering
-these data in the first place.
+series with three variables: response time \code{rt}, accuracy
+\code{corr}, and a covariate, \code{Pacc}, which defines the relative
+pay-off for speeded versus accurate responding.  Before describing
+some of the models that are fitted to these data, we provide a brief
+sketch of the reasons for gathering these data in the first place.
 
 Response times are a very common dependent variable in psychological
 experiments and hence form the basis for inference about many
