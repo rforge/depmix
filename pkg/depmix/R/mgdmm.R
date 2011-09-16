@@ -47,7 +47,7 @@ mgdmm <- function(dmm,ng=1,modname=NULL,trans=FALSE,obser=FALSE,init=FALSE,conpa
 			bl=c(bl,mixmod[[i]]$bl[1:mixmod[[i]]$npars])
 			bu=c(bu,mixmod[[i]]$bu[1:mixmod[[i]]$npars])
 			fixed=c(fixed,mixmod[[i]]$fixed[1:mixmod[[i]]$npars])
-			linmat[[i]]=mixmod[[i]]$A[,1:mixmod[[i]]$npars]
+			linmat[[i]]=mixmod[[i]]$A[,1:mixmod[[i]]$npars,drop=FALSE]
 			bllin=c(bllin,mixmod[[i]]$bllin)
 			bulin=c(bulin,mixmod[[i]]$bulin)
 		}

@@ -23,3 +23,9 @@ Changes from 0.9.7 to 0.9.8
 1) Minor changes in C++ code to conform to compiler standards (producing
 an error on SUN systems).
 
+Changes from 0.9.8 to 0.9.9
+
+1) Fixed a bug which led to an error when specifying multigroup models 
+in which one or more groups had a 1-state model (fixed by adding a 
+drop=FALSE in function mgdmm).
+

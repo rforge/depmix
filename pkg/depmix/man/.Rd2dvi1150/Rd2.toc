@@ -1,2 +1,0 @@
-\contentsline {subsection}{depmix}{1}{page.1}
-\contentsline {chapter}{Index}{7}{page.7}
