@@ -1,13 +1,12 @@
 ## package for fitting dependent mixture models
 
-.First.lib <- function(lib, pkg) {
-  library.dynam("depmix", pkg, lib)
-  require(MASS)
-}
-
-.Last.lib <- function(libpath) {
-	library.dynam.unload("depmix",libpath)
-}
+# .onLoad <- function(lib, pkg) {
+# 	library.dynam("depmix", pkg, lib)
+# }
+# 
+# .onUnLoad <- function(libpath) {
+# 	library.dynam.unload("depmix",libpath)
+# }
 
 ###################################
 #                                 #
