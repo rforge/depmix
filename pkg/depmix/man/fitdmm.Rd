@@ -225,8 +225,12 @@ types of models.}
 
 data(speed)
 mod <- dmm(nsta=2,itemt=c(1,2)) # gaussian and binary items
+ll <- loglike(speed,mod)
 fit1 <- fitdmm(dat=speed,dmm=mod)
 summary(fit1)
+ll <- loglike(speed,fit1)
+pst <- posterior(dat=speed,dmm=fit1)
+bs <- bootstrap(fit1,speed,samples=10)
 
 # add some constraints using conpat
 conpat=rep(1,15)

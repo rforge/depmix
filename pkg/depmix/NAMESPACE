@@ -1,9 +1,8 @@
 useDynLib(depmix)
 
-# import(methods)
-
 export(dmm,mgdmm,fitdmm,mixdmm,loglike,oneliner,bootstrap,posterior,
-	generate,lca)
+	generate,lca,ntimes,itemtypes,dname,replicates,ncov,inames,
+	nitems,ind,markovdata)
 
 S3method(summary,dmm)
 S3method(summary,mgd)
