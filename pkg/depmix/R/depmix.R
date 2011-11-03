@@ -254,64 +254,64 @@ fitdmm <- function(dat,dmm,printlevel=1,poster=TRUE,tdcov=0,ses=TRUE,method="opt
 		z
 	}
 	
-# 	##  call npmain to optimize the model (non-linear constraints not implemented yet)
-# 	if(method=="donlp") {
-# 		
-# 		require("Rdonlp2")
-# 		
-# 		bu=bu[which(fixed==1)]
-# 		bl=bl[which(fixed==1)]
-# 		
-# 		if(printlevel>29) {
-# 			print(A)
-# 			print(bl)
-# 			print(bu)
-# 			print(bllin)
-# 			print(bulin)
-# 		}
-# 		
-# 		# donlp specific inputs
-# 		optpars=fitpars[which(fixed==1)]
-# 		A=A[,which(fixed==1),drop=FALSE]			
-# 		
-# 		# define loglike function
-# 		logl <- function(pars) {
-# 			xgmod$pars[which(fixed==1)]=pars
-# 			-loglike(dat=dat,dmm=xgmod,print=0,set=FALSE,tdcov=tdcov)$logl
-# 		}
-# 		
-# 		if(der) {
-# 			grad <- function(pars) {
-# 				xgmod$pars[which(fixed==1)]=pars
-# 				gr <- -loglike(dat=dat,dmm=xgmod,print=0,set=FALSE,tdcov=tdcov,grad=TRUE)$gr[which(fixed==1)]
-# 				return(gr)
-# 			}
-# 			attr(logl, "gr") <- grad
-# 		}
-# 		
-# 		timeUsed <- system.time(
-# 			res <- donlp2(optpars, logl,
-# 				par.upper=bu,
-# 				par.lower=bl,
-# 				A = A,
-# 				lin.upper=bulin,
-# 				lin.lower=bllin,
-# 				nlin = list(),
-# 				control=donlp2.control(),
-# 				env=.GlobalEnv, name="Rdonlp2")
-# 		)
-# 		
-# 		z=list()
-# 		z$objf=-res$fx
-# 		z$iter=res$step.nr
-# 		z$inform=res$message
-# 		z$timeUsed=timeUsed[3]
-# 		fitpars[which(fixed==1)]=res$par
-# 		z$pars=fitpars
-# 		z$npars=xgmod$npars
-# 		z$totMem=NULL
-# 		z
-# 	}
+ 	##  call npmain to optimize the model (non-linear constraints not implemented yet)
+ 	if(method=="donlp") {
+ 		
+ 		require("Rdonlp2")
+ 		
+ 		bu=bu[which(fixed==1)]
+ 		bl=bl[which(fixed==1)]
+ 		
+ 		if(printlevel>29) {
+ 			print(A)
+ 			print(bl)
+ 			print(bu)
+ 			print(bllin)
+ 			print(bulin)
+ 		}
+ 		
+ 		# donlp specific inputs
+ 		optpars=fitpars[which(fixed==1)]
+ 		A=A[,which(fixed==1),drop=FALSE]			
+ 		
+ 		# define loglike function
+ 		logl <- function(pars) {
+ 			xgmod$pars[which(fixed==1)]=pars
+ 			-loglike(dat=dat,dmm=xgmod,print=0,set=FALSE,tdcov=tdcov)$logl
+ 		}
+ 		
+ 		if(der) {
+ 			grad <- function(pars) {
+ 				xgmod$pars[which(fixed==1)]=pars
+ 				gr <- -loglike(dat=dat,dmm=xgmod,print=0,set=FALSE,tdcov=tdcov,grad=TRUE)$gr[which(fixed==1)]
+ 				return(gr)
+ 			}
+ 			attr(logl, "gr") <- grad
+ 		}
+ 		
+ 		timeUsed <- system.time(
+ 			res <- donlp2(optpars, logl,
+ 				par.upper=bu,
+ 				par.lower=bl,
+ 				A = A,
+ 				lin.upper=bulin,
+ 				lin.lower=bllin,
+ 				nlin = list(),
+ 				control=donlp2.control(),
+ 				env=.GlobalEnv, name="Rdonlp2")
+ 		)
+ 		
+ 		z=list()
+ 		z$objf=-res$fx
+ 		z$iter=res$step.nr
+ 		z$inform=res$message
+ 		z$timeUsed=timeUsed[3]
+ 		fitpars[which(fixed==1)]=res$par
+ 		z$pars=fitpars
+ 		z$npars=xgmod$npars
+ 		z$totMem=NULL
+ 		z
+ 	}
 	
 	##  call optim or nlm to optimize the model
 	if(method=="optim" || method=="nlm") {
