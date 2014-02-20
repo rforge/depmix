@@ -314,7 +314,7 @@ matrix transpose(const matrix &a) {
 
 double max(matrix a) {
 	if(!(a.row==1||a.col==1)) error("[Matrix] max only defined for row or col vector.\n");
-	int maxidx=1;
+// 	int maxidx=1;
 	int idx=0; 
 	double max=a(1);
 	if(a.row==1) idx=a.col;

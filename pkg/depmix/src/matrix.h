@@ -7,7 +7,7 @@
 
 extern "C" {
 	#include <R.h>
-	static int matrixConst; 
+/* 	static int matrixConst;  */
 }
 
 #define MATRIXBOUNDS 1
