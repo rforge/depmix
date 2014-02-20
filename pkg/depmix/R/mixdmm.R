@@ -48,13 +48,13 @@ mixdmm <- function(dmm, modname=NULL, mixprop=NULL, conrows=NULL) {
 			fixed=c(fixed,mod[[i]]$fixed[2:mod[[i]]$npars])
 		}
 # sum constraint for mixprop
-		sc=matrix(rep(1,nrcomp),nr=1)
+		sc=matrix(rep(1,nrcomp),nrow=1)
 		bllin=1
 		bulin=1
 	# user supplied general linear constraints on mixprop
 		amp=NULL
 		if(!(is.null(conrows))) {
-			conrows=matrix(conrows,nc=npars,byrow=TRUE)
+			conrows=matrix(conrows,ncol=npars,byrow=TRUE)
 			amp=conrows
 			bllin=c(bllin,rep(0,nrow(amp)))
 			bulin=c(bulin,rep(0,nrow(amp)))
@@ -82,7 +82,7 @@ mixdmm <- function(dmm, modname=NULL, mixprop=NULL, conrows=NULL) {
 			}
 		}
 # make combined constraint matrix 
-		A=matrix(0,nc=npars,nr=nr)
+		A=matrix(0,ncol=npars,nrow=nr)
 		A[1:nrow(amp),1:nrcomp] <- amp
 		B=bdiag(linmat)
 		A[2:nrow(A),(nrcomp+1):npars]=B
@@ -119,7 +119,7 @@ mixdmm <- function(dmm, modname=NULL, mixprop=NULL, conrows=NULL) {
 					linmattd[[i]]=matrix(0,1,mod[[i]]$npars-1)
 				}
 			}
-			zeroes=matrix(0,nc=npars,nr=nr)
+			zeroes=matrix(0,ncol=npars,nrow=nr)
 			A=cbind(A,zeroes)
 			C=bdiag(linmattd)
 			A[2:nrow(A),(npars+nrcomp+1):(2*npars)]=C

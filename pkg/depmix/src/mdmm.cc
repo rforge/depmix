@@ -268,6 +268,7 @@ double mdmm::derobs(const int np, const int st, const int it, double datit) {
 		if(npit!=it) return(0.0);
 		else {
 			int npitpar=itempar(np);
+			
 			//multinomial item
 			if(getMode(it)>1) {
 				if(npitpar!=((int) datit)) return(0.0);
@@ -283,6 +284,7 @@ double mdmm::derobs(const int np, const int st, const int it, double datit) {
 				}
 			}
 		}
+		return(0.0); // to make sure we do not get 'control may reach end of non-void function' warnings
 	}
 }
 
@@ -312,6 +314,7 @@ double mdmm::hesobs(const int np1, const int np2, const int st, const int it, do
 				}
 			}
 		}
+		return(0.0); // to make sure we do not get 'control may reach end of non-void function' warnings
 	}
 }
 

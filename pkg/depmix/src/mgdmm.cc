@@ -79,7 +79,6 @@ void mgdmm::initWorkspace(void) {
 }
 
 mgdmm::~mgdmm(void) {
-	delete [] nstates;
 	delete [] itemtypes;
 	delete [] mods;
 	delete [] ncpars;
@@ -97,10 +96,10 @@ mgdmm::~mgdmm(void) {
 		delete [] omegat;
 		delete [] omegafinal;
 	}
+	delete [] nstates;
 }
 
 void mgdmm::reset(const int ngroups, const int nrc, int *nst, const int nit, int *itt, int xm) {
-	delete [] nstates;
 	delete [] itemtypes;
 	delete [] mods;
 	delete [] ncpars;
@@ -118,6 +117,7 @@ void mgdmm::reset(const int ngroups, const int nrc, int *nst, const int nit, int
 		delete [] omegat;
 		delete [] omegafinal;
 	}
+	delete [] nstates;
 	initialize(ngroups,nrc,nst,nit,itt,xm);
 }
 

@@ -32,13 +32,13 @@ lca <- function(nclasses, itemtypes, modname=NULL, fixed=NULL, stval=NULL, conro
 		stval=c(1,diag(nclasses),runif((lcmnp-1)))
 	}
 	if(!is.null(conrows)) {
-		conrows=matrix(conrows,nc=lcmnp,byrow=TRUE)
-		trzeroes=matrix(0,nr=nrow(conrows),nc=nclasses*nclasses)
+		conrows=matrix(conrows,ncol=lcmnp,byrow=TRUE)
+		trzeroes=matrix(0,nrow=nrow(conrows),ncol=nclasses*nclasses)
 		mpzeroes=matrix(0,nrow(conrows),1)
 		conrows=t(cbind(mpzeroes,trzeroes,conrows[,2:(ncol(conrows))]))
 	}
 	if(!is.null(linmat)) {
-		trzeroes=matrix(0,nr=nrow(linmat),nc=nclasses*nclasses)
+		trzeroes=matrix(0,nrow=nrow(linmat),ncol=nclasses*nclasses)
 		linmat=cbind(trzeroes,linmat)
 	}
 	if(!is.null(conpat)) {

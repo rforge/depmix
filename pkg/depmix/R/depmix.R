@@ -85,7 +85,7 @@ fitdmm <- function(dat,dmm,printlevel=1,poster=TRUE,tdcov=0,ses=TRUE,method="opt
 		}
 	}
 	
-	initLogl=loglike(dat=dat,dmm=xgmod,tdcov=tdcov,print=0,set=FALSE)$logl
+	initLogl=loglike(dat=dat,dmm=xgmod,tdcov=tdcov,printlevel=0,set=FALSE)$logl
 	if(is.nan(initLogl) || is.infinite(initLogl)) stop("Initial model inadmissible, better starting values needed?!\n")
 	if(printlevel>0) cat("Initial loglikelihood: ", initLogl, " \n")
 	
@@ -149,10 +149,10 @@ fitdmm <- function(dat,dmm,printlevel=1,poster=TRUE,tdcov=0,ses=TRUE,method="opt
 	# after defining the model
 	
 	if(nrow(A)>0) {
-		Bcomplete=matrix(as.logical(A),nr=nrow(A))
+		Bcomplete=matrix(as.logical(A),nrow=nrow(A))
 		xcomplete=apply(Bcomplete,1,sum)
 		A[,which(fixed==0)]=0
-		B=matrix(as.logical(A),nr=nrow(A))
+		B=matrix(as.logical(A),nrow=nrow(A))
 		x=apply(B,1,sum)
 		for(i in 1:nrow(A)) {
 			if(x[i]!=xcomplete[i]) {
@@ -277,13 +277,13 @@ fitdmm <- function(dat,dmm,printlevel=1,poster=TRUE,tdcov=0,ses=TRUE,method="opt
  		# define loglike function
  		logl <- function(pars) {
  			xgmod$pars[which(fixed==1)]=pars
- 			-loglike(dat=dat,dmm=xgmod,print=0,set=FALSE,tdcov=tdcov)$logl
+ 			-loglike(dat=dat,dmm=xgmod,printlevel=0,set=FALSE,tdcov=tdcov)$logl
  		}
  		
  		if(der) {
  			grad <- function(pars) {
  				xgmod$pars[which(fixed==1)]=pars
- 				gr <- -loglike(dat=dat,dmm=xgmod,print=0,set=FALSE,tdcov=tdcov,grad=TRUE)$gr[which(fixed==1)]
+ 				gr <- -loglike(dat=dat,dmm=xgmod,printlevel=0,set=FALSE,tdcov=tdcov,grad=TRUE)$gr[which(fixed==1)]
  				return(gr)
  			}
  			attr(logl, "gr") <- grad
@@ -297,7 +297,7 @@ fitdmm <- function(dat,dmm,printlevel=1,poster=TRUE,tdcov=0,ses=TRUE,method="opt
  				lin.upper=bulin,
  				lin.lower=bllin,
  				nlin = list(),
- 				control=donlp2.control(),
+ 				control=donlp2Control(),
  				env=.GlobalEnv, name="Rdonlp2")
  		)
  		
@@ -331,15 +331,15 @@ fitdmm <- function(dat,dmm,printlevel=1,poster=TRUE,tdcov=0,ses=TRUE,method="opt
 		A=A[,which(constr==1),drop=FALSE]
 		# remove rows correponding with inequality constraints
 		idx=which(bllin<bulin) 
-		ci=matrix(bulin,nc=1) 
+		ci=matrix(bulin,ncol=1) 
 		
 		ineq=FALSE
 		if(length(idx)>0) {
 			A=A[-idx,,drop=FALSE]
 			ci=ci[-idx]
 			Aineq=xgmod$A[idx,which(constr==1),drop=FALSE]
-			ciIneqLow=matrix(xgmod$bllin[idx],nc=1)
-			ciIneqUp=matrix(xgmod$bulin[idx],nc=1)
+			ciIneqLow=matrix(xgmod$bllin[idx],ncol=1)
+			ciIneqUp=matrix(xgmod$bulin[idx],ncol=1)
 			ineq=TRUE
 		}
 		
@@ -375,38 +375,42 @@ fitdmm <- function(dat,dmm,printlevel=1,poster=TRUE,tdcov=0,ses=TRUE,method="opt
 			violup=violationPenalty*sum(as.numeric(xgpars>xgmod$bu)*sqrt((xgpars-xgmod$bu)^2))
 			viollow=violationPenalty*sum(as.numeric(xgpars<xgmod$bl)*sqrt((xgpars-xgmod$bl)^2))
 			violation=violcon+violup+viollow+sum(violineq)
-			violation
+			return(violation)
 		}
 		
-		assign("fcalls",0,envir=.GlobalEnv)
-		assign("totalviolation",0,envir=.GlobalEnv)		
+# 		assign("fcalls",0,envir=.GlobalEnv)
+#   	assign("totalviolation",0,envir=.GlobalEnv)		
+ 		
+		totalviolation = 0
 		
 		# optim optimization
 		if(method=="optim") {
 			f <- function(pars) {
 				if(nnewpars>0) xgmod$pars[which(constr==1)]=ginvA%*%ci + b%*%pars[1:nnewpars]
 				if(nucpars>0) xgmod$pars[which(uncon==1)]=pars[(nnewpars+1):(nnewpars+nucpars)]
-				ll=loglike(dat=dat,dmm=xgmod,print=0,set=FALSE,tdcov=tdcov)$logl
+				ll=loglike(dat=dat,dmm=xgmod,printlevel=0,set=FALSE,tdcov=tdcov)$logl
 				xgpars=xgmod$pars
 				violation=viol(xgpars)
-				assign("totalviolation",violation,envir=.GlobalEnv)
-				assign("fcalls",fcalls+1,envir=.GlobalEnv)
+#  				assign("totalviolation",violation,envir=.GlobalEnv)
+# 				totalviolation=violation
+				totalviolation=viol(xgpars)
+# 				assign("fcalls",fcalls+1,envir=.GlobalEnv)
 				if(is.nan(ll) || is.infinite(ll)) ll=initLogl*1.01
-				ll=ll-violation
+				ll=ll-totalviolation
 				pr=0
-				if(printlevel>9 && (fcalls%%10)==0) {cat("call " , fcalls, " logl ", ll, "\n"); pr=1}
-				if(printlevel>14 && pr==0) cat("call " , fcalls, " logl ", ll, "\n")
+# 				if(printlevel>9 && (fcalls%%10)==0) {cat("call " , fcalls, " logl ", ll, "\n"); pr=1}
+# 				if(printlevel>14 && pr==0) cat("call " , fcalls, " logl ", ll, "\n")
 				ll
 			}
 			
 			gr <- function(pars) {
 				if(nnewpars>0) xgmod$pars[which(constr==1)]=ginvA%*%ci + b%*%pars[1:nnewpars]
 				if(nucpars>0) xgmod$pars[which(uncon==1)]=pars[(nnewpars+1):(nnewpars+nucpars)]
-				gr=loglike(dat=dat,dmm=xgmod,grad=TRUE,print=0,set=FALSE)$gr
+				gr=loglike(dat=dat,dmm=xgmod,grad=TRUE,printlevel=0,set=FALSE)$gr
 				if(nnewpars>0) grad=c(gr[which(constr==1)]%*%b,gr[which(uncon==1)])
 				else grad=gr[which(uncon==1)]
-				if(printlevel>0 && (fcalls%%10)==0) cat("call " , fcalls, " grad ", grad, "\n")
-				if(printlevel>9) cat("call " , fcalls, " grad ", grad, "\n")
+# 				if(printlevel>0 && (fcalls%%10)==0) cat("call " , fcalls, " grad ", grad, "\n")
+# 				if(printlevel>9) cat("call " , fcalls, " grad ", grad, "\n")
 				grad
 			}
 			
@@ -444,7 +448,7 @@ fitdmm <- function(dat,dmm,printlevel=1,poster=TRUE,tdcov=0,ses=TRUE,method="opt
 		
 		# nlm optimization
 		if(method=="nlm") {
-			assign("loglvalue",0,envir=.GlobalEnv)
+# 			assign("loglvalue",0,envir=.GlobalEnv)
 			
 			f <- function(pars) {
 				# expand pars into the model
@@ -452,19 +456,21 @@ fitdmm <- function(dat,dmm,printlevel=1,poster=TRUE,tdcov=0,ses=TRUE,method="opt
 				if(nucpars>0) xgmod$pars[which(uncon==1)]=pars[(nnewpars+1):(nnewpars+nucpars)]
 				# get the actual likelihood and gradients if requested/feasible
 				if(der) {
-					llgr=loglike(dat=dat,dmm=xgmod,print=0,grad=TRUE,set=FALSE)
+					llgr=loglike(dat=dat,dmm=xgmod,printlevel=0,grad=TRUE,set=FALSE)
 					if(nnewpars>0) grad=c(-llgr$gr[which(constr==1)]%*%b,-llgr$gr[which(uncon==1)])
 					else grad=-llgr$gr[which(uncon==1)]
-				} else llgr=loglike(dat=dat,dmm=xgmod,tdcov=tdcov,print=0,grad=FALSE,set=FALSE)
+				} else llgr=loglike(dat=dat,dmm=xgmod,tdcov=tdcov,printlevel=0,grad=FALSE,set=FALSE)
 				ll=llgr$logl
 				violation=viol(xgmod$pars)
-				assign("totalviolation",violation,envir=.GlobalEnv)
-				ll=ll-violation
+				totalviolation=viol(xgmod$pars)
+# 				totalviolation=violoation
+# 				assign("totalviolation",violation,envir=.GlobalEnv)
+				ll=ll-totalviolation
 				pr=0
-				assign("fcalls",fcalls+1,envir=.GlobalEnv)
+# 				assign("fcalls",fcalls+1,envir=.GlobalEnv)
 				if(is.nan(ll) || is.infinite(ll)) ll=initLogl*1.01
-				if(printlevel>9 && (fcalls%%10)==0) {cat("call " , fcalls, " logl ", ll, "\n"); pr=1}
-				if(printlevel>14 && pr==0) cat("call " , fcalls, " logl ", ll, "\n")
+# 				if(printlevel>9 && (fcalls%%10)==0) {cat("call " , fcalls, " logl ", ll, "\n"); pr=1}
+# 				if(printlevel>14 && pr==0) cat("call " , fcalls, " logl ", ll, "\n")
 				if(der) attr(ll,'gradient')=grad
 				-ll
 			}
@@ -494,7 +500,7 @@ fitdmm <- function(dat,dmm,printlevel=1,poster=TRUE,tdcov=0,ses=TRUE,method="opt
 			}
 			
 			names(z)=c("objf","par","grad","inform","iter")
-			z$objf=ifelse(loglvalue==0,-z$objf,loglvalue)
+# 			z$objf=ifelse(loglvalue==0,-z$objf,loglvalue)
 		} # end nlm
 		
 		# put fitted pars into xgmod, gather output into z
@@ -687,7 +693,7 @@ posterior <- function(dat,dmm,tdcov=0,printlevel=1) {
 	post$comp <- list() 
 	for(g in 1:xgmod$ng) {
 		post$comp[[g]]=matrix(0,length(ntimes(dat[[g]])),xgmod$nrcomp+1)
-		post$states[[g]] <- matrix(0,nc=(2+sum(xgmod$nstates)),nr=0)
+		post$states[[g]] <- matrix(0,ncol=(2+sum(xgmod$nstates)),nrow=0)
 	###the first entry in each series is the number of the component
 		for(i in 1:(length(ntimes(dat[[g]])))) {
 			pp=ntimes(dat[[g]])[i]*sum(xgmod$nstates)
@@ -701,7 +707,7 @@ posterior <- function(dat,dmm,tdcov=0,printlevel=1) {
 				as.integer(i),
 				PACKAGE="depmix")
 			post$comp[[g]][i,xgmod$nrcomp+1]=z$postcomp
-			pst=matrix(c(rep(z$postcomp,ntimes(dat[[g]])[i]),z$states,matrix(z$postdelta,nc=sum(xgmod$nstates),byrow=TRUE)),nc=(2+sum(xgmod$nstates)))
+			pst=matrix(c(rep(z$postcomp,ntimes(dat[[g]])[i]),z$states,matrix(z$postdelta,ncol=sum(xgmod$nstates),byrow=TRUE)),ncol=(2+sum(xgmod$nstates)))
 			postprob=pst[ntimes(dat[[g]])[i],3:(2+sum(xgmod$nstates))]
 			bg=1; en=xgmod$nstates[1];
 			post$comp[[g]][i,1] = sum(postprob[bg:en])
@@ -724,7 +730,7 @@ computeSes <- function(dat,dmm) {
 	cat("Computing standard errors \n")
 	mod=dmm
 	eps=1e-8
-	lgh=loglike(dat=dat,dmm=mod,grad=TRUE,tdcov=0,print=0)
+	lgh=loglike(dat=dat,dmm=mod,grad=TRUE,tdcov=0,printlevel=0)
 	ll=lgh$logl
 	gr=lgh$gr
 	hsall=matrix(0,mod$npars,mod$npars)
@@ -733,7 +739,7 @@ computeSes <- function(dat,dmm) {
 			del=eps*max(1,mod$pars[j])
 			por=mod$pars[j]
 			mod$pars[j] = por+del
-			alli=loglike(dat=dat,dmm=mod,grad=TRUE,hess=FALSE,set=FALSE,tdcov=0,print=0)
+			alli=loglike(dat=dat,dmm=mod,grad=TRUE,hess=FALSE,set=FALSE,tdcov=0,printlevel=0)
 			grd=alli$gr
 			for(i in 1:mod$npars) hsall[i,j] = (grd[i]-gr[i])/del
 			mod$pars[j]=por
@@ -742,7 +748,7 @@ computeSes <- function(dat,dmm) {
 	se=rep(0,mod$npars)
 	hs=-hsall[which(mod$fixed[1:mod$npars]==1),which(mod$fixed[1:mod$npars]==1)]	
 	if(nrow(mod$A)>0) {
-		A=matrix(mod$A[,which(mod$fixed[1:mod$npars]==1)],nr=nrow(mod$A))
+		A=matrix(mod$A[,which(mod$fixed[1:mod$npars]==1)],nrow=nrow(mod$A))
 		idx=which(mod$bllin<mod$bulin)
 		if(length(idx)>0) A=A[-idx,,drop=FALSE]
 		idx=numeric(0)
@@ -799,9 +805,9 @@ bootstrap <- function(object, dat, samples=100, pvalonly=0, ...) {
 			PACKAGE="depmix")
 	}
 	for(i in 1:samples) {
-		gen=generate(dmm=mod, nt=ntimes(dat))
-		ll=loglike(dat=gen,dmm=mod,print=0)$logl
-		fit=fitdmm(dat=gen,dmm=mod,print=0,ses=0,postst=0,poster=FALSE)
+		gen=generate(dmm=mod, ntimes=ntimes(dat))
+		ll=loglike(dat=gen,dmm=mod,printlevel=0)$logl
+		fit=fitdmm(dat=gen,dmm=mod,printlevel=0,ses=0,postst=0,poster=FALSE)
 		bootpars[i,]=fit$mod$pars
 		ll=fit$loglike
 		gof[i,]=c(ll,fit$aic,fit$bic)

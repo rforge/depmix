@@ -51,12 +51,12 @@ dmm <- function(nstates, itemtypes, modname=NULL, fixed=NULL, stval=NULL, conrow
 # provide parameter start values if none are given, scale start values if provided
 	mixprop=1.0 # mixing proportion (added for consistency)
 	if(st) {
-		trans <- matrix(stval[2:(nstates*nstates+1)],nr=nstates,byrow=TRUE)
-		obser <- matrix(stval[(nstates*nstates+2):(npars-nstates)],nr=nstates,byrow=TRUE)
+		trans <- matrix(stval[2:(nstates*nstates+1)],nrow=nstates,byrow=TRUE)
+		obser <- matrix(stval[(nstates*nstates+2):(npars-nstates)],nrow=nstates,byrow=TRUE)
 		init=stval[(npars-nstates+1):npars]
 	} else {
-		trans <- matrix(runif(nstates*nstates,0,1),nr=nstates)
-		obser <- matrix(0,nr=nstates,nc=sum(lobs))
+		trans <- matrix(runif(nstates*nstates,0,1),nrow=nstates)
+		obser <- matrix(0,nrow=nstates,ncol=sum(lobs))
 		for(j in 1:nstates) {
 			z=numeric(0)
 			for (i in 1:nitems) z=ppar(itemtypes[i],z)
@@ -73,8 +73,8 @@ dmm <- function(nstates, itemtypes, modname=NULL, fixed=NULL, stval=NULL, conrow
 	for(j in 1:nstates) {
 		for(i in 1:nitems) {
 			if(itemtypes[i]>1) { 
- 				itpars=pars[paridx(nstates,itemtypes,m="ob",idx1=j,it=i)]
-				pars[paridx(nstates,itemtypes,m="ob",idx1=j,it=i)] = itpars/sum(itpars)
+ 				itpars=pars[paridx(nstates,itemtypes,mat="ob",idx1=j,it=i)]
+				pars[paridx(nstates,itemtypes,mat="ob",idx1=j,it=i)] = itpars/sum(itpars)
 			}
 		}
 	}
@@ -102,7 +102,7 @@ dmm <- function(nstates, itemtypes, modname=NULL, fixed=NULL, stval=NULL, conrow
 	blst=numeric(0); bust=numeric(0)
 	if(nstates>1) {
 		sctr=matrix(0,nstates,npars)
-		for(i in 1:nstates) sctr[i,paridx(nstates,itemtypes,m="tr",i)]=1
+		for(i in 1:nstates) sctr[i,paridx(nstates,itemtypes,mat="tr",i)]=1
 		blst <- rep(1,nstates)
 		bust <- rep(1,nstates)
 	}
@@ -112,7 +112,7 @@ dmm <- function(nstates, itemtypes, modname=NULL, fixed=NULL, stval=NULL, conrow
 		for(j in 1:nitems) {
 			if(itemtypes[j]>1) {
 				sc=rep(0,npars)
-				sc[paridx(nstates,itemtypes,m="ob",it=j,idx1=i)]=1
+				sc[paridx(nstates,itemtypes,mat="ob",it=j,idx1=i)]=1
 				scob=rbind(scob,sc)
 				blso=c(blso,1); buso=c(buso,1)
 			}
@@ -133,7 +133,7 @@ dmm <- function(nstates, itemtypes, modname=NULL, fixed=NULL, stval=NULL, conrow
 	else A=rbind(sctr,scob,scin)
 # add user supplied linear constraints to A and set their bounds
 	if(cr) {
-		conrows <- matrix(conrows,nc=npars,byrow=TRUE)
+		conrows <- matrix(conrows,ncol=npars,byrow=TRUE)
 		A=rbind(A,conrows)
 		bllin <- c(bllin,rep(0,nrow(conrows)))
 		bulin <- c(bulin,rep(0,nrow(conrows)))
@@ -152,23 +152,23 @@ dmm <- function(nstates, itemtypes, modname=NULL, fixed=NULL, stval=NULL, conrow
 		td=1 # only one covariate supported at the moment 
 		bltd=rep(0,npars)
 		butd=rep(0,npars)
-		if(any(tdfix[paridx(nstates,itemtypes,m="tr")]==1)) {
+		if(any(tdfix[paridx(nstates,itemtypes,mat="tr")]==1)) {
 			tdtr=TRUE
 			if(nstates==1) stop("Covariates on the transition matrix do not make sense with a single state model.\n")
-			butd[paridx(nstates,itemtypes,m="tr")]=1
-			bltd[paridx(nstates,itemtypes,m="tr")]=-1
+			butd[paridx(nstates,itemtypes,mat="tr")]=1
+			bltd[paridx(nstates,itemtypes,mat="tr")]=-1
 		}
 		# etc for other betas
-		if(any(tdfix[paridx(nstates,itemtypes,m="ob")]==1)) {
+		if(any(tdfix[paridx(nstates,itemtypes,mat="ob")]==1)) {
 			tdob=TRUE
-			butd[paridx(nstates,itemtypes,m="ob")]=bigB
-			bltd[paridx(nstates,itemtypes,m="ob")]=-bigB
+			butd[paridx(nstates,itemtypes,mat="ob")]=bigB
+			bltd[paridx(nstates,itemtypes,mat="ob")]=-bigB
 		}
-		if(any(tdfix[paridx(nstates,itemtypes,m="in")]==1)) {
+		if(any(tdfix[paridx(nstates,itemtypes,mat="in")]==1)) {
 			tdin=TRUE
 			if(nstates==1) stop("Covariates on the initial probs do not make sense with a single state model.\n")
-			butd[paridx(nstates,itemtypes,m="in")]=1
-			bltd[paridx(nstates,itemtypes,m="in")]=-1
+			butd[paridx(nstates,itemtypes,mat="in")]=1
+			bltd[paridx(nstates,itemtypes,mat="in")]=-1
 		}
 		tdpars=rep(0,npars)
 		if(is.null(tdst)) tdpars=replace(tdpars,tdfix==1,rnorm(sum(tdfix),0,0.1))
@@ -177,20 +177,20 @@ dmm <- function(nstates, itemtypes, modname=NULL, fixed=NULL, stval=NULL, conrow
 # covariates for tr parameters
 	if(tdtr) {
 		# values: make values conformable with constraints
-		tdtrans=matrix(tdpars[paridx(nstates,itemtypes,m="tr")],nr=nstates,byrow=TRUE)
+		tdtrans=matrix(tdpars[paridx(nstates,itemtypes,mat="tr")],nrow=nstates,byrow=TRUE)
 		if(nstates==2) tdtrans[,2]=-tdtrans[,1]
 		else tdtrans[,nstates]=-apply(tdtrans[,(1:(nstates-1))],1,sum)
-		tdpars[paridx(nstates,itemtypes,m="tr")]=t(tdtrans)
+		tdpars[paridx(nstates,itemtypes,mat="tr")]=t(tdtrans)
 		# make the constraints
 		sctdtr=matrix(0,nstates+nstates*nstates,2*npars)
 		blsctdtr=rep(0,nstates+nstates*nstates)
 		busctdtr=c(rep(0,nstates),rep(1,nstates*nstates))
 		# ... between the beta's (these sum to zero per state)
-		for(i in 1:nstates) sctdtr[i,paridx(nstates,itemtypes,m="tr",idx1=i)+npars]=1
+		for(i in 1:nstates) sctdtr[i,paridx(nstates,itemtypes,mat="tr",idx1=i)+npars]=1
 		# ... between transpars and beta's  0<=a_ij+b_ij<=1, assuming the covariate is between 0 and 1
  		for(i in 1:nstates) {
  			for(j in 1:nstates) {
- 				pidx=paridx(nstates,itemtypes,m="tr",idx1=i,idx2=j)
+ 				pidx=paridx(nstates,itemtypes,mat="tr",idx1=i,idx2=j)
 				sctdtr[nstates+(i-1)*nstates+j,c(pidx,pidx+npars)]=c(1,1)
  			}
  		}
@@ -208,10 +208,10 @@ dmm <- function(nstates, itemtypes, modname=NULL, fixed=NULL, stval=NULL, conrow
 				if(itemtypes[j]>1) {
 					kk=kk+1
 					# these beta's have to sum to one
-					pp=tdpars[paridx(nstates,itemtypes,m="ob",idx1=i,it=j)]
+					pp=tdpars[paridx(nstates,itemtypes,mat="ob",idx1=i,it=j)]
 					pp[itemtypes[j]]=-sum(pp[1:(itemtypes[j]-1)])
-					tdpars[paridx(nstates,itemtypes,m="ob",idx1=i,it=j)]=pp
-					sctdob[kk,paridx(nstates,itemtypes,m="ob",idx1=i,it=j)+npars]=1
+					tdpars[paridx(nstates,itemtypes,mat="ob",idx1=i,it=j)]=pp
+					sctdob[kk,paridx(nstates,itemtypes,mat="ob",idx1=i,it=j)+npars]=1
 				}
 			}
 		}
@@ -222,7 +222,7 @@ dmm <- function(nstates, itemtypes, modname=NULL, fixed=NULL, stval=NULL, conrow
 				if(itemtypes[j]>1) {
 					for(k in 1:itemtypes[j]) {
 						kk=kk+1
-						pidx=paridx(nstates,itemtypes,m="ob",idx1=i,it=j,idx2=k)
+						pidx=paridx(nstates,itemtypes,mat="ob",idx1=i,it=j,idx2=k)
 						sctdob[kk,c(pidx,pidx+npars)]=c(1,1)
 					}
 				}
@@ -240,10 +240,10 @@ dmm <- function(nstates, itemtypes, modname=NULL, fixed=NULL, stval=NULL, conrow
 		blsctdin=rep(0,1+nstates)
 		busctdin=c(0,rep(1,nstates))
 		# beta's sum to zero
-		sctdin[,paridx(nstates,itemtypes,m="in")+npars]=1
+		sctdin[,paridx(nstates,itemtypes,mat="in")+npars]=1
 		# beta + initpar should be between zero and one
 		for(i in 1:nstates) {
-			pidx=paridx(nstates,itemtypes,m="in",idx1=i)
+			pidx=paridx(nstates,itemtypes,mat="in",idx1=i)
 			sctdin[1+i,c(pidx,pidx+npars)]=c(1,1)
 		}
 	}
@@ -281,10 +281,10 @@ dmm <- function(nstates, itemtypes, modname=NULL, fixed=NULL, stval=NULL, conrow
 	# check for zero rows in A which may result from fixing parameters at zero, and remove them
 	# set zeroes in A when pars are fixed, and change bllin and bulin accordingly
 	if(nrow(A)>0) {
-		Bcomplete=matrix(as.logical(A),nr=nrow(A))
+		Bcomplete=matrix(as.logical(A),nrow=nrow(A))
 		xcomplete=apply(Bcomplete,1,sum)
 		A[,which(fixed==0)]=0
-		B=matrix(as.logical(A),nr=nrow(A))
+		B=matrix(as.logical(A),nrow=nrow(A))
 		x=apply(B,1,sum)
 		for(i in 1:nrow(A)) {
 			if(x[i]!=xcomplete[i]) {
@@ -330,16 +330,16 @@ summary.dmm <- function(object, specs=FALSE, precision=3, se=NULL, ...) {
 	ses=ifelse(is.null(se),0,1)
 	if(!"lcm" %in% class(object)) {
 		cat(" Parameter values, transition matrix \n\n")
-		trsx=matrix(object$pars[paridx(object$nstates,object$itemtypes,m="tr")],object$nstates,byrow=TRUE)
+		trsx=matrix(object$pars[paridx(object$nstates,object$itemtypes,mat="tr")],object$nstates,byrow=TRUE)
 		rownames(trsx)=object$snames
 		if(object$tdtr && object$tdfit==1) {
-            betr=matrix(object$pars[paridx(object$nstates,object$itemtypes,m="tr")+object$npars],object$nstates,byrow=TRUE)
+            betr=matrix(object$pars[paridx(object$nstates,object$itemtypes,mat="tr")+object$npars],object$nstates,byrow=TRUE)
             trsx=matrix(rbind(c(trsx),c(betr)),object$nstates*2,object$nstates)
             be=rep(x="be", object$nstates)
             rownames(trsx)=c(rbind(object$snames,be))
         }
 		if(ses) {
-			setr=matrix(se[paridx(object$nstates,object$itemtypes,m="tr")],object$nstates,byrow=TRUE)
+			setr=matrix(se[paridx(object$nstates,object$itemtypes,mat="tr")],object$nstates,byrow=TRUE)
 			tr=matrix(0,object$nstates*3,object$nstates)
 			for(i in 1: object$nstates) {
 				tr[3*(i-1)+1,]=trsx[i,]
@@ -356,17 +356,17 @@ summary.dmm <- function(object, specs=FALSE, precision=3, se=NULL, ...) {
 		cat("\n\n")
 	}
 	cat(" Parameter values, observation parameters \n\n")
-	obsx=matrix(object$pars[paridx(object$nstates,object$itemtypes,m="ob")],object$nstates,byrow=TRUE)
+	obsx=matrix(object$pars[paridx(object$nstates,object$itemtypes,mat="ob")],object$nstates,byrow=TRUE)
 	rownames(obsx)=object$snames
 	if(object$tdob && object$tdfit==1) {
-		tdobpars=matrix(object$pars[paridx(object$nstates,object$itemtypes,m="ob")+object$npars],object$nstates,byrow=TRUE)
+		tdobpars=matrix(object$pars[paridx(object$nstates,object$itemtypes,mat="ob")+object$npars],object$nstates,byrow=TRUE)
 		obsx=matrix(rbind(c(obsx),c(tdobpars)),object$nstates*2,byrow=FALSE)
 		be=rep(x="be", object$nstates)
 		rownames(obsx)=c(rbind(object$snames,be))
 	}
 	if(ses) {
-		seob=matrix(se[paridx(object$nstates,object$itemtypes,m="ob")],object$nstates,byrow=TRUE)
-		ob=matrix(0,object$nstates*3,nc=ncol(obsx))
+		seob=matrix(se[paridx(object$nstates,object$itemtypes,mat="ob")],object$nstates,byrow=TRUE)
+		ob=matrix(0,object$nstates*3,ncol=ncol(obsx))
 		for(i in 1: object$nstates) {
 			ob[3*(i-1)+1,]=obsx[i,]
 			ob[3*(i-1)+2,]=seob[i,]
@@ -387,18 +387,18 @@ summary.dmm <- function(object, specs=FALSE, precision=3, se=NULL, ...) {
 	if(!"lcm" %in% class(object)) cat(" Parameter values, initial state probabilies \n\n")
 	else cat(" Parameter values, unconditional (class) probabilities \n\n")
 	if(ses) {
-		inix=matrix(c(object$pars[paridx(object$nstates,object$itemtypes,m="in")],rep(0,2*object$nstates)),3,object$nstates,byrow=TRUE)
-		sein=se[paridx(object$nstates,object$itemtypes,m="in")]
+		inix=matrix(c(object$pars[paridx(object$nstates,object$itemtypes,mat="in")],rep(0,2*object$nstates)),3,object$nstates,byrow=TRUE)
+		sein=se[paridx(object$nstates,object$itemtypes,mat="in")]
 		for(i in 1: object$nstates) {
 			inix[2,i]=sein[i]
 			inix[3,i]=ifelse(sein[i]==0,NA,inix[1,i]/sein[i])
 		}
 		rownames(inix)=c("val","se","t")
 	} else {
-		inix=matrix(object$pars[paridx(object$nstates,object$itemtypes,m="in")],1,object$nstates,byrow=TRUE)
+		inix=matrix(object$pars[paridx(object$nstates,object$itemtypes,mat="in")],1,object$nstates,byrow=TRUE)
 		rownames(inix)="val"
  		if(object$tdin && object$tdfit==1) {
-			inix=rbind(inix,object$pars[paridx(object$nstates,object$itemtypes,m="in")+object$npars])
+			inix=rbind(inix,object$pars[paridx(object$nstates,object$itemtypes,mat="in")+object$npars])
 			rownames(inix)=c("val","be")
 		}
 	}

@@ -259,7 +259,8 @@ tdfix[2:5]=1
 stcov=rep(0,15)
 stcov[2:5]=c(-0.4,0.4,0.15,-0.15)
 
-mod<-dmm(nstates=2,itemt=c("n",2),stval=stv,conpat=conpat,tdfix=tdfix,tdst=stcov,modname="twoboth+cov")
+mod<-dmm(nstates=2,itemt=c("n",2),stval=stv,conpat=conpat,tdfix=tdfix,tdst=stcov,
+modname="twoboth+cov")
 
 fit3 <- fitdmm(dat=speed,dmm=mod,tdcov=1,der=0,ses=0,vfa=80)
 summary(fit3)

@@ -1,6 +1,6 @@
 Package: depmix
-Version: 0.9.10
-Date: 2011-10-24
+Version: 0.9.11
+Date: 2014-02-19
 Title: Dependent Mixture Models
 Author: Ingmar Visser <i.visser@uva.nl>
 Maintainer: Ingmar Visser <i.visser@uva.nl>

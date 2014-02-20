@@ -11,17 +11,17 @@ generate <- function(ntimes,dmm,nreal=1) {
 	trans=list(); obser=list(); init=list()
 	if(class(dmm)[1]=="dmm") dmm=mixdmm(dmm=list(dmm))
 	for(i in 1:dmm$nrcomp) {
-		idx=paridx(dmm$nstates,dmm$itemtypes,m="tr",comp=i)
+		idx=paridx(dmm$nstates,dmm$itemtypes,mat="tr",comp=i)
 		trans[[i]]=matrix(dmm$pars[idx],dmm$nstates[i],byrow=TRUE)
-		idx=paridx(dmm$nstates,dmm$itemtypes,m="ob",comp=i)
+		idx=paridx(dmm$nstates,dmm$itemtypes,mat="ob",comp=i)
 		obser[[i]]=matrix(dmm$pars[idx],dmm$nstates[i],byrow=TRUE)
-		idx=paridx(dmm$nstates,dmm$itemtypes,m="in",comp=i)
+		idx=paridx(dmm$nstates,dmm$itemtypes,mat="in",comp=i)
 		init[[i]]=matrix(dmm$pars[idx],dmm$nstates[i])
 	}
 	ntcount=0
 	# create return value vectors
 	nitems=length(dmm$itemtypes)
-	obs = matrix(0,nc=nitems,nr=sum(ntimes))
+	obs = matrix(0,ncol=nitems,nrow=sum(ntimes))
 	instates=integer(length(ntimes))
 	incomp=integer(length(ntimes))
 	for(j in 1:length(ntimes)) {
@@ -48,7 +48,7 @@ generate <- function(ntimes,dmm,nreal=1) {
 		ntcount = ntcount + ntimes[j]
 	}
 	# repeat ntimes
-	gen <- markovdata(dat=obs,itemt=dmm$itemtnames,ntimes=ntimes)
+	gen <- markovdata(dat=obs,itemtypes=dmm$itemtnames,ntimes=ntimes)
 	attr(gen,"instates")=instates
 	if(dmm$nrcomp>1) attr(gen,"incomp")=incomp
 	gen

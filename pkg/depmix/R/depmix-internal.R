@@ -44,8 +44,8 @@ checkSetRecode <- function(dat,dmm,tdcov=0,printlevel=1) {
 		dcov=list()
 		datsplit=list()
 		for(i in 1:xgmod$ng) {
-			dcov[[i]]=markovdata(dat=dat[[i]][,(nrit+1):(dim(dat[[i]])[2]),drop=FALSE],itemt=itt,nt=ntimes(dat[[i]]))
-			datsplit[[i]]=markovdata(dat=dat[[i]][,1:nrit,drop=FALSE],itemtypes=itemtypes(dat[[i]])[1:nrit],nt=ntimes(dat[[i]]),replicates=replicates(dat[[i]]))
+			dcov[[i]]=markovdata(dat=dat[[i]][,(nrit+1):(dim(dat[[i]])[2]),drop=FALSE],itemtypes=itt,ntimes=ntimes(dat[[i]]))
+			datsplit[[i]]=markovdata(dat=dat[[i]][,1:nrit,drop=FALSE],itemtypes=itemtypes(dat[[i]])[1:nrit],ntimes=ntimes(dat[[i]]),replicates=replicates(dat[[i]]))
 		}
 		dat=datsplit
 		if(printlevel>19) print("Data split okay.")

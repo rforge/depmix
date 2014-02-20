@@ -60,11 +60,11 @@ mgdmm <- function(dmm,ng=1,modname=NULL,trans=FALSE,obser=FALSE,init=FALSE,conpa
 			# count the number of transition pars and add this many rows *(ng-1) to A
 			trcount=0
 			for(i in 1:nrcomp) {
-				trcount = length(paridx(nstates,itemtypes,comp=i,m="tr"))
+				trcount = length(paridx(nstates,itemtypes,comp=i,mat="tr"))
 				trinv = matrix(0,trcount*(ng-1),npars)
 				j=0
 				for(g in 1:(ng-1)) {
-					idx = paridx(nstates,itemtypes,comp=i,m="tr")
+					idx = paridx(nstates,itemtypes,comp=i,mat="tr")
 					for (id in idx) {
 						j = j+1
 						trinv[j,id] = 1
@@ -83,11 +83,11 @@ mgdmm <- function(dmm,ng=1,modname=NULL,trans=FALSE,obser=FALSE,init=FALSE,conpa
 			# count the number of observation pars and add this many rows *(ng-1) to A
 			obcount=0
 			for(i in 1:nrcomp) {
-				obcount = length(paridx(nstates,itemtypes,comp=i,m="ob"))
+				obcount = length(paridx(nstates,itemtypes,comp=i,mat="ob"))
 				obinv = matrix(0,obcount*(ng-1),npars)
 				j=0
 				for(g in 1:(ng-1)) {
-					idx = paridx(nstates,itemtypes,comp=i,m="ob")
+					idx = paridx(nstates,itemtypes,comp=i,mat="ob")
 					for(id in idx) {
 						j = j+1
 						obinv[j,id] = 1
@@ -106,11 +106,11 @@ mgdmm <- function(dmm,ng=1,modname=NULL,trans=FALSE,obser=FALSE,init=FALSE,conpa
 			# count the number of initial state pars and add this many rows *(ng-1) to A
 			incount=0
 			for(i in 1:nrcomp) {
-				incount = length(paridx(nstates,itemtypes,comp=i,m="in"))
+				incount = length(paridx(nstates,itemtypes,comp=i,mat="in"))
 				ininv = matrix(0,incount*(ng-1),npars)
 				j=0
 				for(g in 1:(ng-1)) {
-					idx = paridx(nstates,itemtypes,comp=i,m="in")
+					idx = paridx(nstates,itemtypes,comp=i,mat="in")
 					for (id in idx) {
 						j = j+1
 						ininv[j,id] = 1
@@ -180,7 +180,7 @@ mgdmm <- function(dmm,ng=1,modname=NULL,trans=FALSE,obser=FALSE,init=FALSE,conpa
 		idx=numeric(0) 
 		if(nrow(A)>0) {
 			for(i in 1:nrow(A)) {if(sum(as.logical(A[i,]))!=0) idx = c(idx,i) }
-			A=matrix(A[idx,],nc=nparstotal)
+			A=matrix(A[idx,],ncol=nparstotal)
 		}
 		#  ... also remove corresponding entries in bllin and bulin
 		bllin=bllin[idx]
