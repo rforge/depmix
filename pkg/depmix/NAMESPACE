@@ -1,5 +1,7 @@
 useDynLib(depmix)
 
+import(MASS)
+
 export(dmm,mgdmm,fitdmm,mixdmm,loglike,oneliner,bootstrap,posterior,
 	generate,lca,ntimes,itemtypes,dname,replicates,ncov,inames,
 	nitems,ind,markovdata)

@@ -14,6 +14,8 @@
 #                                 #
 ###################################
 
+if(getRversion() >= "2.15.1")  utils::globalVariables(c("donlp2", "donlp2Control"))
+
 fitdmm <- function(dat,dmm,printlevel=1,poster=TRUE,tdcov=0,ses=TRUE,method="optim",vfactor=15,der=1,iterlim=100,kmst=!dmm$st,kmrep=5,postst=FALSE) { 
 	mod=dmm #keep copy of the original model
 ## create good starting values if not provdided
