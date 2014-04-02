@@ -229,8 +229,13 @@ ll <- loglike(speed,mod)
 fit1 <- fitdmm(dat=speed,dmm=mod)
 summary(fit1)
 ll <- loglike(speed,fit1)
+
+# bootstrap
+\dontrun{
 pst <- posterior(dat=speed,dmm=fit1)
-bs <- bootstrap(fit1,speed,samples=10)
+bs <- bootstrap(fit1,speed,samples=50)
+} # end not run
+
 
 # add some constraints using conpat
 conpat=rep(1,15)
@@ -245,8 +250,12 @@ mod=dmm(nstates=2,itemt=c("n",2),stval=stv,conpat=conpat)
 fit2 <- fitdmm(dat=speed,dmm=mod)
 summary(fit2)
 
+
 # add covariates to the model to incorporate the fact the accuracy pay off changes per trial
 # 2-state model with covariates + other constraints
+
+\dontrun{
+
 conpat=rep(1,15)
 conpat[1]=0
 conpat[8:9]=0
@@ -286,8 +295,11 @@ mgr <-mgdmm(dmm=mod,ng=3,trans=TRUE,obser=FALSE)
 fitmg <- fitdmm(dat=list(r1,r2,r3),dmm=mgr)
 summary(fitmg)
 
+} # end not run
 
 # LEARNING DATA AND MODELS (with absorbing states)
+
+\dontrun{
 
 data(discrimination)
 
@@ -321,6 +333,8 @@ mix <- mixdmm(dmm=list(allor,cim),modname="MixAllCim")
 # ... and fit it on the combined data discrimination
 fitmix <- fitdmm(discrimination,mix)
 summary(fitmix)
+
+} # end not run
 
 }
 
