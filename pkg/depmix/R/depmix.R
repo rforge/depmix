@@ -287,7 +287,8 @@ fitdmm <- function(dat,dmm,printlevel=1,poster=TRUE,tdcov=0,ses=TRUE,method="opt
  				xgmod$pars[which(fixed==1)]=pars
  				gr <- -loglike(dat=dat,dmm=xgmod,printlevel=0,set=FALSE,tdcov=tdcov,grad=TRUE)$gr[which(fixed==1)]
  				return(gr)
- 			}
+			}
+			
  			attr(logl, "gr") <- grad
  		}
  		
