@@ -9,7 +9,6 @@
 *                                  *
 ***********************************/
 
-
 #ifndef DERDIST
 #define DERDIST 1
 
@@ -27,6 +26,8 @@
   * will be returned
   */
 
+/* extern "C" { */
+
 double dernorm(double x, double mu, double sig, int ms, int logsc);
 
 /* 
@@ -39,6 +40,16 @@ double dernorm(double x, double mu, double sig, int ms, int logsc);
  * 
  *  and others .....
  */
+
+/* double squared(double x); */
+
+// the second and third to last integer arguments determine for which 
+// combination of parameters the hessian is returned, ie 1 for mu and 
+//2 for sigma, if logsc=1 the log will be returned (not functional)
+
+double hessnorm(double x, double mu, double sig, int ms1, int ms2, int logsc);
+
+/* } // end extern "C" */
 
 #endif
 

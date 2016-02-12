@@ -18,10 +18,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-extern "C" {
-	#include <R.h>
-	#include <Rmath.h>
-}
+/* extern "C" { */
+#include <R.h>
+#include <Rmath.h>
+/* } */
 
 #include "matrix.h"
 #include "mdmm.h"

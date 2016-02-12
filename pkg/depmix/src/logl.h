@@ -13,10 +13,10 @@
 
 #include "matrix.h"
 
-extern "C" {
-
 #include <R.h>	
 #include <Rmath.h>
+
+extern "C" {
 
 //these routines set up the model and set up the data in formats that are readable by loglikelihood
 void mixModelSetUp(int *ngroups, int *nrcomp, int *nstates, int *nitems, int *itemtypes, double *pars, int *xm, int *print);

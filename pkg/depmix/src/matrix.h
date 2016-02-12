@@ -5,10 +5,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-extern "C" {
-	#include <R.h>
+/* extern "C" { */
+#include <R.h>
 /* 	static int matrixConst;  */
-}
+/* } */
 
 #define MATRIXBOUNDS 1
 

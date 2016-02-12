@@ -20,9 +20,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-extern "C" {
-	#include <R.h>
-}
+/* extern "C" { */
+#include <R.h>
+/* } */
 
 #include "matrix.h"
 #include "mts.h"

@@ -12,12 +12,14 @@
 
 #ifndef HESSDIST
 #define HESSDIST 1
-
+   
 #include <stdio.h>
 #include <stdlib.h>
 
 #include <R.h>
 #include <Rmath.h>
+
+/* extern "C" { */
 
 //constant M_PI=3.141592653589793238462643383280 from Rmath.h
 
@@ -30,7 +32,7 @@ double squared(double x);
 double hessnorm(double x, double mu, double sig, int ms1, int ms2, int logsc);
 
 //this puts the return value in x (for use directly from R)
-void Rhessnorm(double *x, double *mu, double *sig, int *ms1, int *ms2, int *logsc, double *value);
+/* void Rhessnorm(double *x, double *mu, double *sig, int *ms1, int *ms2, int *logsc, double *value); */
 
 // to be implemented:
 
@@ -38,5 +40,8 @@ void Rhessnorm(double *x, double *mu, double *sig, int *ms1, int *ms2, int *logs
 // double hessunif(double x, double low, double up, int lu1, int lu2, int logsc);
 // double hessweibull(double x, double sh, double sc, int shsc1, int shsc2, int logsc);
 // double hessgamma(double x, double sh, double sc, int shsc1, int shsc2, int logsc);
+
+/* } */
+
 
 #endif

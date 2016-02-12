@@ -19,14 +19,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-extern "C" {
-	#include <R.h>
-	#include <Rmath.h>
-	#include "derdist.h"
-	#include "hessdist.h"
-}
+#include <R.h>
+#include <Rmath.h>
 
 #include "matrix.h"
+
+extern "C" { 
+#include "derdist.h"	
+}
 
 #define MDMMBOUNDS 1
 

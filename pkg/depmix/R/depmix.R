@@ -14,7 +14,7 @@
 #                                 #
 ###################################
 
-if(getRversion() >= "2.15.1")  utils::globalVariables(c("donlp2", "donlp2Control"))
+# if(getRversion() >= "2.15.1")  utils::globalVariables(c("donlp2", "donlp2Control"))
 
 fitdmm <- function(dat,dmm,printlevel=1,poster=TRUE,tdcov=0,ses=TRUE,method="optim",vfactor=15,der=1,iterlim=100,kmst=!dmm$st,kmrep=5,postst=FALSE) { 
 	mod=dmm #keep copy of the original model
@@ -259,7 +259,7 @@ fitdmm <- function(dat,dmm,printlevel=1,poster=TRUE,tdcov=0,ses=TRUE,method="opt
  	##  call npmain to optimize the model (non-linear constraints not implemented yet)
  	if(method=="donlp") {
  		
- 		require("Rdonlp2")
+ 		requireNamespace("Rdonlp2")
  		
  		bu=bu[which(fixed==1)]
  		bl=bl[which(fixed==1)]
@@ -293,14 +293,14 @@ fitdmm <- function(dat,dmm,printlevel=1,poster=TRUE,tdcov=0,ses=TRUE,method="opt
  		}
  		
  		timeUsed <- system.time(
- 			res <- donlp2(optpars, logl,
+ 			res <- Rdonlp2::donlp2(optpars, logl,
  				par.upper=bu,
  				par.lower=bl,
  				A = A,
  				lin.upper=bulin,
  				lin.lower=bllin,
  				nlin = list(),
- 				control=donlp2Control(),
+ 				control=Rdonlp2::donlp2Control(),
  				env=.GlobalEnv, name="Rdonlp2")
  		)
  		

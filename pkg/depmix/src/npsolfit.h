@@ -6,6 +6,9 @@
 #include <stdlib.h>
 /* #include <fstream.h> */
 
+#include <R.h>
+#include <Rmath.h>
+
 extern "C" {
 
 //globals needed in npsolc and funobj	
@@ -15,8 +18,6 @@ int *fixed;
 double *fixedvalues;
 int npars;
 
-#include <R.h>	
-#include <Rmath.h>
 
 /************************************************************/
 /*															*/
