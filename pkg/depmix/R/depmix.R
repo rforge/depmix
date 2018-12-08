@@ -1,4 +1,4 @@
-## package for fitting dependent mixture models
+### package for fitting dependent mixture models
 
 # .onLoad <- function(lib, pkg) {
 # 	library.dynam("depmix", pkg, lib)
@@ -175,26 +175,26 @@ fitdmm <- function(dat,dmm,printlevel=1,poster=TRUE,tdcov=0,ses=TRUE,method="opt
 	pars=fitpars[which(fixed==1)]
 	
 ##  call npmain to optimize the model (non-linear constraints not implemented yet)
-	if(method=="npsol") {
+#	if(method=="npsol") {
 		
-		bu=bu[which(fixed==1)]
-		bl=bl[which(fixed==1)]
-		
-		if(printlevel>29) {
-			print(A)
-			print(bl)
-			print(bu)
-			print(bllin)
-			print(bulin)
-		}
+#		bu=bu[which(fixed==1)]
+#		bl=bl[which(fixed==1)]
+#		
+#		if(printlevel>29) {
+#			print(A)
+#			print(bl)
+#			print(bu)
+#			print(bllin)
+#			print(bulin)
+#		}
 
 		# npsol specific inputs
-		fixedvals=fitpars
-		A=A[,which(fixed==1),drop=FALSE]
-		if(nrow(A)>0) {
-			bl=c(bl,bllin)
-			bu=c(bu,bulin)
-		} # else nothing to do, bl and bu are already defined
+#		fixedvals=fitpars
+#		A=A[,which(fixed==1),drop=FALSE]
+#		if(nrow(A)>0) {
+#			bl=c(bl,bllin)
+#			bu=c(bu,bulin)
+#		} # else nothing to do, bl and bu are already defined
 		
 		## npsol optimization options
 #  		itlim=paste(c("Iteration Limit = ", iterlim , "   "), collapse=" ")
@@ -211,50 +211,50 @@ fitdmm <- function(dat,dmm,printlevel=1,poster=TRUE,tdcov=0,ses=TRUE,method="opt
 		
 #  		optset=lapply(npopts,FUN=optfor <- function(opt) {.Fortran("npoptn",as.character(opt),PACKAGE="depmix") } )
 		# optfile can be used to read in an optionsfile called npoptn from the working directory
-		optfile=1 # using this will override above specified default options
-		derivatives=der # are derivatives to be used or not
-		cj=1 # non linear constraints are not supported yet, hence cj=1
-		maxnpcalls=1 # maxnpcalls is not used at the moment
-		nctotl=length(pars)+nrow(A)+0 # latter zero is for the number of non-linear constraints
-		npars=length(pars) # nr of pars to be optimized
+#		optfile=1 # using this will override above specified default options
+#		derivatives=der # are derivatives to be used or not
+#		cj=1 # non linear constraints are not supported yet, hence cj=1
+#		maxnpcalls=1 # maxnpcalls is not used at the moment
+#		nctotl=length(pars)+nrow(A)+0 # latter zero is for the number of non-linear constraints
+#		npars=length(pars) # nr of pars to be optimized
 		
-		timeUsed <-  system.time(z <- .C("npsolc",
-				as.integer(npars),				# nr of pars to be optimized
-				as.integer(nrow(A)), 			# nr of lin constraints
-				as.integer(0), 					# nr of non-linear constraints
-				as.integer(nrow(A)),			# lead dimension of A
-				as.integer(1),					# lead dimension of Jacobian of non-linear constr
-				as.integer(npars),				# lead dimension of matrix R
-				as.double(A),					# linear constraint matrix
-				as.double(bl),					# lower bounds on pars and constraints
-				as.double(bu),					# upper bounds on pars and constraints
-				inform=integer(1),				# inform
-				iter=integer(1),				# nr of iterations
-				istate=as.integer(rep(0,nctotl)),	# return value indicating whether constraints are satisfied
-				as.double(1),					# par for non-linear constraints, not implemented
-				as.double(0),					# not accessed, non-linear constraint var
-				as.double(rep(0,nctotl)),		# clamda, bounds and linear constraints
-				objf=double(1),					# return value: final logl
-				gradu=double(npars),			# return value: gradients at final iterate
-				R=as.double(rep(0,npars*npars)),# return value: augmented hessian
-				pars=as.double(pars),			# initial values and return values with final values of pars
-				totMem=integer(1),				# memory usage
-				as.integer(maxnpcalls),			# may be used to restart iterations after perturbing parameters
-				as.integer(optfile),			# logical indicating whether an options file should be read
-				as.integer(printlevel),			# printlevel
-				as.integer(derivatives),		# logical indicating whether analytical gradients are available or not
-				as.integer(tdcov),				# logical indicating whether time dependent covariates pars are fitted or not
-				as.integer(fixed),				# logical indicating which pars are fixed zeroes
-				as.double(fixedvals),			# values of fixed parameters
-				as.integer(length(fixed)),		# self evident
-				PACKAGE="depmix"))
-		z$timeUsed=timeUsed[3]
-		if(printlevel>19) print(z)
-		fitpars=xgmod$pars
-		fitpars[which(fixed==1)]=z$pars
-		z$pars=fitpars
-		z
-	}
+#		timeUsed <-  system.time(z <- .C("npsolc",
+#				as.integer(npars),				# nr of pars to be optimized
+#				as.integer(nrow(A)), 			# nr of lin constraints
+#				as.integer(0), 					# nr of non-linear constraints
+#				as.integer(nrow(A)),			# lead dimension of A
+#				as.integer(1),					# lead dimension of Jacobian of non-linear constr
+#				as.integer(npars),				# lead dimension of matrix R
+#				as.double(A),					# linear constraint matrix
+#				as.double(bl),					# lower bounds on pars and constraints
+#				as.double(bu),					# upper bounds on pars and constraints
+#				inform=integer(1),				# inform
+#				iter=integer(1),				# nr of iterations
+#				istate=as.integer(rep(0,nctotl)),	# return value indicating whether constraints are satisfied
+#				as.double(1),					# par for non-linear constraints, not implemented
+#				as.double(0),					# not accessed, non-linear constraint var
+#				as.double(rep(0,nctotl)),		# clamda, bounds and linear constraints
+#				objf=double(1),					# return value: final logl
+#				gradu=double(npars),			# return value: gradients at final iterate
+#				R=as.double(rep(0,npars*npars)),# return value: augmented hessian
+#				pars=as.double(pars),			# initial values and return values with final values of pars
+#				totMem=integer(1),				# memory usage
+#				as.integer(maxnpcalls),			# may be used to restart iterations after perturbing parameters
+#				as.integer(optfile),			# logical indicating whether an options file should be read
+#				as.integer(printlevel),			# printlevel
+#				as.integer(derivatives),		# logical indicating whether analytical gradients are available or not
+#				as.integer(tdcov),				# logical indicating whether time dependent covariates pars are fitted or not
+#				as.integer(fixed),				# logical indicating which pars are fixed zeroes
+#				as.double(fixedvals),			# values of fixed parameters
+#				as.integer(length(fixed)),		# self evident
+#				PACKAGE="depmix"))
+#		z$timeUsed=timeUsed[3]
+#		if(printlevel>19) print(z)
+#		fitpars=xgmod$pars
+#		fitpars[which(fixed==1)]=z$pars
+#		z$pars=fitpars
+#		z
+#	}
 	
  	##  call npmain to optimize the model (non-linear constraints not implemented yet)
  	if(method=="donlp") {

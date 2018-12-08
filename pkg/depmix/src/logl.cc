@@ -1,6 +1,6 @@
 #include "logl.h"
 
-#include "npsolfit.h"
+// #include "npsolfit.h"
 
 extern "C" {
 	

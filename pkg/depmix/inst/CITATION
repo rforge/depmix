@@ -6,7 +6,7 @@ citEntry(entry="Article",
 	author = person(given="Ingmar", family="Visser"),
 	journal = "R-package manual",
 	year = "2007",
-	url = "http://cran.r-project.org",
+	url = "https://CRAN.R-project.org",
 	textVersion = paste("Ingmar Visser (2007).  Depmix: An R-package 
 	for fitting mixture models on mixed multivariate data with Markov
 	dependencies. R-package manual and introduction into Dependent 

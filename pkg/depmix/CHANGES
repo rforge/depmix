@@ -1,4 +1,9 @@
 
+Changes in 0.9.15
+
+1) Removed NPSOL support in both C and R code (as it produced errors and no one seems to be using it anyway).
+2) Added registration of native routines. 
+
 Changes from 0.9.8 to 0.9.9
 
 1) Fixed a bug which led to an error when specifying multigroup models 

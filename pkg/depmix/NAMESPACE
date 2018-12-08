@@ -1,5 +1,3 @@
-useDynLib(depmix)
-
 import(MASS)
 
 importFrom("graphics", "layout.show")
@@ -20,5 +18,4 @@ S3method(plot,md)
 
 S3method(summary,fit)
 
-
-
+useDynLib(depmix, .registration=TRUE)
