@@ -1,4 +1,5 @@
 import(MASS)
+import(methods)
 
 importFrom("graphics", "layout.show")
 importFrom("stats", "kmeans", "na.omit", "nlm", "optim", "plot.ts",

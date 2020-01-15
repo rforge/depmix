@@ -1,3 +1,7 @@
+Changes in 0.9.16
+
+1) Now using is(x,"classname") instead of class(x)=="classname" which 
+is errorprone in objects with multiple classes. 
 
 Changes in 0.9.15
 

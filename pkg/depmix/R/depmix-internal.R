@@ -368,8 +368,8 @@ bdiag <- function (x) {
 kmstart <- function(dat,dmm) {
 	nst=dmm$nstates
 	kmc=try(kmeans(na.omit(dat[,1:(nitems(dat)-ncov(dat))]),nst)$cluster,silent=TRUE)
-	if(class(kmc)=="try-error") {
-		while(class(kmc)=="try-error") {
+	if(is(kmc,"try-error")) {
+		while(is(kmc,"try-error")) {
 			kmc=try(kmeans(dat[,1:(nitems(dat)-ncov(dat))],nst)$cluster,silent=TRUE)
 		}	
 	}
@@ -386,7 +386,7 @@ poststart <- function(dat,dmm) {
 cl2st <- function(cluster,dat,dmm) {
 	nst=dmm$nstates
 	stin=numeric(nst)
-	if("lcm"%in%class(dmm) || dmm$nst==1) {
+	if(is(dmm, "lcm") || dmm$nst==1) {
 		sttr=diag(nst)
 		for(i in 1:nst) {
 			stin[i]=length(cluster[which(cluster==i)]) 

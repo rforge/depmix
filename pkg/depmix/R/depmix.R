@@ -763,17 +763,17 @@ computeSes <- function(dat,dmm) {
 		if(length(idx)>0) A=A[-idx,,drop=FALSE]
 		d=hs+t(A)%*%A
 		di=try(solve(d),silent=TRUE)
-		if(class(di)=="try-error") {
+		if(is(di,"try-error")) {
 			warning("Hessian singular, ses could not be computed.") 
 			val=list(se=0,hs=0)
 		} else {
 			ada=A%*%di%*%t(A)
 			adai=try(solve(ada),silent=TRUE)
-			if(class(adai)=="try-error") {
+			if(is(adai,"try-error")) {
 				warning("Near-singular hessian, ses may be bad.\n")
 				diag(ada)=diag(ada)*1.000001
 				adai=try(solve(ada))
-				if(class(adai)=="try-error") {
+				if(is(adai,"try-error")) {
 					warning("Corrected hessian also singular, ses computed without contraints.\n")
 					se[which(mod$fixed[1:mod$npars]==1)]=sqrt(diag(di))
 				} else {
@@ -795,7 +795,7 @@ computeSes <- function(dat,dmm) {
 
 # compute bootstrap based standard errors + gof
 bootstrap <- function(object, dat, samples=100, pvalonly=0, ...) {
-	if(!class(object)=="fit") stop("Bootstrapping only possible on 'fit' objects.")
+	if(!is(object,"fit")) stop("Bootstrapping only possible on 'fit' objects.")
 	mod=object$mod
 	# compute only bootrapped pval, not ses
 	gof=matrix(0,samples,3)
